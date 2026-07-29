@@ -242,6 +242,12 @@ export function CircleCanvas({
   };
 
   const handleWheel = (event: ReactWheelEvent<HTMLCanvasElement>) => {
+    // Keep ordinary wheel and two-finger scrolling available for page
+    // navigation. Trackpad pinch gestures are exposed as Ctrl + wheel by
+    // modern browsers; Ctrl/Cmd + wheel also gives mouse users an explicit
+    // way to zoom the blueprint.
+    if (!event.ctrlKey && !event.metaKey) return;
+
     event.preventDefault();
     const normalizedDelta =
       event.deltaMode === 1
@@ -351,7 +357,10 @@ export function CircleCanvas({
           Fullscreen
         </button>
       </div>
-      <p className="canvas-tip">Scroll to zoom · drag to pan · tap a cell for coordinates</p>
+      <p className="canvas-tip">
+        Pinch or Ctrl/⌘ + scroll to zoom · drag to pan · tap a cell for
+        coordinates
+      </p>
     </section>
   );
 }
