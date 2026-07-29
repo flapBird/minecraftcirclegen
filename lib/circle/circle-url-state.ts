@@ -41,10 +41,21 @@ export function parseCircleUrl(search: string): CircleOptions {
 }
 
 export function serializeCircleUrl(options: CircleOptions): string {
-  const params = new URLSearchParams({
-    diameter: String(options.diameter),
-    mode: options.mode,
-    thickness: String(options.mode === "hollow" ? 1 : options.thickness),
-  });
-  return `?${params.toString()}`;
+  const params = new URLSearchParams();
+
+  if (options.diameter !== DEFAULT_DIAMETER) {
+    params.set("diameter", String(options.diameter));
+  }
+  if (options.mode !== DEFAULT_MODE) {
+    params.set("mode", options.mode);
+  }
+  if (
+    options.mode === "thick" &&
+    options.thickness !== DEFAULT_THICKNESS
+  ) {
+    params.set("thickness", String(options.thickness));
+  }
+
+  const query = params.toString();
+  return query ? `?${query}` : "";
 }
