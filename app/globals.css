@@ -258,23 +258,11 @@ a {
   padding: 14px;
 }
 
-.generator-workspace,
 .generator-support {
   display: grid;
   grid-template-columns: minmax(320px, 0.78fr) minmax(520px, 1.45fr);
   gap: 14px;
   align-items: start;
-}
-
-.generator-preview {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.generator-preview {
-  position: static;
 }
 
 .tool-card {
@@ -284,6 +272,35 @@ a {
   background: var(--paper);
   box-shadow: 0 3px 14px rgba(32, 50, 38, 0.04);
   padding: 20px;
+}
+
+.tool-card.blueprint-workspace-card {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.75fr) minmax(0, 1.65fr);
+  overflow: hidden;
+  padding: 0;
+}
+
+.blueprint-settings {
+  min-width: 0;
+  border-right: 1px solid var(--line);
+  background: #fbfcfa;
+  padding: 20px;
+}
+
+.blueprint-stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.blueprint-canvas {
+  min-width: 0;
+}
+
+.blueprint-stage .share-row {
+  margin: 0 16px 16px;
+  background: #f8faf7;
 }
 
 .card-heading {
@@ -1378,9 +1395,9 @@ a {
 }
 
 @media (max-width: 980px) {
-  .generator-workspace,
+  .tool-card.blueprint-workspace-card,
   .generator-support {
-    grid-template-columns: minmax(290px, 0.9fr) minmax(420px, 1.25fr);
+    grid-template-columns: minmax(250px, 0.85fr) minmax(380px, 1.25fr);
   }
 
   .canvas-shell {
@@ -1485,14 +1502,8 @@ a {
   }
 
   .generator-layout,
-  .generator-workspace,
-  .generator-support,
-  .generator-preview {
+  .generator-support {
     display: contents;
-  }
-
-  .generator-preview {
-    position: static;
   }
 
   .generator-shell {
@@ -1509,24 +1520,24 @@ a {
     padding-inline: 15px;
   }
 
-  .controls-card {
+  .blueprint-workspace-card {
     order: 1;
+    display: flex !important;
+    flex-direction: column;
   }
 
-  .canvas-card {
-    order: 2;
+  .blueprint-settings {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 16px;
   }
 
   .stats-card {
-    order: 3;
+    order: 2;
   }
 
   .builder-card {
-    order: 4;
-  }
-
-  .share-row {
-    order: 5;
+    order: 3;
   }
 
   .tool-card {
@@ -1534,8 +1545,16 @@ a {
     padding: 16px;
   }
 
+  .tool-card.blueprint-workspace-card {
+    padding: 0;
+  }
+
   .canvas-card {
     padding: 10px;
+  }
+
+  .blueprint-stage .share-row {
+    margin: 0 10px 10px;
   }
 
   .canvas-shell {

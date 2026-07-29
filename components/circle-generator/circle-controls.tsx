@@ -10,6 +10,7 @@ import {
 const PRESETS = [5, 7, 9, 11, 15, 21, 31, 51, 101];
 
 interface CircleControlsProps {
+  embedded?: boolean;
   diameter: number;
   diameterInput: string;
   diameterError: string;
@@ -24,6 +25,7 @@ interface CircleControlsProps {
 }
 
 export function CircleControls({
+  embedded = false,
   diameter,
   diameterInput,
   diameterError,
@@ -39,7 +41,14 @@ export function CircleControls({
   const maxThickness = getMaxThickness(diameter);
 
   return (
-    <section className="tool-card controls-card" aria-labelledby="controls-title">
+    <section
+      className={
+        embedded
+          ? "controls-card blueprint-settings"
+          : "tool-card controls-card"
+      }
+      aria-labelledby="controls-title"
+    >
       <div className="card-heading">
         <div>
           <h2 id="controls-title">Shape settings</h2>

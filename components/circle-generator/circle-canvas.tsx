@@ -11,6 +11,7 @@ import type { CircleResult } from "@/lib/circle/circle-types";
 import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils";
 
 interface CircleCanvasProps {
+  embedded?: boolean;
   result: CircleResult;
   builderActive: boolean;
   currentRow: number;
@@ -31,6 +32,7 @@ interface DragState {
 const DRAG_THRESHOLD = 8;
 
 export function CircleCanvas({
+  embedded = false,
   result,
   builderActive,
   currentRow,
@@ -271,7 +273,12 @@ export function CircleCanvas({
     : "Point to or tap a cell to see its coordinates";
 
   return (
-    <section className="tool-card canvas-card" aria-labelledby="blueprint-title">
+    <section
+      className={
+        embedded ? "canvas-card blueprint-canvas" : "tool-card canvas-card"
+      }
+      aria-labelledby="blueprint-title"
+    >
       <div className="canvas-heading">
         <div className="card-heading">
           <div>
