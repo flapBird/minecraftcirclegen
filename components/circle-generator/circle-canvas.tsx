@@ -6,12 +6,13 @@ import {
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
+  type ReactNode,
 } from "react";
 import type { CircleResult } from "@/lib/circle/circle-types";
 import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils";
 
 interface CircleCanvasProps {
-  embedded?: boolean;
+  settingsPanel?: ReactNode;
   result: CircleResult;
   builderActive: boolean;
   currentRow: number;
@@ -23,6 +24,11 @@ interface Point {
   y: number;
 }
 
+interface CanvasSize {
+  width: number;
+  height: number;
+}
+
 interface DragState {
   point: Point;
   pan: Point;
@@ -31,8 +37,30 @@ interface DragState {
 
 const DRAG_THRESHOLD = 8;
 
+function getCanvasMetrics(
+  size: CanvasSize,
+  diameter: number,
+  zoom: number,
+  pan: Point,
+  hasSettingsPanel: boolean,
+) {
+  const settingsInset =
+    hasSettingsPanel ? Math.min(290, Math.max(240, size.width * 0.25)) : 0;
+  const drawingWidth = size.width - settingsInset;
+  const baseCell = (Math.min(drawingWidth, size.height) * 0.82) / diameter;
+  const cell = baseCell * zoom;
+  const gridSize = cell * diameter;
+
+  return {
+    cell,
+    gridSize,
+    originX: settingsInset + (drawingWidth - gridSize) / 2 + pan.x,
+    originY: (size.height - gridSize) / 2 + pan.y,
+  };
+}
+
 export function CircleCanvas({
-  embedded = false,
+  settingsPanel,
   result,
   builderActive,
   currentRow,
@@ -48,6 +76,7 @@ export function CircleCanvas({
   const [hoveredCell, setHoveredCell] = useState<Point | null>(null);
   const [canvasError, setCanvasError] = useState("");
   const [fullscreenAvailable, setFullscreenAvailable] = useState(false);
+  const hasSettingsPanel = Boolean(settingsPanel);
 
   const fitView = useCallback(() => {
     setZoom(1);
@@ -111,11 +140,13 @@ export function CircleCanvas({
       context.fillStyle = "#f7f9f5";
       context.fillRect(0, 0, size.width, size.height);
 
-      const baseCell = (Math.min(size.width, size.height) * 0.82) / result.diameter;
-      const cell = baseCell * zoom;
-      const gridSize = cell * result.diameter;
-      const originX = (size.width - gridSize) / 2 + pan.x;
-      const originY = (size.height - gridSize) / 2 + pan.y;
+      const { cell, gridSize, originX, originY } = getCanvasMetrics(
+        size,
+        result.diameter,
+        zoom,
+        pan,
+        hasSettingsPanel && window.innerWidth > 760,
+      );
 
       context.fillStyle = "#edf1eb";
       context.fillRect(originX, originY, gridSize, gridSize);
@@ -193,6 +224,7 @@ export function CircleCanvas({
     builderActive,
     completedRows,
     currentRow,
+    hasSettingsPanel,
     hoveredCell,
     pan,
     result,
@@ -205,11 +237,13 @@ export function CircleCanvas({
       const canvas = canvasRef.current;
       if (!canvas) return null;
       const rect = canvas.getBoundingClientRect();
-      const baseCell = (Math.min(size.width, size.height) * 0.82) / result.diameter;
-      const cell = baseCell * zoom;
-      const gridSize = cell * result.diameter;
-      const originX = (size.width - gridSize) / 2 + pan.x;
-      const originY = (size.height - gridSize) / 2 + pan.y;
+      const { cell, originX, originY } = getCanvasMetrics(
+        size,
+        result.diameter,
+        zoom,
+        pan,
+        hasSettingsPanel && window.innerWidth > 760,
+      );
       const x = Math.floor((clientX - rect.left - originX) / cell);
       const y = Math.floor((clientY - rect.top - originY) / cell);
       if (x < 0 || y < 0 || x >= result.diameter || y >= result.diameter) {
@@ -217,7 +251,7 @@ export function CircleCanvas({
       }
       return { x, y };
     },
-    [pan, result.diameter, size, zoom],
+    [hasSettingsPanel, pan, result.diameter, size, zoom],
   );
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
@@ -273,12 +307,7 @@ export function CircleCanvas({
     : "Point to or tap a cell to see its coordinates";
 
   return (
-    <section
-      className={
-        embedded ? "canvas-card blueprint-canvas" : "tool-card canvas-card"
-      }
-      aria-labelledby="blueprint-title"
-    >
+    <section className="tool-card canvas-card" aria-labelledby="blueprint-title">
       <div className="canvas-heading">
         <div className="card-heading">
           <div>
@@ -290,32 +319,37 @@ export function CircleCanvas({
         </div>
         <span className="zoom-readout">{Math.round(zoom * 100)}%</span>
       </div>
-      <div
-        ref={containerRef}
-        className="canvas-shell"
-        data-testid="canvas-shell"
-      >
-        <canvas
-          ref={canvasRef}
-          aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint`}
-          role="img"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={() => {
-            dragRef.current = null;
-          }}
-          onPointerLeave={() => {
-            if (!dragRef.current) setHoveredCell(null);
-          }}
+      <div className={`canvas-workspace${hasSettingsPanel ? " has-settings" : ""}`}>
+        {settingsPanel && (
+          <div className="canvas-settings-overlay">{settingsPanel}</div>
+        )}
+        <div
+          ref={containerRef}
+          className="canvas-shell"
+          data-testid="canvas-shell"
         >
-          A {result.mode} {result.diameter} by {result.diameter} block circle
-          requiring {result.totalBlocks} blocks.
-        </canvas>
-        <div className="canvas-legend" aria-hidden="true">
-          <span><i className="legend-block built" /> Circle</span>
-          <span><i className="legend-block current" /> Current row</span>
-          <span><i className="legend-line" /> Center axes</span>
+          <canvas
+            ref={canvasRef}
+            aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint`}
+            role="img"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={() => {
+              dragRef.current = null;
+            }}
+            onPointerLeave={() => {
+              if (!dragRef.current) setHoveredCell(null);
+            }}
+          >
+            A {result.mode} {result.diameter} by {result.diameter} block circle
+            requiring {result.totalBlocks} blocks.
+          </canvas>
+          <div className="canvas-legend" aria-hidden="true">
+            <span><i className="legend-block built" /> Circle</span>
+            <span><i className="legend-block current" /> Current row</span>
+            <span><i className="legend-line" /> Center axes</span>
+          </div>
         </div>
       </div>
       {canvasError ? (
