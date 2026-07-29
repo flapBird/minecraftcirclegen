@@ -24,6 +24,14 @@ npm run dev
 
 The local URL is printed by the development server.
 
+The default commands use the native Next.js runtime and are suitable for
+Vercel. The existing Sites/Cloudflare build remains available separately:
+
+```bash
+npm run dev:sites
+npm run build:sites
+```
+
 ## Validation
 
 ```bash
