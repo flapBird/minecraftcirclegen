@@ -268,8 +268,7 @@ a {
 }
 
 .generator-preview {
-  position: sticky;
-  top: 76px;
+  position: static;
 }
 
 .tool-card {
@@ -1349,6 +1348,48 @@ a {
   margin-bottom: 38px;
   color: #768178 !important;
   font-size: 0.78rem !important;
+}
+
+@media (min-width: 761px) {
+  .generator-layout {
+    height: clamp(650px, calc(100vh - 92px), 790px);
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .generator-controls {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding-right: 4px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
+
+  .generator-controls:focus-visible {
+    outline: 3px solid rgba(62, 127, 76, 0.3);
+    outline-offset: -3px;
+    border-radius: 13px;
+  }
+
+  .generator-preview {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .generator-preview .canvas-card {
+    min-height: 0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .generator-preview .canvas-shell {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    flex: 1;
+  }
 }
 
 @media (max-width: 980px) {
