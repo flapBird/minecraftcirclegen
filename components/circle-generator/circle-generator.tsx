@@ -203,7 +203,7 @@ export function CircleGenerator({
       </div>
 
       <div className="generator-layout">
-        <div className="generator-controls">
+        <div className="generator-workspace">
           <CircleControls
             diameter={diameter}
             diameterInput={diameterInput}
@@ -217,6 +217,24 @@ export function CircleGenerator({
             onModeChange={changeMode}
             onThicknessChange={changeThickness}
           />
+          <div className="generator-preview">
+            <CircleCanvas
+              result={result}
+              builderActive={builderActive}
+              currentRow={currentRow}
+              completedRows={completedRows}
+            />
+            <div className="share-row">
+              <CircleExportDialog result={result} onStatus={showStatus} />
+              <CircleShareButton onStatus={showStatus} />
+              <span className="share-note">
+                Exports the full blueprint, not the current view.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="generator-support">
           <CircleStats result={result} completedRows={completedRows.size} />
           <CircleBuilder
             result={result}
@@ -231,19 +249,6 @@ export function CircleGenerator({
             onReset={resetProgress}
             onExit={() => setBuilderActive(false)}
           />
-        </div>
-        <div className="generator-preview">
-          <CircleCanvas
-            result={result}
-            builderActive={builderActive}
-            currentRow={currentRow}
-            completedRows={completedRows}
-          />
-          <div className="share-row">
-            <CircleExportDialog result={result} onStatus={showStatus} />
-            <CircleShareButton onStatus={showStatus} />
-            <span className="share-note">Exports the full blueprint, not the current view.</span>
-          </div>
         </div>
       </div>
 
