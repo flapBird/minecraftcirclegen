@@ -41,7 +41,6 @@ export function CircleControls({
   return (
     <section className="tool-card controls-card" aria-labelledby="controls-title">
       <div className="card-heading">
-        <span className="step-chip">1</span>
         <div>
           <h2 id="controls-title">Shape settings</h2>
           <p>Choose the footprint you want to build.</p>

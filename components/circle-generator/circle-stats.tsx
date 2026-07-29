@@ -14,7 +14,6 @@ export function CircleStats({ result, completedRows }: CircleStatsProps) {
   return (
     <section className="tool-card stats-card" aria-labelledby="materials-title">
       <div className="card-heading">
-        <span className="step-chip">3</span>
         <div>
           <h2 id="materials-title">Materials</h2>
           <p>Your build at a glance.</p>

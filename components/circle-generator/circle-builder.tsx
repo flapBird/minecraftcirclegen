@@ -38,7 +38,6 @@ export function CircleBuilder({
   return (
     <section className="tool-card builder-card" aria-labelledby="builder-title">
       <div className="card-heading">
-        <span className="step-chip">4</span>
         <div>
           <h2 id="builder-title">Builder Mode</h2>
           <p>Follow one exact row at a time.</p>

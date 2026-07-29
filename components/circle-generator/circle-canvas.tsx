@@ -274,7 +274,6 @@ export function CircleCanvas({
     <section className="tool-card canvas-card" aria-labelledby="blueprint-title">
       <div className="canvas-heading">
         <div className="card-heading">
-          <span className="step-chip">2</span>
           <div>
             <h2 id="blueprint-title">Blueprint</h2>
             <p>
