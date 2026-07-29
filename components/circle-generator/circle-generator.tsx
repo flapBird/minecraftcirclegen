@@ -203,36 +203,35 @@ export function CircleGenerator({
       </div>
 
       <div className="generator-layout">
-        <div className="tool-card blueprint-workspace-card">
-          <CircleControls
-            embedded
-            diameter={diameter}
-            diameterInput={diameterInput}
-            diameterError={diameterError}
-            mode={mode}
-            thickness={thickness}
-            isEffectivelyFilled={result.isEffectivelyFilled}
-            onDiameterInput={handleDiameterInput}
-            onDiameterCommit={commitDiameter}
-            onDiameterChange={changeDiameter}
-            onModeChange={changeMode}
-            onThicknessChange={changeThickness}
+        <div className="generator-preview">
+          <CircleCanvas
+            settingsPanel={
+              <CircleControls
+                embedded
+                diameter={diameter}
+                diameterInput={diameterInput}
+                diameterError={diameterError}
+                mode={mode}
+                thickness={thickness}
+                isEffectivelyFilled={result.isEffectivelyFilled}
+                onDiameterInput={handleDiameterInput}
+                onDiameterCommit={commitDiameter}
+                onDiameterChange={changeDiameter}
+                onModeChange={changeMode}
+                onThicknessChange={changeThickness}
+              />
+            }
+            result={result}
+            builderActive={builderActive}
+            currentRow={currentRow}
+            completedRows={completedRows}
           />
-          <div className="blueprint-stage">
-            <CircleCanvas
-              embedded
-              result={result}
-              builderActive={builderActive}
-              currentRow={currentRow}
-              completedRows={completedRows}
-            />
-            <div className="share-row">
-              <CircleExportDialog result={result} onStatus={showStatus} />
-              <CircleShareButton onStatus={showStatus} />
-              <span className="share-note">
-                Exports the full blueprint, not the current view.
-              </span>
-            </div>
+          <div className="share-row">
+            <CircleExportDialog result={result} onStatus={showStatus} />
+            <CircleShareButton onStatus={showStatus} />
+            <span className="share-note">
+              Exports the full blueprint, not the current view.
+            </span>
           </div>
         </div>
 
