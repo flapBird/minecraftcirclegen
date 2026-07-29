@@ -22,6 +22,14 @@ interface Point {
   y: number;
 }
 
+interface DragState {
+  point: Point;
+  pan: Point;
+  dragging: boolean;
+}
+
+const DRAG_THRESHOLD = 8;
+
 export function CircleCanvas({
   result,
   builderActive,
@@ -31,7 +39,7 @@ export function CircleCanvas({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number | null>(null);
-  const dragRef = useRef<{ point: Point; pan: Point } | null>(null);
+  const dragRef = useRef<DragState | null>(null);
   const [size, setSize] = useState({ width: 640, height: 640 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState<Point>({ x: 0, y: 0 });
@@ -215,14 +223,24 @@ export function CircleCanvas({
     dragRef.current = {
       point: { x: event.clientX, y: event.clientY },
       pan,
+      dragging: false,
     };
   };
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLCanvasElement>) => {
     if (dragRef.current) {
+      const deltaX = event.clientX - dragRef.current.point.x;
+      const deltaY = event.clientY - dragRef.current.point.y;
+      if (
+        !dragRef.current.dragging &&
+        Math.hypot(deltaX, deltaY) < DRAG_THRESHOLD
+      ) {
+        return;
+      }
+      dragRef.current.dragging = true;
       setPan({
-        x: dragRef.current.pan.x + event.clientX - dragRef.current.point.x,
-        y: dragRef.current.pan.y + event.clientY - dragRef.current.point.y,
+        x: dragRef.current.pan.x + deltaX,
+        y: dragRef.current.pan.y + deltaY,
       });
       return;
     }
@@ -230,46 +248,12 @@ export function CircleCanvas({
   };
 
   const handlePointerUp = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    if (dragRef.current) {
-      const distance =
-        Math.abs(event.clientX - dragRef.current.point.x) +
-        Math.abs(event.clientY - dragRef.current.point.y);
-      if (distance < 5) setHoveredCell(cellFromPointer(event.clientX, event.clientY));
+    if (dragRef.current && !dragRef.current.dragging) {
+      setHoveredCell(cellFromPointer(event.clientX, event.clientY));
     }
     dragRef.current = null;
     event.currentTarget.releasePointerCapture(event.pointerId);
   };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const handleWheel = (event: WheelEvent) => {
-      // Keep ordinary wheel and two-finger scrolling available for page
-      // navigation. Trackpad pinch gestures are exposed as Ctrl + wheel by
-      // modern browsers; Ctrl/Cmd + wheel also gives mouse users an explicit
-      // way to zoom the blueprint.
-      if (!event.ctrlKey && !event.metaKey) return;
-
-      event.preventDefault();
-      const normalizedDelta =
-        event.deltaMode === 1
-          ? event.deltaY * 16
-          : event.deltaMode === 2
-            ? event.deltaY * size.height
-            : event.deltaY;
-      const limitedDelta = Math.max(-80, Math.min(80, normalizedDelta));
-      const zoomFactor = Math.exp(-limitedDelta * 0.0007);
-      setZoom((current) =>
-        Math.min(8, Math.max(0.25, current * zoomFactor)),
-      );
-    };
-
-    // React/browser wheel listeners can be passive. Registering this listener
-    // explicitly lets us cancel only an intentional zoom gesture.
-    canvas.addEventListener("wheel", handleWheel, { passive: false });
-    return () => canvas.removeEventListener("wheel", handleWheel);
-  }, [size.height]);
 
   const toggleFullscreen = async () => {
     const container = containerRef.current;
@@ -366,8 +350,7 @@ export function CircleCanvas({
         </button>
       </div>
       <p className="canvas-tip">
-        Pinch or Ctrl/⌘ + scroll to zoom · drag to pan · tap a cell for
-        coordinates
+        Use the zoom controls · drag to pan · tap a cell for coordinates
       </p>
     </section>
   );
