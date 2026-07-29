@@ -203,8 +203,9 @@ export function CircleGenerator({
       </div>
 
       <div className="generator-layout">
-        <div className="generator-workspace">
+        <div className="tool-card blueprint-workspace-card">
           <CircleControls
+            embedded
             diameter={diameter}
             diameterInput={diameterInput}
             diameterError={diameterError}
@@ -217,8 +218,9 @@ export function CircleGenerator({
             onModeChange={changeMode}
             onThicknessChange={changeThickness}
           />
-          <div className="generator-preview">
+          <div className="blueprint-stage">
             <CircleCanvas
+              embedded
               result={result}
               builderActive={builderActive}
               currentRow={currentRow}
