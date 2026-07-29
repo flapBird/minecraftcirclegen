@@ -200,7 +200,6 @@ export function CircleGenerator({
           <span className="live-dot" aria-hidden="true" />
           <span>Blueprint updates live</span>
         </div>
-        <span>No sign-up · Works in your browser</span>
       </div>
 
       <div className="generator-layout">

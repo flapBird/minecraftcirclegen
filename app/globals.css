@@ -1519,10 +1519,6 @@ a {
     padding-bottom: 64px;
   }
 
-  .generator-toolbar > span {
-    display: none;
-  }
-
   .generator-layout,
   .generator-controls,
   .generator-preview {
