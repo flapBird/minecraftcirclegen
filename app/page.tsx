@@ -1,0 +1,411 @@
+import type { Metadata } from "next";
+import { CircleGenerator } from "@/components/circle-generator/circle-generator";
+import { parseCircleUrl } from "@/lib/circle/circle-url-state";
+
+const title = "Minecraft Circle Generator – Build Perfect Block Circles";
+const description =
+  "Create perfect Minecraft circles by diameter and thickness. Follow a row-by-row building guide, calculate block stacks, and download your circle blueprint.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: "https://minecraftcirclegen.com/" },
+  openGraph: {
+    title,
+    description,
+    url: "https://minecraftcirclegen.com/",
+    type: "website",
+    images: [
+      {
+        url: "https://minecraftcirclegen.com/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Minecraft Circle Gen block circle blueprint",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["https://minecraftcirclegen.com/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const faqs = [
+  {
+    question: "What is a Minecraft circle generator?",
+    answer:
+      "A Minecraft circle generator converts a diameter into a block-by-block, pixel-style circle blueprint. It shows exactly which blocks to place instead of relying on a smooth geometric drawing that cannot be built on the Minecraft grid.",
+  },
+  {
+    question: "How do I make a perfect circle in Minecraft?",
+    answer:
+      "Choose a diameter, copy the generated row pattern, and keep the shape symmetrical around its center axes. Builder Mode highlights one row at a time and lists the exact X-coordinate range for every block segment.",
+  },
+  {
+    question: "What is the best diameter for a Minecraft circle?",
+    answer:
+      "The best diameter depends on the build. Sizes from 9 to 15 blocks work well for compact rooms and towers, while 21 to 31 blocks give larger builds more usable interior space. Bigger arenas and bases often start at 51 blocks.",
+  },
+  {
+    question: "Should I use an odd or even diameter?",
+    answer:
+      "Both work. An odd diameter has one center block, which can make alignment convenient. An even diameter is centered between four blocks and often lines up naturally with two-block-wide entrances. Choose the layout that fits your build.",
+  },
+  {
+    question: "How many blocks do I need?",
+    answer:
+      "The material card counts the occupied cells in the exact generated blueprint. It also converts the total into full stacks of 64 plus remaining blocks, so you can prepare materials before building.",
+  },
+  {
+    question: "Can I create a filled circle?",
+    answer:
+      "Yes. Select Filled for a solid circular platform or foundation. Thick creates an adjustable ring, while Hollow creates a one-block outline.",
+  },
+  {
+    question: "Can I download the circle blueprint?",
+    answer:
+      "Yes. Download PNG creates a high-resolution image of the full blueprint with optional grid lines, center axes, coordinates, and a transparent background.",
+  },
+  {
+    question: "Does this work for Java and Bedrock Edition?",
+    answer:
+      "Yes. The blueprint is a general block layout and works in both Java Edition and Bedrock Edition. The tool does not connect to the game or place blocks automatically.",
+  },
+];
+
+const sizes = [
+  ["7 blocks", "A compact fountain, pillar base, or tiny turret."],
+  ["9 blocks", "A small tower, garden feature, or circular stair core."],
+  ["11 blocks", "A comfortable starter tower or detailed fountain basin."],
+  ["15 blocks", "A round room, watchtower, or compact dome foundation."],
+  ["21 blocks", "A versatile base, pavilion, or medium arena center."],
+  ["31 blocks", "A large hall, substantial tower, or town plaza."],
+  ["51 blocks", "A major arena, city landmark, or large storage base."],
+  ["101 blocks", "A giant hub, megabase footprint, or server-scale project."],
+];
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const incomingParams = await searchParams;
+  const initialOptions = parseCircleUrl(
+    new URLSearchParams(
+      Object.entries(incomingParams).flatMap(([key, value]) =>
+        Array.isArray(value)
+          ? value.map((item) => [key, item])
+          : value === undefined
+            ? []
+            : [[key, value]],
+      ),
+    ).toString(),
+  );
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+  const appSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Minecraft Circle Gen",
+    url: "https://minecraftcirclegen.com/",
+    applicationCategory: "DesignApplication",
+    operatingSystem: "Any",
+    description,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main>
+        <section className="hero">
+          <div className="page-container">
+            <div className="hero-kicker">
+              <span aria-hidden="true">◆</span>
+              Free block blueprint tool
+            </div>
+            <h1>Minecraft Circle Generator</h1>
+            <p className="hero-subtitle">
+              Create perfect Minecraft circles, calculate the blocks you need,
+              and build them row by row.
+            </p>
+            <div className="hero-points" aria-label="Tool features">
+              <span>✓ Exact block layout</span>
+              <span>✓ Row-by-row guide</span>
+              <span>✓ PNG export</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="tool-section" aria-label="Minecraft circle generator tool">
+          <div className="page-container">
+            <CircleGenerator initialOptions={initialOptions} />
+          </div>
+        </section>
+
+        <article className="seo-content">
+          <div className="content-container">
+            <p className="section-label">BUILDING GUIDE</p>
+            <section id="how-to-use">
+              <h2>How to use the Minecraft Circle Generator</h2>
+              <p>
+                Start by entering the diameter of the circle you want to build.
+                The diameter is the complete width of the finished blueprint in
+                blocks, from one outside edge to the other. The preview updates
+                as soon as the value changes, so it is easy to compare several
+                sizes without pressing a generate button.
+              </p>
+              <ol className="guide-steps">
+                <li>
+                  <strong>Enter a diameter.</strong>
+                  <span>
+                    Type any whole number from 3 to 512, or choose one of the
+                    common size shortcuts.
+                  </span>
+                </li>
+                <li>
+                  <strong>Choose a circle mode.</strong>
+                  <span>
+                    Use Hollow for a one-block outline, Thick for an adjustable
+                    ring, or Filled for a solid footprint.
+                  </span>
+                </li>
+                <li>
+                  <strong>Read the blueprint.</strong>
+                  <span>
+                    Green cells are blocks. The crossing lines mark the true
+                    horizontal and vertical center of the circle.
+                  </span>
+                </li>
+                <li>
+                  <strong>Open Builder Mode.</strong>
+                  <span>
+                    Follow the rows in order, using the segment coordinates to
+                    count each uninterrupted run of blocks.
+                  </span>
+                </li>
+                <li>
+                  <strong>Save or share the plan.</strong>
+                  <span>
+                    Download a clean PNG for reference or copy a link that
+                    restores the same diameter, mode, and thickness.
+                  </span>
+                </li>
+              </ol>
+            </section>
+
+            <section>
+              <h2>How to build a circle in Minecraft</h2>
+              <p>
+                Minecraft worlds are made from square blocks, so a mathematical
+                curve cannot be reproduced literally. A convincing circle is a
+                carefully balanced pixel approximation: short straight runs
+                near the top and bottom gradually become longer toward the
+                middle. The important part is not making every step identical.
+                It is keeping each step mirrored across the center.
+              </p>
+              <p>
+                Before placing the outline, mark the horizontal and vertical
+                center axes on the ground with temporary blocks. On an odd-size
+                circle the two axes cross on the center block. On an even-size
+                circle they cross between the central four blocks. These guides
+                give every row a dependable reference point and stop the shape
+                from drifting sideways as it grows.
+              </p>
+              <p>
+                You can start at the top edge and work down one row at a time,
+                or build outward from the center row. Starting at the top works
+                naturally with Builder Mode because the guide uses the same
+                order as the blueprint. For a large circle, another reliable
+                method is to finish one quarter first, check the pattern, and
+                mirror it into the other three quarters. Whichever approach you
+                use, count the length of each straight segment rather than
+                estimating its endpoints by eye.
+              </p>
+            </section>
+
+            <section>
+              <h2>Hollow vs thick vs filled circles</h2>
+              <div className="mode-explainer">
+                <div>
+                  <span className="mode-icon hollow" aria-hidden="true" />
+                  <h3>Hollow circles</h3>
+                  <p>
+                    Hollow mode draws a one-block outside edge. It is the
+                    material-efficient choice for tower walls, arena boundaries,
+                    round rooms, decorative rings, and plans where the interior
+                    should stay open.
+                  </p>
+                </div>
+                <div>
+                  <span className="mode-icon thick" aria-hidden="true" />
+                  <h3>Thick circles</h3>
+                  <p>
+                    Thick mode builds inward from the same outer footprint. Use
+                    it for defensive walls, broad circular roads, raised platform
+                    borders, or builds that need enough depth for stairs and
+                    interior detail.
+                  </p>
+                </div>
+                <div>
+                  <span className="mode-icon filled" aria-hidden="true" />
+                  <h3>Filled circles</h3>
+                  <p>
+                    Filled mode occupies every block inside the outline. It is
+                    best for foundations, floors, islands, circular platforms,
+                    roof layers, and any design that needs a complete surface.
+                  </p>
+                </div>
+              </div>
+              <p>
+                Increasing a thick ring eventually removes all usable space from
+                its center. When that happens, the generator treats the result
+                as filled and tells you directly, so the block count and row
+                instructions remain accurate.
+              </p>
+            </section>
+
+            <section>
+              <h2>Odd and even diameter circles</h2>
+              <p>
+                An odd diameter such as 21 has a single center block. Its
+                coordinates run evenly in both directions, and that center block
+                can be a convenient anchor for towers, beacons, paths, or radial
+                decoration. An even diameter such as 22 has its center at the
+                intersection between four blocks. The blueprint shows half-step
+                relative coordinates so that the geometry stays honest and
+                symmetrical.
+              </p>
+              <p>
+                Neither choice is universally better. Odd circles are often easy
+                to align around a central feature, while even circles work well
+                with paired doors, two-block corridors, and symmetrical interior
+                layouts. Decide from the surrounding build rather than choosing
+                a size only because one type is easier to count.
+              </p>
+            </section>
+
+            <section>
+              <h2>Common Minecraft circle sizes</h2>
+              <p>
+                These sizes are useful starting points, not rigid rules. Check
+                the generated interior space before committing materials,
+                especially when the circle will contain walls, stairs, storage,
+                or redstone.
+              </p>
+              <div className="size-table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Diameter</th>
+                      <th>Good for</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sizes.map(([size, use]) => (
+                      <tr key={size}>
+                        <th scope="row">{size}</th>
+                        <td>{use}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                Small changes matter more at compact sizes. Moving from 9 to 11
+                blocks can noticeably improve the usable floor area. At larger
+                scales, leave room for wall thickness and circulation: a
+                31-block outer diameter with a three-block wall has much less
+                interior width than the number 31 initially suggests.
+              </p>
+            </section>
+
+            <section>
+              <h2>Minecraft circle building tips</h2>
+              <ul className="tips-grid">
+                <li>
+                  <strong>Mark both center axes.</strong>
+                  Keep them in place until the outline closes and every side has
+                  been checked.
+                </li>
+                <li>
+                  <strong>Use temporary colors.</strong>
+                  A contrasting block at segment changes makes counting easier;
+                  replace it after verification.
+                </li>
+                <li>
+                  <strong>Mirror a quarter.</strong>
+                  Build one clean quadrant, then copy its turns across the axes
+                  for strong symmetry.
+                </li>
+                <li>
+                  <strong>Split large projects.</strong>
+                  Treat a 51- or 101-block circle as several sessions and mark
+                  completed rows as you go.
+                </li>
+                <li>
+                  <strong>Bring extra materials.</strong>
+                  The total is exact for the plan, but scaffolding and accidental
+                  placements usually require a small reserve.
+                </li>
+                <li>
+                  <strong>Check the active row.</strong>
+                  Use Builder Mode before every turn in the outline to avoid
+                  carrying one counting error through the build.
+                </li>
+              </ul>
+              <p>
+                For walls that rise several blocks, finish and verify the entire
+                ground-level circle before copying it upward. A small mistake in
+                the foundation becomes much more expensive after several layers.
+                The generator supplies a two-dimensional footprint; height,
+                decoration, entrances, and structural details remain yours to
+                design in game.
+              </p>
+            </section>
+
+            <section id="faq" className="faq-section">
+              <p className="section-label">FAQ</p>
+              <h2>Minecraft circle generator questions</h2>
+              <div className="faq-list">
+                {faqs.map((faq) => (
+                  <details key={faq.question}>
+                    <summary>{faq.question}</summary>
+                    <p>{faq.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          </div>
+        </article>
+      </main>
+    </>
+  );
+}
