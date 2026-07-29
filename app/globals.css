@@ -256,7 +256,7 @@ a {
   grid-template-columns: minmax(320px, 0.78fr) minmax(520px, 1.45fr);
   gap: 14px;
   padding: 14px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .generator-controls,
@@ -1372,30 +1372,8 @@ a {
 }
 
 @media (min-width: 761px) {
-  .generator-layout {
-    height: clamp(650px, calc(100vh - 92px), 790px);
-    align-items: stretch;
-    overflow: hidden;
-  }
-
-  .generator-controls {
-    height: 100%;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    padding-right: 4px;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-  }
-
-  .generator-controls:focus-visible {
-    outline: 3px solid rgba(62, 127, 76, 0.3);
-    outline-offset: -3px;
-    border-radius: 13px;
-  }
-
   .generator-preview {
     height: 100%;
-    overflow: hidden;
   }
 
   .generator-preview .canvas-card {
@@ -1407,7 +1385,7 @@ a {
 
   .generator-preview .canvas-shell {
     height: auto;
-    min-height: 0;
+    min-height: 420px;
     max-height: none;
     flex: 1;
   }

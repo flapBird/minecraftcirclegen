@@ -203,12 +203,7 @@ export function CircleGenerator({
       </div>
 
       <div className="generator-layout">
-        <div
-          className="generator-controls"
-          role="region"
-          aria-label="Circle settings, materials, and builder controls"
-          tabIndex={0}
-        >
+        <div className="generator-controls">
           <CircleControls
             diameter={diameter}
             diameterInput={diameterInput}
