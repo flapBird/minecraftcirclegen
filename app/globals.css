@@ -475,54 +475,138 @@ a {
 
 .canvas-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
+  gap: 24px;
   padding: 4px 4px 0;
 }
 
 .canvas-heading .card-heading {
-  margin-bottom: 13px;
+  flex: 0 0 auto;
+  margin-bottom: 10px;
 }
 
-.canvas-workspace {
-  position: relative;
+.workbench-materials {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-bottom: 10px;
 }
 
-.canvas-settings-overlay {
-  position: absolute;
-  left: 14px;
-  top: 14px;
-  z-index: 4;
-  width: min(260px, calc(100% - 28px));
-  max-height: calc(100% - 28px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 1px solid rgba(196, 208, 197, 0.95);
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 12px 30px rgba(34, 56, 40, 0.12);
-  padding: 15px;
-  backdrop-filter: blur(8px);
+.workbench-materials h2 {
+  margin: 0 3px 0 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.canvas-settings-overlay .card-heading {
-  margin-bottom: 14px;
+.workbench-materials dl {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin: 0;
 }
 
-.canvas-settings-overlay .field-group + .field-group {
-  margin-top: 16px;
+.workbench-materials dl div {
+  min-width: 0;
+  border: 1px solid #dce3dc;
+  border-radius: 8px;
+  background: #f8faf7;
+  padding: 6px 9px;
 }
 
-.canvas-settings-overlay .field-help {
+.workbench-materials dt {
+  color: var(--muted);
+  font-size: 0.58rem;
+  line-height: 1.2;
+}
+
+.workbench-materials dd {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.7rem;
+  font-weight: 780;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blueprint-workbench {
+  display: grid;
+  grid-template-columns:
+    minmax(230px, 260px)
+    minmax(360px, 1fr)
+    minmax(280px, 320px);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid #d5ded5;
+  border-radius: 12px;
+  background: #f7f9f5;
+}
+
+.workbench-settings,
+.workbench-builder {
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 17px;
+}
+
+.workbench-settings {
+  border-right: 1px solid #dce3dc;
+}
+
+.workbench-builder {
+  border-left: 1px solid #dce3dc;
+}
+
+.workbench-settings .blueprint-settings {
+  height: 100%;
+}
+
+.workbench-settings .card-heading,
+.workbench-builder .card-heading {
+  margin-bottom: 15px;
+}
+
+.workbench-settings .field-group + .field-group {
+  margin-top: 17px;
+}
+
+.workbench-settings .field-help {
   margin-bottom: 8px;
 }
 
-.canvas-settings-overlay .preset-list {
-  gap: 4px;
+.workbench-settings .field-error:empty {
+  display: none;
 }
 
-.canvas-settings-overlay .preset-list button {
+.workbench-settings .preset-list {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 8px;
+}
+
+.workbench-settings .preset-list button {
   min-height: 32px;
+}
+
+.workbench-settings .number-stepper {
+  height: 44px;
+}
+
+.workbench-settings .segmented-control button {
+  min-height: 38px;
+}
+
+.workbench-canvas {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f7f9f5;
 }
 
 .zoom-readout {
@@ -538,12 +622,11 @@ a {
 .canvas-shell {
   position: relative;
   width: 100%;
-  height: clamp(420px, 47vw, 590px);
-  max-height: calc(100vh - 250px);
-  min-height: 390px;
+  height: clamp(420px, 42vw, 510px);
+  min-height: 420px;
   overflow: hidden;
-  border: 1px solid #d5ded5;
-  border-radius: 11px;
+  border: 0;
+  border-radius: 0;
   background: #f7f9f5;
 }
 
@@ -611,8 +694,8 @@ a {
 }
 
 .coordinate-readout {
-  min-height: 26px;
-  margin: 9px 2px 2px;
+  min-height: 21px;
+  margin: 7px 2px 0;
   color: #4b5a50;
   font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
   font-size: 0.75rem;
@@ -624,11 +707,11 @@ a {
   justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
+  margin: 5px 10px 10px;
 }
 
 .canvas-controls button {
-  min-height: 40px;
+  min-height: 36px;
   border: 1px solid #d2dad2;
   border-radius: 7px;
   background: #f7f9f6;
@@ -637,6 +720,65 @@ a {
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+.canvas-controls .zoom-readout {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+}
+
+.workbench-builder-panel {
+  height: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.workbench-builder-panel .builder-intro {
+  margin-bottom: 13px;
+}
+
+.workbench-builder-panel .row-facts {
+  margin: 11px 0;
+}
+
+.workbench-builder-panel .segment {
+  padding-block: 7px;
+}
+
+.workbench-builder-panel .builder-actions {
+  margin-top: 11px;
+}
+
+.workbench-builder-panel .progress-block {
+  margin-top: 13px;
+}
+
+.workbench-builder-panel .keyboard-tip {
+  display: none;
+}
+
+.workbench-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.workbench-share-row {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 11px 4px 0;
+}
+
+.workbench-footer .canvas-tip {
+  flex: 0 0 auto;
+  max-width: 260px;
+  margin: 10px 4px 0 0;
+  text-align: right;
 }
 
 .canvas-controls button:hover:not(:disabled) {
@@ -1020,6 +1162,13 @@ a {
   border-radius: 12px;
   background: white;
   padding: 10px;
+}
+
+.share-row.workbench-share-row {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 11px 4px 0;
 }
 
 .share-note {
@@ -1419,20 +1568,47 @@ a {
 }
 
 @media (max-width: 980px) {
-  .generator-support {
-    grid-template-columns: minmax(250px, 0.85fr) minmax(380px, 1.25fr);
+  .blueprint-workbench {
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr);
   }
 
-  .canvas-shell {
-    height: min(54vw, 560px);
+  .workbench-builder {
+    grid-column: 1 / -1;
+    border-top: 1px solid #dce3dc;
+    border-left: 0;
   }
 
-  .preset-list {
-    grid-template-columns: repeat(5, 1fr);
+  .workbench-builder-panel:not(:has(.builder-active)) {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.35fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 18px;
   }
 
-  .builder-actions {
-    grid-template-columns: 1fr;
+  .workbench-builder-panel:not(:has(.builder-active)) .card-heading,
+  .workbench-builder-panel:not(:has(.builder-active)) .builder-intro {
+    margin: 0;
+  }
+
+  .workbench-builder-panel:not(:has(.builder-active)) .primary-button {
+    margin-top: 12px;
+  }
+
+  .canvas-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .workbench-materials {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .workbench-materials dl {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -1524,16 +1700,7 @@ a {
     padding-bottom: 64px;
   }
 
-  .generator-layout,
-  .generator-support,
-  .generator-preview {
-    display: contents;
-  }
-
   .generator-shell {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     padding: 0 9px 9px;
     border-radius: 16px;
   }
@@ -1544,53 +1711,60 @@ a {
     padding-inline: 15px;
   }
 
-  .canvas-card {
-    order: 1;
+  .generator-layout {
+    display: block;
+    padding: 9px 0 0;
   }
 
-  .stats-card {
-    order: 2;
+  .generator-preview {
+    display: block;
   }
 
-  .builder-card {
-    order: 3;
+  .canvas-heading {
+    padding: 5px 5px 0;
   }
 
-  .share-row {
-    order: 4;
+  .workbench-materials {
+    display: block;
+    margin-bottom: 10px;
   }
 
-  .tool-card {
-    border-radius: 12px;
-    padding: 16px;
+  .workbench-materials h2 {
+    margin-bottom: 6px;
   }
 
-  .canvas-card {
-    padding: 10px;
+  .workbench-materials dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .canvas-workspace.has-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .blueprint-workbench {
+    grid-template-columns: 1fr;
   }
 
-  .canvas-settings-overlay {
-    position: static;
-    width: auto;
-    max-height: none;
-    overflow: visible;
-    border-radius: 9px;
-    background: #f8faf7;
-    box-shadow: none;
-    padding: 14px;
-    backdrop-filter: none;
+  .workbench-settings {
+    border-right: 0;
+    border-bottom: 1px solid #dce3dc;
   }
 
   .canvas-shell {
     height: min(88vw, 560px);
     min-height: 310px;
-    max-height: none;
+  }
+
+  .workbench-builder {
+    grid-column: auto;
+  }
+
+  .workbench-builder-panel:not(:has(.builder-active)) {
+    display: block;
+  }
+
+  .workbench-builder-panel:not(:has(.builder-active)) .card-heading {
+    margin-bottom: 14px;
+  }
+
+  .workbench-builder-panel:not(:has(.builder-active)) .builder-intro {
+    margin-bottom: 13px;
   }
 
   .canvas-legend {
@@ -1609,6 +1783,16 @@ a {
   .share-note {
     width: 100%;
     margin-left: 0;
+    text-align: center;
+  }
+
+  .workbench-footer {
+    display: block;
+  }
+
+  .workbench-footer .canvas-tip {
+    max-width: none;
+    margin: 5px 4px 1px;
     text-align: center;
   }
 
@@ -1682,6 +1866,15 @@ a {
 
   .canvas-controls button {
     flex: 1 1 29%;
+  }
+
+  .canvas-controls .zoom-readout {
+    flex: 1 1 29%;
+    justify-content: center;
+  }
+
+  .builder-actions {
+    grid-template-columns: 1fr;
   }
 
   .row-facts {

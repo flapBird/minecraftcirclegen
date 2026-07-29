@@ -4,6 +4,7 @@ import type { CircleResult } from "@/lib/circle/circle-types";
 import { formatCoordinate, pluralize } from "@/lib/circle/circle-utils";
 
 interface CircleBuilderProps {
+  embedded?: boolean;
   result: CircleResult;
   active: boolean;
   currentRow: number;
@@ -18,6 +19,7 @@ interface CircleBuilderProps {
 }
 
 export function CircleBuilder({
+  embedded = false,
   result,
   active,
   currentRow,
@@ -36,7 +38,14 @@ export function CircleBuilder({
   const allComplete = completeCount === result.diameter;
 
   return (
-    <section className="tool-card builder-card" aria-labelledby="builder-title">
+    <section
+      className={
+        embedded
+          ? "builder-card workbench-builder-panel"
+          : "tool-card builder-card"
+      }
+      aria-labelledby="builder-title"
+    >
       <div className="card-heading">
         <div>
           <h2 id="builder-title">Builder Mode</h2>

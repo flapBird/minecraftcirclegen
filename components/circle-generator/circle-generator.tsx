@@ -221,34 +221,42 @@ export function CircleGenerator({
                 onThicknessChange={changeThickness}
               />
             }
+            summaryPanel={
+              <CircleStats
+                compact
+                result={result}
+                completedRows={completedRows.size}
+              />
+            }
+            builderPanel={
+              <CircleBuilder
+                embedded
+                result={result}
+                active={builderActive}
+                currentRow={currentRow}
+                completedRows={completedRows}
+                storageWarning={storageWarning}
+                onStart={() => setBuilderActive(true)}
+                onPrevious={previousRow}
+                onNext={nextRow}
+                onComplete={toggleComplete}
+                onReset={resetProgress}
+                onExit={() => setBuilderActive(false)}
+              />
+            }
+            actionPanel={
+              <div className="share-row workbench-share-row">
+                <CircleExportDialog result={result} onStatus={showStatus} />
+                <CircleShareButton onStatus={showStatus} />
+                <span className="share-note">
+                  Exports the full blueprint, not the current view.
+                </span>
+              </div>
+            }
             result={result}
             builderActive={builderActive}
             currentRow={currentRow}
             completedRows={completedRows}
-          />
-          <div className="share-row">
-            <CircleExportDialog result={result} onStatus={showStatus} />
-            <CircleShareButton onStatus={showStatus} />
-            <span className="share-note">
-              Exports the full blueprint, not the current view.
-            </span>
-          </div>
-        </div>
-
-        <div className="generator-support">
-          <CircleStats result={result} completedRows={completedRows.size} />
-          <CircleBuilder
-            result={result}
-            active={builderActive}
-            currentRow={currentRow}
-            completedRows={completedRows}
-            storageWarning={storageWarning}
-            onStart={() => setBuilderActive(true)}
-            onPrevious={previousRow}
-            onNext={nextRow}
-            onComplete={toggleComplete}
-            onReset={resetProgress}
-            onExit={() => setBuilderActive(false)}
           />
         </div>
       </div>

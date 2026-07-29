@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <SiteFooter />
+        <GoogleAnalytics />
       </body>
     </html>
   );

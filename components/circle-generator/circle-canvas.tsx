@@ -13,6 +13,9 @@ import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils"
 
 interface CircleCanvasProps {
   settingsPanel?: ReactNode;
+  summaryPanel?: ReactNode;
+  builderPanel?: ReactNode;
+  actionPanel?: ReactNode;
   result: CircleResult;
   builderActive: boolean;
   currentRow: number;
@@ -42,25 +45,24 @@ function getCanvasMetrics(
   diameter: number,
   zoom: number,
   pan: Point,
-  hasSettingsPanel: boolean,
 ) {
-  const settingsInset =
-    hasSettingsPanel ? Math.min(290, Math.max(240, size.width * 0.25)) : 0;
-  const drawingWidth = size.width - settingsInset;
-  const baseCell = (Math.min(drawingWidth, size.height) * 0.82) / diameter;
+  const baseCell = (Math.min(size.width, size.height) * 0.82) / diameter;
   const cell = baseCell * zoom;
   const gridSize = cell * diameter;
 
   return {
     cell,
     gridSize,
-    originX: settingsInset + (drawingWidth - gridSize) / 2 + pan.x,
+    originX: (size.width - gridSize) / 2 + pan.x,
     originY: (size.height - gridSize) / 2 + pan.y,
   };
 }
 
 export function CircleCanvas({
   settingsPanel,
+  summaryPanel,
+  builderPanel,
+  actionPanel,
   result,
   builderActive,
   currentRow,
@@ -76,7 +78,6 @@ export function CircleCanvas({
   const [hoveredCell, setHoveredCell] = useState<Point | null>(null);
   const [canvasError, setCanvasError] = useState("");
   const [fullscreenAvailable, setFullscreenAvailable] = useState(false);
-  const hasSettingsPanel = Boolean(settingsPanel);
 
   const fitView = useCallback(() => {
     setZoom(1);
@@ -145,7 +146,6 @@ export function CircleCanvas({
         result.diameter,
         zoom,
         pan,
-        hasSettingsPanel && window.innerWidth > 760,
       );
 
       context.fillStyle = "#edf1eb";
@@ -224,7 +224,6 @@ export function CircleCanvas({
     builderActive,
     completedRows,
     currentRow,
-    hasSettingsPanel,
     hoveredCell,
     pan,
     result,
@@ -242,7 +241,6 @@ export function CircleCanvas({
         result.diameter,
         zoom,
         pan,
-        hasSettingsPanel && window.innerWidth > 760,
       );
       const x = Math.floor((clientX - rect.left - originX) / cell);
       const y = Math.floor((clientY - rect.top - originY) / cell);
@@ -251,7 +249,7 @@ export function CircleCanvas({
       }
       return { x, y };
     },
-    [hasSettingsPanel, pan, result.diameter, size, zoom],
+    [pan, result.diameter, size, zoom],
   );
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
@@ -317,81 +315,90 @@ export function CircleCanvas({
             </p>
           </div>
         </div>
-        <span className="zoom-readout">{Math.round(zoom * 100)}%</span>
+        {summaryPanel}
       </div>
-      <div className={`canvas-workspace${hasSettingsPanel ? " has-settings" : ""}`}>
-        {settingsPanel && (
-          <div className="canvas-settings-overlay">{settingsPanel}</div>
-        )}
-        <div
-          ref={containerRef}
-          className="canvas-shell"
-          data-testid="canvas-shell"
-        >
-          <canvas
-            ref={canvasRef}
-            aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint`}
-            role="img"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={() => {
-              dragRef.current = null;
-            }}
-            onPointerLeave={() => {
-              if (!dragRef.current) setHoveredCell(null);
-            }}
+      <div className="blueprint-workbench">
+        <aside className="workbench-settings" aria-label="Shape settings panel">
+          {settingsPanel}
+        </aside>
+        <div className="workbench-canvas">
+          <div
+            ref={containerRef}
+            className="canvas-shell"
+            data-testid="canvas-shell"
           >
+            <canvas
+              ref={canvasRef}
+              aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint`}
+              role="img"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={() => {
+                dragRef.current = null;
+              }}
+              onPointerLeave={() => {
+                if (!dragRef.current) setHoveredCell(null);
+              }}
+            >
+              A {result.mode} {result.diameter} by {result.diameter} block circle
+              requiring {result.totalBlocks} blocks.
+            </canvas>
+            <div className="canvas-legend" aria-hidden="true">
+              <span><i className="legend-block built" /> Circle</span>
+              <span><i className="legend-block current" /> Current row</span>
+              <span><i className="legend-line" /> Center axes</span>
+            </div>
+          </div>
+          {canvasError ? (
+            <p className="field-error" role="alert">{canvasError}</p>
+          ) : (
+            <p className="coordinate-readout" aria-live="polite">
+              {coordinateText}
+            </p>
+          )}
+          <p className="sr-only">
             A {result.mode} {result.diameter} by {result.diameter} block circle
             requiring {result.totalBlocks} blocks.
-          </canvas>
-          <div className="canvas-legend" aria-hidden="true">
-            <span><i className="legend-block built" /> Circle</span>
-            <span><i className="legend-block current" /> Current row</span>
-            <span><i className="legend-line" /> Center axes</span>
+          </p>
+          <div className="canvas-controls" aria-label="Blueprint view controls">
+            <span className="zoom-readout">{Math.round(zoom * 100)}%</span>
+            <button
+              type="button"
+              aria-label="Zoom out"
+              onClick={() => setZoom((value) => Math.max(0.25, value / 1.25))}
+            >
+              −
+            </button>
+            <button type="button" onClick={fitView}>Fit</button>
+            <button
+              type="button"
+              aria-label="Zoom in"
+              onClick={() => setZoom((value) => Math.min(8, value * 1.25))}
+            >
+              +
+            </button>
+            <button type="button" onClick={fitView}>Reset</button>
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              disabled={!fullscreenAvailable}
+              title={fullscreenAvailable ? undefined : "Fullscreen is unavailable in this browser"}
+            >
+              Fullscreen
+            </button>
           </div>
         </div>
+        <aside className="workbench-builder" aria-label="Builder Mode panel">
+          {builderPanel}
+        </aside>
       </div>
-      {canvasError ? (
-        <p className="field-error" role="alert">{canvasError}</p>
-      ) : (
-        <p className="coordinate-readout" aria-live="polite">
-          {coordinateText}
+      <div className="workbench-footer">
+        {actionPanel}
+        <p className="canvas-tip">
+          Select a cell for coordinates. View controls do not change the blueprint.
         </p>
-      )}
-      <p className="sr-only">
-        A {result.mode} {result.diameter} by {result.diameter} block circle
-        requiring {result.totalBlocks} blocks.
-      </p>
-      <div className="canvas-controls" aria-label="Blueprint view controls">
-        <button
-          type="button"
-          aria-label="Zoom out"
-          onClick={() => setZoom((value) => Math.max(0.25, value / 1.25))}
-        >
-          −
-        </button>
-        <button type="button" onClick={fitView}>Fit</button>
-        <button
-          type="button"
-          aria-label="Zoom in"
-          onClick={() => setZoom((value) => Math.min(8, value * 1.25))}
-        >
-          +
-        </button>
-        <button type="button" onClick={fitView}>Reset View</button>
-        <button
-          type="button"
-          onClick={toggleFullscreen}
-          disabled={!fullscreenAvailable}
-          title={fullscreenAvailable ? undefined : "Fullscreen is unavailable in this browser"}
-        >
-          Fullscreen
-        </button>
       </div>
-      <p className="canvas-tip">
-        Use the zoom controls · drag to pan · tap a cell for coordinates
-      </p>
     </section>
   );
 }
