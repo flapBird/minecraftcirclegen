@@ -1372,10 +1372,6 @@ a {
 }
 
 @media (min-width: 761px) {
-  .generator-preview {
-    height: 100%;
-  }
-
   .generator-preview .canvas-card {
     min-height: 0;
     display: flex;
@@ -1387,7 +1383,8 @@ a {
     height: auto;
     min-height: 420px;
     max-height: none;
-    flex: 1;
+    flex: 1 1 0;
+    contain: size layout paint;
   }
 }
 
