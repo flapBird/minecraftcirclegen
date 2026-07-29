@@ -16,7 +16,7 @@ export function SiteFooter() {
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy Policy</Link>
           <Link href="/terms">Terms of Use</Link>
-          <a href="mailto:contact@minecraftcirclegen.com">Contact</a>
+          <Link href="/about#contact">Contact</Link>
         </nav>
       </div>
       <div className="page-container footer-bottom">

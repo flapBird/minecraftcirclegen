@@ -15,8 +15,28 @@ export const metadata: Metadata = {
     "A free Minecraft circle generator with block blueprints, material counts, and a row-by-row building guide.",
   applicationName: "Minecraft Circle Gen",
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/favicon.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/favicon-32x32.png",
+    apple: {
+      url: "/apple-touch-icon.png",
+      sizes: "180x180",
+      type: "image/png",
+    },
   },
   manifest: "/manifest.webmanifest",
 };

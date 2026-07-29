@@ -42,7 +42,7 @@ export default function AboutPage() {
           assets.
         </p>
       </section>
-      <section>
+      <section id="contact">
         <h2>Contact</h2>
         <p>
           Questions, bug reports, and practical feedback are welcome at{" "}

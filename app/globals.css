@@ -182,22 +182,6 @@ a {
   mask-image: linear-gradient(to bottom, black 50%, transparent);
 }
 
-.hero-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 13px;
-  color: var(--green-dark);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.hero-kicker span {
-  font-size: 0.65rem;
-}
-
 .hero h1 {
   max-width: 900px;
   margin: 0 auto;

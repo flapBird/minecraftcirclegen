@@ -147,10 +147,6 @@ export default async function Home({
       <main>
         <section className="hero">
           <div className="page-container">
-            <div className="hero-kicker">
-              <span aria-hidden="true">◆</span>
-              Free block blueprint tool
-            </div>
             <h1>Minecraft Circle Generator</h1>
             <p className="hero-subtitle">
               Create perfect Minecraft circles, calculate the blocks you need,
