@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
 import type { CircleResult } from "@/lib/circle/circle-types";
 import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils";
@@ -241,26 +240,36 @@ export function CircleCanvas({
     event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
-  const handleWheel = (event: ReactWheelEvent<HTMLCanvasElement>) => {
-    // Keep ordinary wheel and two-finger scrolling available for page
-    // navigation. Trackpad pinch gestures are exposed as Ctrl + wheel by
-    // modern browsers; Ctrl/Cmd + wheel also gives mouse users an explicit
-    // way to zoom the blueprint.
-    if (!event.ctrlKey && !event.metaKey) return;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    event.preventDefault();
-    const normalizedDelta =
-      event.deltaMode === 1
-        ? event.deltaY * 16
-        : event.deltaMode === 2
-          ? event.deltaY * size.height
-          : event.deltaY;
-    const limitedDelta = Math.max(-80, Math.min(80, normalizedDelta));
-    const zoomFactor = Math.exp(-limitedDelta * 0.0007);
-    setZoom((current) =>
-      Math.min(8, Math.max(0.25, current * zoomFactor)),
-    );
-  };
+    const handleWheel = (event: WheelEvent) => {
+      // Keep ordinary wheel and two-finger scrolling available for page
+      // navigation. Trackpad pinch gestures are exposed as Ctrl + wheel by
+      // modern browsers; Ctrl/Cmd + wheel also gives mouse users an explicit
+      // way to zoom the blueprint.
+      if (!event.ctrlKey && !event.metaKey) return;
+
+      event.preventDefault();
+      const normalizedDelta =
+        event.deltaMode === 1
+          ? event.deltaY * 16
+          : event.deltaMode === 2
+            ? event.deltaY * size.height
+            : event.deltaY;
+      const limitedDelta = Math.max(-80, Math.min(80, normalizedDelta));
+      const zoomFactor = Math.exp(-limitedDelta * 0.0007);
+      setZoom((current) =>
+        Math.min(8, Math.max(0.25, current * zoomFactor)),
+      );
+    };
+
+    // React/browser wheel listeners can be passive. Registering this listener
+    // explicitly lets us cancel only an intentional zoom gesture.
+    canvas.addEventListener("wheel", handleWheel, { passive: false });
+    return () => canvas.removeEventListener("wheel", handleWheel);
+  }, [size.height]);
 
   const toggleFullscreen = async () => {
     const container = containerRef.current;
@@ -309,7 +318,6 @@ export function CircleCanvas({
           onPointerLeave={() => {
             if (!dragRef.current) setHoveredCell(null);
           }}
-          onWheel={handleWheel}
         >
           A {result.mode} {result.diameter} by {result.diameter} block circle
           requiring {result.totalBlocks} blocks.
