@@ -168,8 +168,30 @@ export default async function Home({
 
         <article className="seo-content">
           <div className="content-container">
-            <p className="section-label">BUILDING GUIDE</p>
+            <section className="tool-introduction">
+              <p className="section-label">ABOUT THE TOOL</p>
+              <h2>What is a Minecraft circle generator?</h2>
+              <p>
+                A Minecraft circle generator turns a diameter into a practical
+                block-by-block plan for a round build. Because Minecraft uses a
+                square grid, a smooth mathematical circle cannot be placed
+                directly in the game. The tool converts that curve into a
+                balanced pixel-style footprint, showing exactly which blocks
+                belong in every row.
+              </p>
+              <p>
+                Minecraft Circle Gen goes beyond a simple circle image. It
+                calculates the required blocks and stacks, identifies each
+                continuous row segment with relative coordinates, highlights
+                the row you are building, and lets you save or share the full
+                blueprint. It is useful for planning tower walls, circular
+                rooms, arenas, platforms, foundations, roads, and other
+                two-dimensional round layouts in both Java and Bedrock Edition.
+              </p>
+            </section>
+
             <section id="how-to-use">
+              <p className="section-label">USING THE GENERATOR</p>
               <h2>How to use the Minecraft Circle Generator</h2>
               <p>
                 Start by entering the diameter of the circle you want to build.

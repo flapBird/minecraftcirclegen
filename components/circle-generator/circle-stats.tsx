@@ -14,30 +14,28 @@ export function CircleStats({ result, completedRows }: CircleStatsProps) {
   return (
     <section className="tool-card stats-card" aria-labelledby="materials-title">
       <div className="card-heading">
-        <span className="step-chip">3</span>
         <div>
           <h2 id="materials-title">Materials</h2>
-          <p>Your build at a glance.</p>
+          <p>Everything to gather before you build.</p>
         </div>
       </div>
       <div className="materials-callout">
-        <span>Total blocks</span>
-        <strong>{result.totalBlocks.toLocaleString()}</strong>
-        <small>
-          {fullStacks === 0
-            ? pluralize(remaining, "block")
-            : `${pluralize(fullStacks, "stack")}${remaining ? ` + ${pluralize(remaining, "block")}` : ""}`}
-        </small>
+        <div className="materials-total">
+          <span>Total blocks</span>
+          <strong>{result.totalBlocks.toLocaleString()}</strong>
+        </div>
+        <dl className="materials-breakdown">
+          <div>
+            <dt>Stacks of 64</dt>
+            <dd>{pluralize(fullStacks, "stack")}</dd>
+          </div>
+          <div>
+            <dt>Remaining</dt>
+            <dd>{pluralize(remaining, "block")}</dd>
+          </div>
+        </dl>
       </div>
       <dl className="stats-grid">
-        <div>
-          <dt>Stacks of 64</dt>
-          <dd>{fullStacks}</dd>
-        </div>
-        <div>
-          <dt>Remaining blocks</dt>
-          <dd>{remaining}</dd>
-        </div>
         <div>
           <dt>Diameter</dt>
           <dd>{result.diameter}</dd>
