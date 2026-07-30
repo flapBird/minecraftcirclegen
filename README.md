@@ -1,19 +1,29 @@
 # Minecraft Circle Gen
 
-A free, client-side Minecraft circle blueprint generator for diameters from 3
-to 512 blocks.
+Minecraft Circle Gen is a free online Minecraft circle generator that creates
+practical block-by-block blueprints for circular builds.
 
-## Features
+Website: https://minecraftcirclegen.com
 
-- Hollow, thick, and filled block circles
-- High-DPI Canvas preview with zoom, pan, fit, and fullscreen controls
-- Exact block and stack counts
-- Row-by-row Builder Mode with local progress
-- High-resolution PNG blueprint export
-- Shareable URL parameters
-- Server-rendered guides, FAQ, and legal pages
+## Main Features
 
-## Development
+- Generate circles from 3 to 512 blocks in diameter
+- Choose Hollow, Thick, or Filled circle modes
+- Preview the complete blueprint on a high-resolution Canvas grid
+- Display center axes, relative coordinates, and highlighted build rows
+- Zoom, fit, reset, and fullscreen the blueprint view
+- Calculate exact block totals, stacks of 64, and remaining blocks
+- Follow each row with Builder Mode and exact X-coordinate segments
+- Mark rows as complete and restore progress from local browser storage
+- Export a high-resolution PNG blueprint with configurable grid, axes,
+  coordinates, and background
+- Copy a shareable link that restores the selected circle settings
+- Use the generator on desktop, tablet, and mobile devices
+
+All circle calculations run locally in the browser. The project does not
+require an account or application database.
+
+## Local Development
 
 Requires Node.js 22.13 or newer.
 
@@ -22,23 +32,10 @@ npm install
 npm run dev
 ```
 
-The local URL is printed by the development server.
-
-The default commands use the native Next.js runtime and are suitable for
-Vercel. The existing Sites/Cloudflare build remains available separately:
-
-```bash
-npm run dev:sites
-npm run build:sites
-```
-
 ## Validation
 
 ```bash
-npm run test
 npm run lint
+npm run test
 npm run build
 ```
-
-Circle calculations and Builder Mode progress run entirely in the browser. The
-application does not require an account or application database.
