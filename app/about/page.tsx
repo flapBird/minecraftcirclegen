@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ContactEmail } from "@/components/layout/contact-email";
 import { LegalPage } from "@/components/layout/legal-page";
 
 export const metadata: Metadata = {
@@ -46,7 +47,7 @@ export default function AboutPage() {
         <h2>Contact</h2>
         <p>
           Questions, bug reports, and practical feedback are welcome at{" "}
-          contact@minecraftcirclegen.com
+          <ContactEmail />
           .
         </p>
       </section>
