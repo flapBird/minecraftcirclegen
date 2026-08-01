@@ -4,7 +4,7 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
-const siteUrl = "https://minecraftcirclegen.com";
+const siteUrl = "https://minecraftcirclegen.com/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

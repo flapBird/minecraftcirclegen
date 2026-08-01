@@ -9,7 +9,6 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: "https://minecraftcirclegen.com/" },
   openGraph: {
     title,
     description,
@@ -136,6 +135,7 @@ export default async function Home({
 
   return (
     <>
+      <link rel="canonical" href="https://minecraftcirclegen.com/" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
