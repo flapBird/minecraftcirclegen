@@ -46,9 +46,7 @@ export default function AboutPage() {
         <h2>Contact</h2>
         <p>
           Questions, bug reports, and practical feedback are welcome at{" "}
-          <a href="mailto:contact@minecraftcirclegen.com">
-            contact@minecraftcirclegen.com
-          </a>
+          contact@minecraftcirclegen.com
           .
         </p>
       </section>

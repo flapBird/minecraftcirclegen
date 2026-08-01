@@ -78,9 +78,7 @@ export default function PrivacyPage() {
         <h2>Contact</h2>
         <p>
           For privacy questions, email{" "}
-          <a href="mailto:contact@minecraftcirclegen.com">
-            contact@minecraftcirclegen.com
-          </a>
+          contact@minecraftcirclegen.com
           .
         </p>
       </section>

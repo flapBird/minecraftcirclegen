@@ -65,9 +65,7 @@ export default function TermsPage() {
         <h2>Contact</h2>
         <p>
           Questions about these terms can be sent to{" "}
-          <a href="mailto:contact@minecraftcirclegen.com">
-            contact@minecraftcirclegen.com
-          </a>
+          contact@minecraftcirclegen.com
           .
         </p>
       </section>
