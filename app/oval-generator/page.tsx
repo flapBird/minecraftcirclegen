@@ -11,6 +11,6 @@ export const metadata: Metadata = {
   openGraph: { title, description, url: "/oval-generator", type: "website" },
 };
 
-export default function OvalPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  return <GeometryLanding shape="oval" searchParams={searchParams} />;
+export default function OvalPage() {
+  return <GeometryLanding shape="oval" />;
 }

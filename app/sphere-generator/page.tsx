@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   openGraph: { title, description, url: "/sphere-generator", type: "website" },
 };
 
-export default function SpherePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  return <GeometryLanding shape="sphere" searchParams={searchParams} />;
+export default function SpherePage() {
+  return <GeometryLanding shape="sphere" />;
 }
-

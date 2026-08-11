@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { GeometryGenerator } from "./geometry-generator";
+import { GeometryGeneratorFromUrl } from "./geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
 import type { GeometryShape } from "@/lib/geometry/geometry-types";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
@@ -35,26 +37,10 @@ const COPY: Record<Exclude<GeometryShape, "circle">, {
   },
 };
 
-function searchString(params: Record<string, string | string[] | undefined>) {
-  return new URLSearchParams(
-    Object.entries(params).flatMap(([key, value]) =>
-      Array.isArray(value)
-        ? value.map((item) => [key, item])
-        : value === undefined ? [] : [[key, value]],
-    ),
-  ).toString();
-}
-
-export async function GeometryLanding({
-  shape,
-  searchParams,
-}: {
+export function GeometryLanding({ shape }: {
   shape: Exclude<GeometryShape, "circle">;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const params = await searchParams;
   const copy = COPY[shape];
-  const initialOptions = parseGeometryUrl(shape, searchString(params));
   return (
     <main>
       <section className="hero geometry-hero">
@@ -66,7 +52,16 @@ export async function GeometryLanding({
       </section>
       <section className="tool-section" aria-label={`${copy.title} tool`}>
         <div className="page-container">
-          <GeometryGenerator shape={shape} initialOptions={initialOptions} />
+          <Suspense
+            fallback={
+              <GeometryGenerator
+                shape={shape}
+                initialOptions={parseGeometryUrl(shape, "")}
+              />
+            }
+          >
+            <GeometryGeneratorFromUrl shape={shape} />
+          </Suspense>
         </div>
       </section>
       <article className="seo-content geometry-content">

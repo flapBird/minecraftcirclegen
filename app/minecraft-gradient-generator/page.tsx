@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { GradientGenerator } from "@/components/gradient-generator/gradient-generator";
-import { parseGradientOptions } from "@/lib/gradient/gradient-url-state";
+import { GradientGeneratorFromUrl } from "@/components/gradient-generator/gradient-generator-from-url";
+import { DEFAULT_GRADIENT_OPTIONS } from "@/lib/gradient/gradient-url-state";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
@@ -25,22 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function GradientGeneratorPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const incoming = await searchParams;
-  const query = new URLSearchParams(
-    Object.entries(incoming).flatMap(([key, value]) =>
-      Array.isArray(value)
-        ? value.map((item) => [key, item])
-        : value === undefined
-          ? []
-          : [[key, value]],
-    ),
-  ).toString();
-  const initialOptions = parseGradientOptions(query);
+export default function GradientGeneratorPage() {
   return (
     <main>
       <section className="hero gradient-hero">
@@ -55,7 +42,11 @@ export default async function GradientGeneratorPage({
 
       <section className="tool-section" aria-label="Minecraft gradient generator tool">
         <div className="page-container">
-          <GradientGenerator initialOptions={initialOptions} />
+          <Suspense
+            fallback={<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />}
+          >
+            <GradientGeneratorFromUrl />
+          </Suspense>
         </div>
       </section>
 

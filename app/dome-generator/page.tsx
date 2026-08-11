@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   openGraph: { title, description, url: "/dome-generator", type: "website" },
 };
 
-export default function DomePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  return <GeometryLanding shape="dome" searchParams={searchParams} />;
+export default function DomePage() {
+  return <GeometryLanding shape="dome" />;
 }
-

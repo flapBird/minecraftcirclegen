@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
+import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolDirectory } from "@/components/layout/tool-page-end";
@@ -91,24 +93,7 @@ const sizes = [
   ["101 blocks", "A giant hub, megabase footprint, or server-scale project."],
 ];
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const incomingParams = await searchParams;
-  const initialOptions = parseGeometryUrl(
-    "circle",
-    new URLSearchParams(
-      Object.entries(incomingParams).flatMap(([key, value]) =>
-        Array.isArray(value)
-          ? value.map((item) => [key, item])
-          : value === undefined
-            ? []
-            : [[key, value]],
-      ),
-    ).toString(),
-  );
+export default function Home() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -161,7 +146,16 @@ export default async function Home({
 
         <section className="tool-section" aria-label="Minecraft circle generator tool">
           <div className="page-container">
-            <GeometryGenerator shape="circle" initialOptions={initialOptions} />
+            <Suspense
+              fallback={
+                <GeometryGenerator
+                  shape="circle"
+                  initialOptions={parseGeometryUrl("circle", "")}
+                />
+              }
+            >
+              <GeometryGeneratorFromUrl shape="circle" />
+            </Suspense>
           </div>
         </section>
 
