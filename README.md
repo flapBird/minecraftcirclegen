@@ -11,9 +11,9 @@ Website: https://minecraftcirclegen.com
 - Choose Hollow, Thick, or Filled circle modes
 - Preview the complete blueprint on a high-resolution Canvas grid
 - Display center axes, relative coordinates, and highlighted build rows
-- Zoom, fit, reset, and fullscreen the blueprint view
+- Zoom, fit, pan, and fullscreen the blueprint view
 - Calculate exact block totals, stacks of 64, and remaining blocks
-- Follow each row with Builder Mode and exact X-coordinate segments
+- Follow each row with Builder Mode, a compact row preview, and exact X-coordinate segments
 - Mark rows as complete and restore progress from local browser storage
 - Export a high-resolution PNG blueprint with configurable grid, axes,
   coordinates, and background

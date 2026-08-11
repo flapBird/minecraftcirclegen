@@ -13,7 +13,16 @@ function roundedRect(
   radius: number,
 ) {
   context.beginPath();
-  context.roundRect(x, y, width, height, radius);
+  if (typeof context.roundRect === "function") {
+    context.roundRect(x, y, width, height, radius);
+  } else {
+    context.moveTo(x + radius, y);
+    context.arcTo(x + width, y, x + width, y + height, radius);
+    context.arcTo(x + width, y + height, x, y + height, radius);
+    context.arcTo(x, y + height, x, y, radius);
+    context.arcTo(x, y, x + width, y, radius);
+    context.closePath();
+  }
   context.fill();
 }
 
@@ -55,25 +64,28 @@ export function renderExportCanvas(
 
   const originX = margin;
   const originY = headerHeight;
-  context.fillStyle = options.transparentBackground ? "rgba(255,255,255,.92)" : "#ffffff";
-  roundedRect(context, originX - 12, originY - 12, gridSize + 24, gridSize + 24, 16);
-  context.fillStyle = "#edf1eb";
-  context.fillRect(originX, originY, gridSize, gridSize);
+  if (!options.transparentBackground) {
+    context.fillStyle = "#ffffff";
+    roundedRect(context, originX - 12, originY - 12, gridSize + 24, gridSize + 24, 16);
+    context.fillStyle = "#edf1eb";
+    context.fillRect(originX, originY, gridSize, gridSize);
+  }
 
   for (let y = 0; y < result.diameter; y += 1) {
     for (let x = 0; x < result.diameter; x += 1) {
       if (!result.grid[y][x]) continue;
       context.fillStyle = "#3e7f4c";
+      const inset = options.showGrid ? Math.min(0.5, cellSize * 0.08) : 0;
       context.fillRect(
-        originX + x * cellSize + 0.5,
-        originY + y * cellSize + 0.5,
-        Math.max(1, cellSize - 1),
-        Math.max(1, cellSize - 1),
+        originX + x * cellSize + inset,
+        originY + y * cellSize + inset,
+        Math.max(1, cellSize - inset * 2),
+        Math.max(1, cellSize - inset * 2),
       );
     }
   }
 
-  if (options.showGrid && cellSize >= 5) {
+  if (options.showGrid) {
     context.strokeStyle = "rgba(40,58,45,.22)";
     context.lineWidth = 1;
     context.beginPath();
@@ -98,19 +110,40 @@ export function renderExportCanvas(
     context.stroke();
   }
 
-  if (options.showCoordinates && cellSize >= 16) {
-    const interval = result.diameter > 100 ? 10 : result.diameter > 40 ? 5 : 1;
-    context.font = `${Math.max(9, Math.min(16, cellSize * 0.38))}px ui-monospace, monospace`;
+  if (options.showCoordinates) {
+    const interval = Math.max(1, Math.ceil(34 / cellSize));
+    const indices: number[] = [];
+    for (let i = 0; i < result.diameter; i += interval) indices.push(i);
+    if (indices.at(-1) !== result.diameter - 1) indices.push(result.diameter - 1);
+    context.font = `${Math.max(9, Math.min(14, cellSize * 0.7))}px ui-monospace, monospace`;
     context.fillStyle = "rgba(24,35,27,.72)";
-    for (let i = 0; i < result.diameter; i += interval) {
+    context.textAlign = "center";
+    context.textBaseline = "bottom";
+    for (const i of indices) {
       const coordinate = formatCoordinate(i - (result.diameter - 1) / 2);
-      context.fillText(coordinate, originX + i * cellSize + 3, originY + 14);
-      context.fillText(coordinate, originX + 3, originY + i * cellSize + 14);
+      context.fillText(
+        coordinate,
+        originX + (i + 0.5) * cellSize,
+        originY - 7,
+      );
     }
+    context.textAlign = "right";
+    context.textBaseline = "middle";
+    for (const i of indices) {
+      const coordinate = formatCoordinate(i - (result.diameter - 1) / 2);
+      context.fillText(
+        coordinate,
+        originX - 8,
+        originY + (i + 0.5) * cellSize,
+      );
+    }
+    context.textBaseline = "alphabetic";
   }
 
   context.fillStyle = "#536158";
   context.font = "500 20px system-ui, sans-serif";
+  context.textAlign = "left";
+  context.textBaseline = "alphabetic";
   context.fillText(
     `Diameter ${result.diameter} · ${result.totalBlocks} total blocks`,
     margin,

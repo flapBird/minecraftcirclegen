@@ -5,8 +5,10 @@ import {
   useEffect,
   useRef,
   useState,
+  type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
+  type WheelEvent as ReactWheelEvent,
 } from "react";
 import type { CircleResult } from "@/lib/circle/circle-types";
 import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils";
@@ -32,19 +34,10 @@ interface CanvasSize {
   height: number;
 }
 
-interface DragState {
-  point: Point;
-  pan: Point;
-  dragging: boolean;
-}
-
-const DRAG_THRESHOLD = 8;
-
 function getCanvasMetrics(
   size: CanvasSize,
   diameter: number,
   zoom: number,
-  pan: Point,
 ) {
   const baseCell = (Math.min(size.width, size.height) * 0.82) / diameter;
   const cell = baseCell * zoom;
@@ -53,8 +46,8 @@ function getCanvasMetrics(
   return {
     cell,
     gridSize,
-    originX: (size.width - gridSize) / 2 + pan.x,
-    originY: (size.height - gridSize) / 2 + pan.y,
+    originX: (size.width - gridSize) / 2,
+    originY: (size.height - gridSize) / 2,
   };
 }
 
@@ -69,19 +62,18 @@ export function CircleCanvas({
   completedRows,
 }: CircleCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const workbenchRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number | null>(null);
-  const dragRef = useRef<DragState | null>(null);
   const [size, setSize] = useState({ width: 640, height: 640 });
   const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState<Point>({ x: 0, y: 0 });
   const [hoveredCell, setHoveredCell] = useState<Point | null>(null);
   const [canvasError, setCanvasError] = useState("");
   const [fullscreenAvailable, setFullscreenAvailable] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const fitView = useCallback(() => {
     setZoom(1);
-    setPan({ x: 0, y: 0 });
   }, []);
 
   useEffect(() => {
@@ -90,11 +82,16 @@ export function CircleCanvas({
   }, [result.diameter, fitView]);
 
   useEffect(() => {
-    const timer = window.setTimeout(
-      () => setFullscreenAvailable(Boolean(document.fullscreenEnabled)),
-      0,
-    );
-    return () => window.clearTimeout(timer);
+    const updateFullscreen = () => {
+      setFullscreenAvailable(Boolean(document.fullscreenEnabled));
+      setIsFullscreen(document.fullscreenElement === workbenchRef.current);
+    };
+    const timer = window.setTimeout(updateFullscreen, 0);
+    document.addEventListener("fullscreenchange", updateFullscreen);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("fullscreenchange", updateFullscreen);
+    };
   }, []);
 
   useEffect(() => {
@@ -103,8 +100,8 @@ export function CircleCanvas({
     const updateSize = () => {
       const rect = container.getBoundingClientRect();
       setSize({
-        width: Math.max(280, Math.round(rect.width)),
-        height: Math.max(320, Math.round(rect.height)),
+        width: Math.max(1, Math.round(rect.width)),
+        height: Math.max(1, Math.round(rect.height)),
       });
     };
     updateSize();
@@ -145,7 +142,6 @@ export function CircleCanvas({
         size,
         result.diameter,
         zoom,
-        pan,
       );
 
       context.fillStyle = "#edf1eb";
@@ -164,9 +160,9 @@ export function CircleCanvas({
         row.segments.forEach((segment) => {
           const startIndex = segment.startX + (result.diameter - 1) / 2;
           if (builderActive && y === currentRow) {
-            context.fillStyle = "#d88b2e";
+            context.fillStyle = "#b85f14";
           } else if (builderActive && completedRows.has(y)) {
-            context.fillStyle = "#6d9b73";
+            context.fillStyle = "#56755b";
           } else {
             context.fillStyle = "#3e7f4c";
           }
@@ -193,7 +189,7 @@ export function CircleCanvas({
         context.stroke();
       }
 
-      context.strokeStyle = "rgba(188,91,39,.72)";
+      context.strokeStyle = "#a54821";
       context.lineWidth = Math.max(1.5, Math.min(3, cell * 0.12));
       context.beginPath();
       context.moveTo(originX + gridSize / 2, originY);
@@ -225,7 +221,6 @@ export function CircleCanvas({
     completedRows,
     currentRow,
     hoveredCell,
-    pan,
     result,
     size,
     zoom,
@@ -240,7 +235,6 @@ export function CircleCanvas({
         size,
         result.diameter,
         zoom,
-        pan,
       );
       const x = Math.floor((clientX - rect.left - originX) / cell);
       const y = Math.floor((clientY - rect.top - originY) / cell);
@@ -249,52 +243,48 @@ export function CircleCanvas({
       }
       return { x, y };
     },
-    [pan, result.diameter, size, zoom],
+    [result.diameter, size, zoom],
   );
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      point: { x: event.clientX, y: event.clientY },
-      pan,
-      dragging: false,
-    };
-  };
-
   const handlePointerMove = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    if (dragRef.current) {
-      const deltaX = event.clientX - dragRef.current.point.x;
-      const deltaY = event.clientY - dragRef.current.point.y;
-      if (
-        !dragRef.current.dragging &&
-        Math.hypot(deltaX, deltaY) < DRAG_THRESHOLD
-      ) {
-        return;
-      }
-      dragRef.current.dragging = true;
-      setPan({
-        x: dragRef.current.pan.x + deltaX,
-        y: dragRef.current.pan.y + deltaY,
-      });
-      return;
-    }
     setHoveredCell(cellFromPointer(event.clientX, event.clientY));
   };
 
   const handlePointerUp = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    if (dragRef.current && !dragRef.current.dragging) {
-      setHoveredCell(cellFromPointer(event.clientX, event.clientY));
-    }
-    dragRef.current = null;
-    event.currentTarget.releasePointerCapture(event.pointerId);
+    setHoveredCell(cellFromPointer(event.clientX, event.clientY));
+  };
+
+  const handleWheel = (event: ReactWheelEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
+    const factor = event.deltaY < 0 ? 1.2 : 1 / 1.2;
+    setZoom((value) => Math.max(0.25, Math.min(8, value * factor)));
+  };
+
+  const handleCanvasKeyDown = (
+    event: ReactKeyboardEvent<HTMLCanvasElement>,
+  ) => {
+    const center = Math.floor((result.diameter - 1) / 2);
+    const current = hoveredCell ?? { x: center, y: center };
+    let next = current;
+    if (event.key === "ArrowLeft") next = { ...current, x: current.x - 1 };
+    else if (event.key === "ArrowRight") next = { ...current, x: current.x + 1 };
+    else if (event.key === "ArrowUp") next = { ...current, y: current.y - 1 };
+    else if (event.key === "ArrowDown") next = { ...current, y: current.y + 1 };
+    else if (event.key === "Home") next = { x: center, y: center };
+    else return;
+    event.preventDefault();
+    setHoveredCell({
+      x: Math.max(0, Math.min(result.diameter - 1, next.x)),
+      y: Math.max(0, Math.min(result.diameter - 1, next.y)),
+    });
   };
 
   const toggleFullscreen = async () => {
-    const container = containerRef.current;
-    if (!container || !document.fullscreenEnabled) return;
+    const workbench = workbenchRef.current;
+    if (!workbench || !document.fullscreenEnabled) return;
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
-      else await container.requestFullscreen();
+      else await workbench.requestFullscreen();
     } catch {
       setFullscreenAvailable(false);
     }
@@ -321,7 +311,7 @@ export function CircleCanvas({
         <aside className="workbench-settings" aria-label="Shape settings panel">
           {settingsPanel}
         </aside>
-        <div className="workbench-canvas">
+        <div ref={workbenchRef} className="workbench-canvas">
           <div
             ref={containerRef}
             className="canvas-shell"
@@ -329,17 +319,15 @@ export function CircleCanvas({
           >
             <canvas
               ref={canvasRef}
-              aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint`}
+              aria-label={`${result.mode} ${result.diameter} by ${result.diameter} block circle blueprint. Use arrow keys to inspect block coordinates.`}
+              aria-describedby="coordinate-readout"
               role="img"
-              onPointerDown={handlePointerDown}
+              tabIndex={0}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
-              onPointerCancel={() => {
-                dragRef.current = null;
-              }}
-              onPointerLeave={() => {
-                if (!dragRef.current) setHoveredCell(null);
-              }}
+              onWheel={handleWheel}
+              onKeyDown={handleCanvasKeyDown}
+              onPointerLeave={() => setHoveredCell(null)}
             >
               A {result.mode} {result.diameter} by {result.diameter} block circle
               requiring {result.totalBlocks} blocks.
@@ -353,7 +341,7 @@ export function CircleCanvas({
           {canvasError ? (
             <p className="field-error" role="alert">{canvasError}</p>
           ) : (
-            <p className="coordinate-readout" aria-live="polite">
+            <p id="coordinate-readout" className="coordinate-readout" aria-live="polite">
               {coordinateText}
             </p>
           )}
@@ -378,14 +366,13 @@ export function CircleCanvas({
             >
               +
             </button>
-            <button type="button" onClick={fitView}>Reset</button>
             <button
               type="button"
               onClick={toggleFullscreen}
               disabled={!fullscreenAvailable}
               title={fullscreenAvailable ? undefined : "Fullscreen is unavailable in this browser"}
             >
-              Fullscreen
+              {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
             </button>
           </div>
         </div>
@@ -396,7 +383,7 @@ export function CircleCanvas({
       <div className="workbench-footer">
         {actionPanel}
         <p className="canvas-tip">
-          Select a cell for coordinates. View controls do not change the blueprint.
+          Point to or tap a cell for coordinates. The blueprint stays centered.
         </p>
       </div>
     </section>

@@ -26,6 +26,7 @@ function renderBuilder(currentRow = 1, completedRows = new Set<number>()) {
       currentRow={currentRow}
       completedRows={completedRows}
       storageWarning={false}
+      completionPending={false}
       {...handlers}
     />,
   );
@@ -54,5 +55,16 @@ describe("CircleBuilder", () => {
     const handlers = renderBuilder();
     await user.click(screen.getByRole("button", { name: "Reset Progress" }));
     expect(handlers.onReset).toHaveBeenCalledOnce();
+  });
+
+  it("keeps row controls available after every row is complete", () => {
+    renderBuilder(6, new Set(result.rows.map((row) => row.index)));
+    expect(screen.getByText("Circle complete!")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Mark Incomplete" })).toBeEnabled();
+  });
+
+  it("clamps an invalid current row instead of crashing", () => {
+    renderBuilder(99);
+    expect(screen.getByRole("heading", { name: "Row 7 of 7" })).toBeInTheDocument();
   });
 });

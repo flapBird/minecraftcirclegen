@@ -28,6 +28,14 @@ describe.each(diameters)("circle generation: diameter %i", (diameter) => {
 });
 
 describe("circle mode behavior", () => {
+  it("matches the known five-block hollow blueprint", () => {
+    const result = generateCircle({ diameter: 5, mode: "hollow", thickness: 1 });
+    expect(
+      result.grid.map((row) => row.map((cell) => (cell ? "#" : ".")).join("")),
+    ).toEqual([".###.", "#...#", "#...#", "#...#", ".###."]);
+    expect(result.totalBlocks).toBe(12);
+  });
+
   it.each(diameters)("hollow %i has all four edges and an open interior", (diameter) => {
     const result = generateCircle({ diameter, mode: "hollow", thickness: 1 });
     expect(result.grid[0].some(Boolean)).toBe(true);
@@ -68,5 +76,12 @@ describe("circle mode behavior", () => {
       expect(result.totalBlocks).toBeGreaterThanOrEqual(previous);
       previous = result.totalBlocks;
     }
+  });
+
+  it("handles the maximum thick circle without repeated erosion", () => {
+    const startedAt = performance.now();
+    const result = generateCircle({ diameter: 512, mode: "thick", thickness: 256 });
+    expect(result.isEffectivelyFilled).toBe(true);
+    expect(performance.now() - startedAt).toBeLessThan(1500);
   });
 });

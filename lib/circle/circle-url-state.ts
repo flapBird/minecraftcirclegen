@@ -29,6 +29,7 @@ export function parseCircleUrl(search: string): CircleOptions {
   const mode = rawMode && MODES.includes(rawMode) ? rawMode : DEFAULT_MODE;
   const parsedThickness = parseInteger(params.get("thickness"));
   const thickness =
+    mode === "thick" &&
     parsedThickness !== null &&
     parsedThickness >= 1 &&
     parsedThickness <= getMaxThickness(diameter)

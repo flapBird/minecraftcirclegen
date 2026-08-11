@@ -48,4 +48,9 @@ describe("circle URL state", () => {
       thickness: 1,
     });
   });
+
+  it("ignores hidden thickness for hollow and filled links", () => {
+    expect(parseCircleUrl("?mode=hollow&thickness=10").thickness).toBe(1);
+    expect(parseCircleUrl("?mode=filled&thickness=10").thickness).toBe(2);
+  });
 });

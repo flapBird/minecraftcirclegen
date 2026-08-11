@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CircleResult, ExportOptions } from "@/lib/circle/circle-types";
 import { downloadCirclePng } from "@/lib/circle/export-circle-png";
 
@@ -23,6 +23,31 @@ export function CircleExportDialog({
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [downloading, setDownloading] = useState(false);
+  const controlRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const close = useCallback((restoreFocus = true) => {
+    setOpen(false);
+    if (restoreFocus) window.setTimeout(() => triggerRef.current?.focus(), 0);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    panelRef.current?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!controlRef.current?.contains(event.target as Node)) close(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [close, open]);
 
   const download = async () => {
     setDownloading(true);
@@ -35,7 +60,7 @@ export function CircleExportDialog({
             ? "Blueprint opened in a new tab"
             : "PNG downloaded",
       );
-      setOpen(false);
+      close(false);
     } catch (error) {
       onStatus(
         error instanceof Error
@@ -49,23 +74,33 @@ export function CircleExportDialog({
   };
 
   return (
-    <div className="export-control">
+    <div ref={controlRef} className="export-control">
       <button
+        ref={triggerRef}
         type="button"
         className="primary-button"
         aria-expanded={open}
+        aria-controls="export-options"
+        aria-haspopup="dialog"
         onClick={() => setOpen((value) => !value)}
       >
         ↓ Download PNG
       </button>
       {open && (
-        <div className="export-panel">
+        <div
+          ref={panelRef}
+          id="export-options"
+          className="export-panel"
+          role="dialog"
+          aria-labelledby="export-options-title"
+          tabIndex={-1}
+        >
           <div className="export-panel-heading">
-            <strong>Export options</strong>
+            <strong id="export-options-title">Export options</strong>
             <button
               type="button"
               aria-label="Close export options"
-              onClick={() => setOpen(false)}
+              onClick={() => close()}
             >
               ×
             </button>

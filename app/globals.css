@@ -51,6 +51,12 @@ input {
 
 button {
   color: inherit;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
 }
 
 a {
@@ -58,7 +64,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(216, 139, 46, 0.65);
+  outline: 3px solid #a85f19;
   outline-offset: 3px;
 }
 
@@ -173,13 +179,28 @@ a {
 }
 
 .hero {
-  padding: 58px 0 31px;
+  position: relative;
+  overflow: hidden;
+  padding: 46px 0 25px;
   text-align: center;
+}
+
+.hero::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
   background:
     linear-gradient(rgba(62, 127, 76, 0.055) 1px, transparent 1px),
     linear-gradient(90deg, rgba(62, 127, 76, 0.055) 1px, transparent 1px);
   background-size: 32px 32px;
+  content: "";
   mask-image: linear-gradient(to bottom, black 50%, transparent);
+  pointer-events: none;
+}
+
+.hero > .page-container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero h1 {
@@ -453,6 +474,11 @@ a {
   accent-color: var(--green);
 }
 
+.diameter-range {
+  margin-top: 12px;
+  cursor: ew-resize;
+}
+
 .range-labels {
   display: flex;
   justify-content: space-between;
@@ -521,7 +547,7 @@ a {
 
 .workbench-materials dt {
   color: var(--muted);
-  font-size: 0.58rem;
+  font-size: 0.67rem;
   line-height: 1.2;
 }
 
@@ -529,7 +555,7 @@ a {
   margin: 2px 0 0;
   overflow: hidden;
   color: var(--ink);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 780;
   line-height: 1.2;
   text-overflow: ellipsis;
@@ -630,23 +656,26 @@ a {
   background: #f7f9f5;
 }
 
-.canvas-shell:fullscreen {
+.workbench-canvas:fullscreen {
+  width: 100vw;
   height: 100vh;
-  max-height: none;
-  border-radius: 0;
   background: #f7f9f5;
+  padding: 12px;
+}
+
+.workbench-canvas:fullscreen .canvas-shell {
+  height: calc(100vh - 112px);
+  max-height: none;
+  min-height: 0;
+  border-radius: 0;
 }
 
 .canvas-shell canvas {
   display: block;
   width: 100%;
   height: 100%;
-  cursor: grab;
-  touch-action: none;
-}
-
-.canvas-shell canvas:active {
-  cursor: grabbing;
+  cursor: crosshair;
+  touch-action: pan-y;
 }
 
 .canvas-legend {
@@ -757,7 +786,7 @@ a {
 }
 
 .workbench-builder-panel .keyboard-tip {
-  display: none;
+  display: block;
 }
 
 .workbench-footer {
@@ -794,7 +823,7 @@ a {
 .canvas-tip {
   margin: 8px 0 0;
   color: #7a857d;
-  font-size: 0.67rem;
+  font-size: 0.72rem;
   text-align: center;
 }
 
@@ -1017,6 +1046,27 @@ a {
   font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
   font-size: 0.86rem;
   font-weight: 750;
+}
+
+.row-preview {
+  position: relative;
+  height: 28px;
+  margin: -4px 0 12px;
+  overflow: hidden;
+  border: 1px solid #d9e1d8;
+  border-radius: 7px;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(188, 91, 39, 0.55) 50%, transparent calc(50% + 0.5px)),
+    repeating-linear-gradient(90deg, #f4f7f2 0 7px, #edf1eb 7px 8px);
+}
+
+.row-preview span {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  min-width: 2px;
+  border-radius: 2px;
+  background: #c66f1f;
 }
 
 .segment-list {
@@ -1253,6 +1303,18 @@ a {
 .toast.is-error {
   border-color: #7a2822;
   background: #842f28;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .seo-content {
@@ -1653,6 +1715,19 @@ a {
     height: 2px;
     display: block;
     background: var(--ink);
+    transition: transform 160ms ease, opacity 160ms ease;
+  }
+
+  .mobile-nav[open] summary span:first-child {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-nav[open] summary span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-nav[open] summary span:last-child {
+    transform: translateY(-6px) rotate(-45deg);
   }
 
   .mobile-nav nav {
@@ -1666,6 +1741,7 @@ a {
     background: white;
     box-shadow: var(--shadow);
     padding: 8px;
+    animation: menu-in 150ms ease-out;
   }
 
   .mobile-nav nav a {
@@ -1680,7 +1756,7 @@ a {
   }
 
   .hero {
-    padding: 42px 0 22px;
+    padding: 32px 0 18px;
   }
 
   .hero h1 {
@@ -1749,6 +1825,13 @@ a {
   .canvas-shell {
     height: min(88vw, 560px);
     min-height: 310px;
+  }
+
+  .workbench-settings .preset-list button,
+  .workbench-settings .segmented-control button,
+  .canvas-controls button,
+  .canvas-controls .zoom-readout {
+    min-height: 44px;
   }
 
   .workbench-builder {
@@ -1846,6 +1929,22 @@ a {
 }
 
 @media (max-width: 420px) {
+  .workbench-materials dd {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .canvas-card {
+    padding: 10px;
+  }
+
+  .workbench-settings,
+  .workbench-builder {
+    padding: 14px;
+  }
+
   .brand {
     font-size: 0.9rem;
   }
@@ -1892,6 +1991,34 @@ a {
   .footer-grid nav {
     grid-template-columns: 1fr;
   }
+}
+
+.error-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--canvas);
+}
+
+.error-card {
+  width: min(100%, 620px);
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.error-card h1 {
+  margin: 10px 0 14px;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 @media (prefers-reduced-motion: reduce) {

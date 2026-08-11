@@ -21,11 +21,11 @@ export function loadProgress(
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<BuilderProgress>;
     if (!Array.isArray(parsed.completedRows)) return null;
+    const parsedCurrentRow = Number(parsed.currentRow);
     return {
-      currentRow: Math.min(
-        diameter - 1,
-        Math.max(0, Number(parsed.currentRow) || 0),
-      ),
+      currentRow: Number.isInteger(parsedCurrentRow)
+        ? Math.min(diameter - 1, Math.max(0, parsedCurrentRow))
+        : 0,
       completedRows: parsed.completedRows.filter(
         (row): row is number =>
           Number.isInteger(row) && row >= 0 && row < diameter,

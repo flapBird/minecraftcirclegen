@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CircleControls } from "../../components/circle-generator/circle-controls";
@@ -35,6 +35,15 @@ describe("CircleControls", () => {
     expect(handlers.onDiameterInput).toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Increase diameter" }));
     expect(handlers.onDiameterChange).toHaveBeenCalledWith(22);
+  });
+
+  it("updates the diameter from the draggable slider", () => {
+    const handlers = renderControls();
+    const slider = screen.getByRole("slider", { name: "Diameter slider" });
+    fireEvent.change(slider, { target: { value: "31" } });
+    expect(slider).toHaveAttribute("min", "3");
+    expect(slider).toHaveAttribute("max", "512");
+    expect(handlers.onDiameterChange).toHaveBeenCalledWith(31);
   });
 
   it("switches mode and only shows thickness for thick mode", async () => {

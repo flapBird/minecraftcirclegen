@@ -95,6 +95,21 @@ export function CircleControls({
             +
           </button>
         </div>
+        <input
+          className="range-control diameter-range"
+          aria-label="Diameter slider"
+          type="range"
+          min={MIN_DIAMETER}
+          max={MAX_DIAMETER}
+          step={1}
+          value={diameter}
+          onChange={(event) => onDiameterChange(Number(event.target.value))}
+        />
+        <div className="range-labels" aria-hidden="true">
+          <span>{MIN_DIAMETER}</span>
+          <span>Drag to resize</span>
+          <span>{MAX_DIAMETER}</span>
+        </div>
         <p id="diameter-error" className="field-error" aria-live="polite">
           {diameterError}
         </p>

@@ -20,32 +20,70 @@ function generateFilledGrid(diameter: number): boolean[][] {
   );
 }
 
-function erode(grid: boolean[][]): boolean[][] {
+function getBoundaryDistances(grid: boolean[][]): number[][] {
   const size = grid.length;
-  return grid.map((row, y) =>
-    row.map((filled, x) => {
-      if (!filled) return false;
-      return (
-        y > 0 &&
-        y < size - 1 &&
-        x > 0 &&
-        x < size - 1 &&
-        grid[y - 1][x] &&
-        grid[y + 1][x] &&
-        grid[y][x - 1] &&
-        grid[y][x + 1]
-      );
-    }),
+  const distances = Array.from({ length: size }, () =>
+    Array<number>(size).fill(0),
   );
-}
+  const queueX = new Int32Array(size * size);
+  const queueY = new Int32Array(size * size);
+  let head = 0;
+  let tail = 0;
 
-function subtractGrid(
-  outer: boolean[][],
-  inner: boolean[][],
-): boolean[][] {
-  return outer.map((row, y) =>
-    row.map((filled, x) => filled && !inner[y][x]),
-  );
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      if (!grid[y][x]) continue;
+      const boundary =
+        y === 0 ||
+        y === size - 1 ||
+        x === 0 ||
+        x === size - 1 ||
+        !grid[y - 1][x] ||
+        !grid[y + 1][x] ||
+        !grid[y][x - 1] ||
+        !grid[y][x + 1];
+      if (!boundary) continue;
+      distances[y][x] = 1;
+      queueX[tail] = x;
+      queueY[tail] = y;
+      tail += 1;
+    }
+  }
+
+  const directions = [
+    [0, -1],
+    [1, 0],
+    [0, 1],
+    [-1, 0],
+  ] as const;
+
+  while (head < tail) {
+    const x = queueX[head];
+    const y = queueY[head];
+    const nextDistance = distances[y][x] + 1;
+    head += 1;
+
+    for (const [dx, dy] of directions) {
+      const nextX = x + dx;
+      const nextY = y + dy;
+      if (
+        nextX < 0 ||
+        nextX >= size ||
+        nextY < 0 ||
+        nextY >= size ||
+        !grid[nextY][nextX] ||
+        distances[nextY][nextX] !== 0
+      ) {
+        continue;
+      }
+      distances[nextY][nextX] = nextDistance;
+      queueX[tail] = nextX;
+      queueY[tail] = nextY;
+      tail += 1;
+    }
+  }
+
+  return distances;
 }
 
 export function generateCircle(options: CircleOptions): CircleResult {
@@ -60,14 +98,13 @@ export function generateCircle(options: CircleOptions): CircleResult {
   let isEffectivelyFilled = mode === "filled";
 
   if (mode !== "filled") {
-    let inner = filledGrid;
     const layers = mode === "hollow" ? 1 : thickness;
-    for (let layer = 0; layer < layers; layer += 1) {
-      inner = erode(inner);
-    }
-    grid = subtractGrid(filledGrid, inner);
-    isEffectivelyFilled = grid.every((row, y) =>
-      row.every((cell, x) => cell === filledGrid[y][x]),
+    const distances = getBoundaryDistances(filledGrid);
+    grid = filledGrid.map((row, y) =>
+      row.map((filled, x) => filled && distances[y][x] <= layers),
+    );
+    isEffectivelyFilled = filledGrid.every((row, y) =>
+      row.every((filled, x) => !filled || distances[y][x] <= layers),
     );
   }
 

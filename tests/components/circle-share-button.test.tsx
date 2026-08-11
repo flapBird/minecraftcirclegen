@@ -11,9 +11,16 @@ describe("CircleShareButton", () => {
       value: { writeText },
     });
     const onStatus = vi.fn();
-    render(<CircleShareButton onStatus={onStatus} />);
+    render(
+      <CircleShareButton
+        options={{ diameter: 31, mode: "thick", thickness: 3 }}
+        onStatus={onStatus}
+      />,
+    );
     await userEvent.click(screen.getByRole("button", { name: "⧉ Copy Link" }));
-    expect(writeText).toHaveBeenCalledWith(window.location.href);
+    expect(writeText).toHaveBeenCalledWith(
+      "http://localhost:3000/?diameter=31&mode=thick&thickness=3",
+    );
     expect(onStatus).toHaveBeenCalledWith("Link copied");
   });
 });

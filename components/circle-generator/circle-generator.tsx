@@ -39,8 +39,11 @@ export function CircleGenerator({
   const [currentRow, setCurrentRow] = useState(0);
   const [completedRows, setCompletedRows] = useState<Set<number>>(new Set());
   const [storageWarning, setStorageWarning] = useState(false);
+  const [completionPending, setCompletionPending] = useState(false);
   const [toast, setToast] = useState<{ message: string; error: boolean } | null>(null);
   const progressReadyRef = useRef(false);
+  const advanceTimerRef = useRef<number | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   const options: CircleOptions = useMemo(
     () => ({ diameter, mode, thickness }),
@@ -48,13 +51,46 @@ export function CircleGenerator({
   );
   const result = useMemo(() => generateCircle(options), [options]);
 
-  const showStatus = useCallback((message: string, error = false) => {
-    setToast({ message, error });
-    window.setTimeout(() => setToast(null), 3500);
+  const cancelPendingAdvance = useCallback(() => {
+    if (advanceTimerRef.current !== null) {
+      window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    setCompletionPending(false);
   }, []);
 
+  const showStatus = useCallback((message: string, error = false) => {
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    setToast({ message, error });
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, 3500);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (advanceTimerRef.current !== null) {
+        window.clearTimeout(advanceTimerRef.current);
+      }
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    },
+    [],
+  );
+
   useEffect(() => {
-    const url = `${window.location.pathname}${serializeCircleUrl(options)}${window.location.hash}`;
+    const params = new URLSearchParams(window.location.search);
+    params.delete("diameter");
+    params.delete("mode");
+    params.delete("thickness");
+    const circleParams = new URLSearchParams(serializeCircleUrl(options));
+    circleParams.forEach((value, key) => params.set(key, value));
+    const query = params.toString();
+    const url = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
     window.history.replaceState(null, "", url);
   }, [options]);
 
@@ -83,9 +119,14 @@ export function CircleGenerator({
 
   const changeDiameter = useCallback(
     (value: number) => {
+      cancelPendingAdvance();
       const next = normalizeDiameter(value);
       setDiameter(next);
       setDiameterInput(String(next));
+      setCurrentRow((row) => Math.min(row, next - 1));
+      setCompletedRows(
+        (rows) => new Set([...rows].filter((row) => row < next)),
+      );
       setDiameterError(
         value < MIN_DIAMETER
           ? `Minimum diameter is ${MIN_DIAMETER}. We corrected it for you.`
@@ -95,7 +136,7 @@ export function CircleGenerator({
       );
       setThickness((current) => normalizeThickness(current, next));
     },
-    [],
+    [cancelPendingAdvance],
   );
 
   const handleDiameterInput = (value: string) => {
@@ -125,6 +166,7 @@ export function CircleGenerator({
   };
 
   const changeMode = (nextMode: CircleMode) => {
+    cancelPendingAdvance();
     setMode(nextMode);
     if (nextMode === "hollow") setThickness(1);
     if (nextMode === "thick" && thickness < 2) {
@@ -133,6 +175,7 @@ export function CircleGenerator({
   };
 
   const changeThickness = (value: number) => {
+    cancelPendingAdvance();
     setThickness(normalizeThickness(value, diameter));
   };
 
@@ -145,27 +188,37 @@ export function CircleGenerator({
   }, [diameter]);
 
   const toggleComplete = useCallback(() => {
+    if (advanceTimerRef.current !== null) return;
+    const wasComplete = completedRows.has(currentRow);
     setCompletedRows((current) => {
       const next = new Set(current);
-      if (next.has(currentRow)) {
-        next.delete(currentRow);
-      } else {
-        next.add(currentRow);
-        if (currentRow < diameter - 1) {
-          window.setTimeout(() => setCurrentRow((row) => Math.min(diameter - 1, row + 1)), 120);
-        }
-      }
+      if (wasComplete) next.delete(currentRow);
+      else next.add(currentRow);
       return next;
     });
-  }, [currentRow, diameter]);
+    setCompletionPending(true);
+    advanceTimerRef.current = window.setTimeout(() => {
+      if (!wasComplete && currentRow < diameter - 1) {
+        setCurrentRow((row) => Math.min(diameter - 1, row + 1));
+      }
+      advanceTimerRef.current = null;
+      setCompletionPending(false);
+    }, 160);
+  }, [completedRows, currentRow, diameter]);
 
   const resetProgress = () => {
     if (!window.confirm("Reset all Builder Mode progress for this circle?")) return;
-    clearProgress(options);
+    cancelPendingAdvance();
+    const cleared = clearProgress(options);
     setCompletedRows(new Set());
     setCurrentRow(0);
-    setStorageWarning(false);
-    showStatus("Builder progress reset");
+    setStorageWarning(!cleared);
+    showStatus(
+      cleared
+        ? "Builder progress reset"
+        : "Progress reset for this visit, but the saved copy could not be cleared.",
+      !cleared,
+    );
   };
 
   useEffect(() => {
@@ -236,6 +289,7 @@ export function CircleGenerator({
                 currentRow={currentRow}
                 completedRows={completedRows}
                 storageWarning={storageWarning}
+                completionPending={completionPending}
                 onStart={() => setBuilderActive(true)}
                 onPrevious={previousRow}
                 onNext={nextRow}
@@ -247,7 +301,7 @@ export function CircleGenerator({
             actionPanel={
               <div className="share-row workbench-share-row">
                 <CircleExportDialog result={result} onStatus={showStatus} />
-                <CircleShareButton onStatus={showStatus} />
+                <CircleShareButton options={options} onStatus={showStatus} />
                 <span className="share-note">
                   Exports the full blueprint, not the current view.
                 </span>

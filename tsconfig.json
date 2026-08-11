@@ -32,9 +32,6 @@
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "worker",
-    "build",
-    "vite.config.ts"
+    "dist"
   ]
 }
