@@ -4,7 +4,7 @@ import { parseCircleUrl } from "@/lib/circle/circle-url-state";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
 const description =
-  "Create perfect Minecraft circles by diameter and thickness. Follow a row-by-row building guide, calculate block stacks, and download your circle blueprint.";
+  "Create perfect Minecraft circles by diameter and thickness. Preview the exact block grid, calculate materials, and download your blueprint.";
 
 export const metadata: Metadata = {
   title,
@@ -44,7 +44,7 @@ const faqs = [
   {
     question: "How do I make a perfect circle in Minecraft?",
     answer:
-      "Choose a diameter, copy the generated row pattern, and keep the shape symmetrical around its center axes. Builder Mode highlights one row at a time and lists the exact X-coordinate range for every block segment.",
+      "Choose a diameter, copy the generated block grid, and keep the shape symmetrical around its center axes. Use the coordinate readout and grid lines to place each block accurately.",
   },
   {
     question: "What is the best diameter for a Minecraft circle?",
@@ -150,11 +150,11 @@ export default async function Home({
             <h1>Minecraft Circle Generator</h1>
             <p className="hero-subtitle">
               Create perfect Minecraft circles, calculate the blocks you need,
-              and build them row by row.
+              and copy the exact block layout.
             </p>
             <div className="hero-points" aria-label="Tool features">
               <span>✓ Exact block layout</span>
-              <span>✓ Row-by-row guide</span>
+              <span>✓ Live grid preview</span>
               <span>✓ PNG export</span>
             </div>
           </div>
@@ -223,10 +223,10 @@ export default async function Home({
                   </span>
                 </li>
                 <li>
-                  <strong>Open Builder Mode.</strong>
+                  <strong>Inspect the grid.</strong>
                   <span>
-                    Follow the rows in order, using the segment coordinates to
-                    count each uninterrupted run of blocks.
+                    Point to or tap any cell to check its relative coordinates,
+                    and zoom when you need a closer view.
                   </span>
                 </li>
                 <li>
@@ -260,12 +260,12 @@ export default async function Home({
               <p>
                 You can start at the top edge and work down one row at a time,
                 or build outward from the center row. Starting at the top works
-                naturally with Builder Mode because the guide uses the same
-                order as the blueprint. For a large circle, another reliable
-                method is to finish one quarter first, check the pattern, and
-                mirror it into the other three quarters. Whichever approach you
-                use, count the length of each straight segment rather than
-                estimating its endpoints by eye.
+                naturally because the grid makes each horizontal run easy to
+                count. For a large circle, another reliable method is to finish
+                one quarter first, check the pattern, and mirror it into the
+                other three quarters. Whichever approach you use, count the
+                length of each straight segment rather than estimating its
+                endpoints by eye.
               </p>
             </section>
 
@@ -385,8 +385,8 @@ export default async function Home({
                 </li>
                 <li>
                   <strong>Split large projects.</strong>
-                  Treat a 51- or 101-block circle as several sessions and mark
-                  completed rows as you go.
+                  Treat a 51- or 101-block circle as several sections and verify
+                  each section before moving on.
                 </li>
                 <li>
                   <strong>Bring extra materials.</strong>
@@ -394,9 +394,9 @@ export default async function Home({
                   placements usually require a small reserve.
                 </li>
                 <li>
-                  <strong>Check the active row.</strong>
-                  Use Builder Mode before every turn in the outline to avoid
-                  carrying one counting error through the build.
+                  <strong>Check every turn.</strong>
+                  Use the grid lines and coordinate readout before each turn in
+                  the outline to avoid carrying a counting error through the build.
                 </li>
               </ul>
               <p>

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | Minecraft Circle Gen",
   },
   description:
-    "A free Minecraft circle generator with block blueprints, material counts, and a row-by-row building guide.",
+    "A free Minecraft circle generator with live block blueprints, material counts, and PNG export.",
   applicationName: "Minecraft Circle Gen",
   icons: {
     icon: [

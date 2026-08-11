@@ -16,12 +16,8 @@ import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils"
 interface CircleCanvasProps {
   settingsPanel?: ReactNode;
   summaryPanel?: ReactNode;
-  builderPanel?: ReactNode;
   actionPanel?: ReactNode;
   result: CircleResult;
-  builderActive: boolean;
-  currentRow: number;
-  completedRows: Set<number>;
 }
 
 interface Point {
@@ -54,12 +50,8 @@ function getCanvasMetrics(
 export function CircleCanvas({
   settingsPanel,
   summaryPanel,
-  builderPanel,
   actionPanel,
   result,
-  builderActive,
-  currentRow,
-  completedRows,
 }: CircleCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const workbenchRef = useRef<HTMLDivElement>(null);
@@ -123,7 +115,7 @@ export function CircleCanvas({
       const context = canvas.getContext("2d");
       if (!context) {
         setCanvasError(
-          "Your browser could not display the interactive blueprint. The row guide and PNG export are still available.",
+          "Your browser could not display the interactive blueprint. PNG export is still available.",
         );
         return;
       }
@@ -147,25 +139,10 @@ export function CircleCanvas({
       context.fillStyle = "#edf1eb";
       context.fillRect(originX, originY, gridSize, gridSize);
 
-      if (builderActive) {
-        for (const completed of completedRows) {
-          context.fillStyle = "rgba(87, 133, 96, .12)";
-          context.fillRect(originX, originY + completed * cell, gridSize, cell);
-        }
-        context.fillStyle = "rgba(232, 162, 55, .2)";
-        context.fillRect(originX, originY + currentRow * cell, gridSize, cell);
-      }
-
       result.rows.forEach((row, y) => {
         row.segments.forEach((segment) => {
           const startIndex = segment.startX + (result.diameter - 1) / 2;
-          if (builderActive && y === currentRow) {
-            context.fillStyle = "#b85f14";
-          } else if (builderActive && completedRows.has(y)) {
-            context.fillStyle = "#56755b";
-          } else {
-            context.fillStyle = "#3e7f4c";
-          }
+          context.fillStyle = "#3e7f4c";
           context.fillRect(
             originX + startIndex * cell + Math.min(0.5, cell * 0.08),
             originY + y * cell + Math.min(0.5, cell * 0.08),
@@ -217,9 +194,6 @@ export function CircleCanvas({
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
     };
   }, [
-    builderActive,
-    completedRows,
-    currentRow,
     hoveredCell,
     result,
     size,
@@ -334,7 +308,6 @@ export function CircleCanvas({
             </canvas>
             <div className="canvas-legend" aria-hidden="true">
               <span><i className="legend-block built" /> Circle</span>
-              <span><i className="legend-block current" /> Current row</span>
               <span><i className="legend-line" /> Center axes</span>
             </div>
           </div>
@@ -376,9 +349,6 @@ export function CircleCanvas({
             </button>
           </div>
         </div>
-        <aside className="workbench-builder" aria-label="Builder Mode panel">
-          {builderPanel}
-        </aside>
       </div>
       <div className="workbench-footer">
         {actionPanel}

@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <LegalPage
       eyebrow="PRIVACY"
       title="Privacy Policy"
-      description="This policy explains how Minecraft Circle Gen handles analytics, tool settings, and Builder Mode progress."
+      description="This policy explains how Minecraft Circle Gen handles analytics and share-link settings."
     >
       <p className="policy-date">Last updated: July 29, 2026</p>
       <section>
@@ -22,16 +22,7 @@ export default function PrivacyPage() {
         <p>
           Circle calculations happen in your browser. You do not need to create
           an account, and the site does not operate an application database for
-          your blueprints or Builder Mode activity.
-        </p>
-      </section>
-      <section>
-        <h2>Local storage</h2>
-        <p>
-          Builder Mode saves the active row and completed rows in your
-          browser&apos;s localStorage. This data is stored on the device and
-          browser you use. You can remove it with the Reset Progress control or
-          by clearing site data in your browser.
+          your generated blueprints.
         </p>
       </section>
       <section>
@@ -39,7 +30,7 @@ export default function PrivacyPage() {
         <p>
           The diameter, mode, and thickness are included in the page URL when
           you use Copy Link. Anyone who receives that URL can see those tool
-          settings. Builder completion data is not added to the share link.
+          settings.
         </p>
       </section>
       <section>
@@ -53,9 +44,9 @@ export default function PrivacyPage() {
         </p>
         <p>
           Analytics is used to improve the site&apos;s usability and
-          performance. It does not store your generated circle grid or Builder
-          Mode progress. You can limit analytics through your browser&apos;s
-          privacy settings or a content blocker.
+          performance. It does not store your generated circle grid or tool
+          settings. You can limit analytics through your browser&apos;s privacy
+          settings or a content blocker.
         </p>
       </section>
       <section>

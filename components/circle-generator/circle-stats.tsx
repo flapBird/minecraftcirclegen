@@ -3,13 +3,11 @@ import { formatMode, pluralize } from "@/lib/circle/circle-utils";
 
 interface CircleStatsProps {
   result: CircleResult;
-  completedRows: number;
   compact?: boolean;
 }
 
 export function CircleStats({
   result,
-  completedRows,
   compact = false,
 }: CircleStatsProps) {
   const fullStacks = Math.floor(result.totalBlocks / 64);
@@ -44,10 +42,8 @@ export function CircleStats({
             </dd>
           </div>
           <div>
-            <dt>Built</dt>
-            <dd>
-              {completedRows}/{result.diameter} rows
-            </dd>
+            <dt>Radius</dt>
+            <dd>{Number.isInteger(radius) ? radius : radius.toFixed(1)}</dd>
           </div>
         </dl>
       </section>
@@ -91,20 +87,10 @@ export function CircleStats({
           <dt>Mode</dt>
           <dd>{formatMode(result.mode)}</dd>
         </div>
-        <div>
-          <dt>{result.mode === "thick" ? "Thickness" : "Completed rows"}</dt>
-          <dd>
-            {result.mode === "thick"
-              ? result.thickness
-              : `${completedRows}/${result.diameter}`}
-          </dd>
-        </div>
         {result.mode === "thick" && (
           <div>
-            <dt>Completed rows</dt>
-            <dd>
-              {completedRows}/{result.diameter}
-            </dd>
+            <dt>Thickness</dt>
+            <dd>{result.thickness}</dd>
           </div>
         )}
       </dl>
