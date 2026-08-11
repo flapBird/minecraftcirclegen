@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TOOL_PAGES } from "@/lib/site/tools";
 
 export function SiteFooter() {
   return (
@@ -9,15 +10,26 @@ export function SiteFooter() {
             Minecraft Circle Gen
           </Link>
           <p>
-            A practical, free blueprint tool for building cleaner block circles.
+            Practical Minecraft building tools for cleaner shapes, palettes, and block plans.
           </p>
         </div>
-        <nav aria-label="Footer navigation">
-          <Link href="/about">About</Link>
-          <Link href="/privacy">Privacy Policy</Link>
-          <Link href="/terms">Terms of Use</Link>
-          <Link href="/about#contact">Contact</Link>
-        </nav>
+        <section className="footer-column">
+          <h2>Tools</h2>
+          <nav aria-label="Footer tools">
+            {TOOL_PAGES.map((tool) => (
+              <Link key={tool.key} href={tool.href}>{tool.title}</Link>
+            ))}
+          </nav>
+        </section>
+        <section className="footer-column">
+          <h2>Site</h2>
+          <nav aria-label="Site information">
+            <Link href="/about">About</Link>
+            <Link href="/about#contact">Contact</Link>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Use</Link>
+          </nav>
+        </section>
       </div>
       <div className="page-container footer-bottom">
         <p>

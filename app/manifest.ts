@@ -5,10 +5,10 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Minecraft Circle Gen",
     short_name: "Circle Gen",
     description:
-      "Create exact Minecraft block circle blueprints with live sizing and PNG export.",
+      "Create Minecraft block blueprints and building palettes with live controls and PNG export.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f4f7f2",
+    background_color: "#f4f1e8",
     theme_color: "#3e7f4c",
     icons: [
       {

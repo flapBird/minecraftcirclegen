@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -8,10 +9,12 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
 } from "react";
+import { TOOL_PAGES } from "@/lib/site/tools";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const detailsRef = useRef<HTMLDetailsElement>(null);
+  const pathname = usePathname();
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -34,23 +37,10 @@ export function SiteHeader() {
     };
   }, [closeMenu, menuOpen]);
 
-  const goToSection =
-    (id: string) => (event: ReactMouseEvent<HTMLAnchorElement>) => {
-      closeMenu();
-      if (window.location.pathname !== "/") return;
-      event.preventDefault();
-      const hash = `#${id}`;
-      window.history.pushState(
-        null,
-        "",
-        `${window.location.pathname}${window.location.search}${hash}`,
-      );
-      document.getElementById(id)?.scrollIntoView();
-    };
-
-  const goHome = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+  const openPage = (event: ReactMouseEvent<HTMLAnchorElement>) => {
     closeMenu();
-    if (window.location.pathname !== "/") return;
+    const target = new URL(event.currentTarget.href);
+    if (window.location.pathname !== target.pathname) return;
     event.preventDefault();
     window.history.pushState(
       null,
@@ -67,7 +57,7 @@ export function SiteHeader() {
           href="/"
           className="brand"
           aria-label="Minecraft Circle Gen home"
-          onClick={goHome}
+          onClick={openPage}
         >
           <span className="brand-mark" aria-hidden="true">
             <i />
@@ -82,9 +72,17 @@ export function SiteHeader() {
           <span>Minecraft Circle Gen</span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
-          <Link href="/#generator" onClick={goToSection("generator")}>Circle Generator</Link>
-          <Link href="/#how-to-use" onClick={goToSection("how-to-use")}>How to Use</Link>
-          <Link href="/#faq" onClick={goToSection("faq")}>FAQ</Link>
+          {TOOL_PAGES.map((tool) => (
+            <Link
+              key={tool.key}
+              href={tool.href}
+              className={pathname === tool.href ? "is-active" : undefined}
+              aria-current={pathname === tool.href ? "page" : undefined}
+              onClick={openPage}
+            >
+              {tool.navLabel}
+            </Link>
+          ))}
         </nav>
         <details
           ref={detailsRef}
@@ -98,9 +96,17 @@ export function SiteHeader() {
             <span />
           </summary>
           <nav aria-label="Mobile navigation">
-            <Link href="/#generator" onClick={goToSection("generator")}>Circle Generator</Link>
-            <Link href="/#how-to-use" onClick={goToSection("how-to-use")}>How to Use</Link>
-            <Link href="/#faq" onClick={goToSection("faq")}>FAQ</Link>
+            {TOOL_PAGES.map((tool) => (
+              <Link
+                key={tool.key}
+                href={tool.href}
+                className={pathname === tool.href ? "is-active" : undefined}
+                aria-current={pathname === tool.href ? "page" : undefined}
+                onClick={openPage}
+              >
+                {tool.navLabel}
+              </Link>
+            ))}
           </nav>
         </details>
       </div>

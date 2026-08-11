@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | Minecraft Circle Gen",
   },
   description:
-    "A free Minecraft circle generator with live block blueprints, material counts, and PNG export.",
+    "Free Minecraft building generators for block shapes, gradients, blueprints, material counts, and PNG export.",
   applicationName: "Minecraft Circle Gen",
   icons: {
     icon: [
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f4f7f2",
+  themeColor: "#f4f1e8",
   colorScheme: "light",
 };
 
@@ -58,7 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <a className="skip-link" href="#generator">
-          Skip to circle generator
+          Skip to generator
         </a>
         <SiteHeader />
         {children}

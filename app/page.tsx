@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { CircleGenerator } from "@/components/circle-generator/circle-generator";
-import { parseCircleUrl } from "@/lib/circle/circle-url-state";
+import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
+import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
+import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
+import { ToolDirectory } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
 const description =
-  "Create perfect Minecraft circles by diameter and thickness. Preview the exact block grid, calculate materials, and download your blueprint.";
+  "Create perfect hollow or filled Minecraft circles by diameter. Preview the exact block grid, calculate materials, and download your blueprint.";
 
 export const metadata: Metadata = {
   title,
@@ -44,7 +46,7 @@ const faqs = [
   {
     question: "How do I make a perfect circle in Minecraft?",
     answer:
-      "Choose a diameter, copy the generated block grid, and keep the shape symmetrical around its center axes. Use the coordinate readout and grid lines to place each block accurately.",
+      "Choose a diameter, copy the generated block grid, and keep the shape symmetrical around its center axes. Use the grid lines to place each block accurately.",
   },
   {
     question: "What is the best diameter for a Minecraft circle?",
@@ -59,17 +61,17 @@ const faqs = [
   {
     question: "How many blocks do I need?",
     answer:
-      "The material card counts the occupied cells in the exact generated blueprint. It also converts the total into full stacks of 64 plus remaining blocks, so you can prepare materials before building.",
+      "The statistics above the blueprint count the occupied cells in the exact generated shape, so you can prepare materials before building.",
   },
   {
     question: "Can I create a filled circle?",
     answer:
-      "Yes. Select Filled for a solid circular platform or foundation. Thick creates an adjustable ring, while Hollow creates a one-block outline.",
+      "Yes. Turn on Filled for a solid circular platform or foundation, or leave it off for a one-block outline.",
   },
   {
     question: "Can I download the circle blueprint?",
     answer:
-      "Yes. Download PNG creates a high-resolution image of the full blueprint with optional grid lines, center axes, coordinates, and a transparent background.",
+      "Yes. Download current blueprint creates a high-resolution PNG of the grid currently shown.",
   },
   {
     question: "Does this work for Java and Bedrock Edition?",
@@ -95,7 +97,8 @@ export default async function Home({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const incomingParams = await searchParams;
-  const initialOptions = parseCircleUrl(
+  const initialOptions = parseGeometryUrl(
+    "circle",
     new URLSearchParams(
       Object.entries(incomingParams).flatMap(([key, value]) =>
         Array.isArray(value)
@@ -147,22 +150,18 @@ export default async function Home({
       <main>
         <section className="hero">
           <div className="page-container">
+            <PageBreadcrumb toolKey="circle" />
             <h1>Minecraft Circle Generator</h1>
             <p className="hero-subtitle">
               Create perfect Minecraft circles, calculate the blocks you need,
               and copy the exact block layout.
             </p>
-            <div className="hero-points" aria-label="Tool features">
-              <span>✓ Exact block layout</span>
-              <span>✓ Live grid preview</span>
-              <span>✓ PNG export</span>
-            </div>
           </div>
         </section>
 
         <section className="tool-section" aria-label="Minecraft circle generator tool">
           <div className="page-container">
-            <CircleGenerator initialOptions={initialOptions} />
+            <GeometryGenerator shape="circle" initialOptions={initialOptions} />
           </div>
         </section>
 
@@ -181,10 +180,8 @@ export default async function Home({
               </p>
               <p>
                 Minecraft Circle Gen goes beyond a simple circle image. It
-                calculates the required blocks and stacks, identifies each
-                continuous row segment with relative coordinates, highlights
-                the row you are building, and lets you save or share the full
-                blueprint. It is useful for planning tower walls, circular
+                calculates the required blocks and lets you download or share
+                the full blueprint. It is useful for planning tower walls, circular
                 rooms, arenas, platforms, foundations, roads, and other
                 two-dimensional round layouts in both Java and Bedrock Edition.
               </p>
@@ -204,15 +201,15 @@ export default async function Home({
                 <li>
                   <strong>Enter a diameter.</strong>
                   <span>
-                    Type any whole number from 3 to 512, or choose one of the
-                    common size shortcuts.
+                    Drag the diameter slider or enter any whole number from 3
+                    to 512.
                   </span>
                 </li>
                 <li>
                   <strong>Choose a circle mode.</strong>
                   <span>
-                    Use Hollow for a one-block outline, Thick for an adjustable
-                    ring, or Filled for a solid footprint.
+                    Leave Filled off for a one-block outline, or turn it on for
+                    a solid footprint.
                   </span>
                 </li>
                 <li>
@@ -225,15 +222,15 @@ export default async function Home({
                 <li>
                   <strong>Inspect the grid.</strong>
                   <span>
-                    Point to or tap any cell to check its relative coordinates,
-                    and zoom when you need a closer view.
+                    Toggle grid lines and drag the Zoom slider when you need a
+                    closer view.
                   </span>
                 </li>
                 <li>
                   <strong>Save or share the plan.</strong>
                   <span>
                     Download a clean PNG for reference or copy a link that
-                    restores the same diameter, mode, and thickness.
+                    restores the same diameter and fill mode.
                   </span>
                 </li>
               </ol>
@@ -270,7 +267,7 @@ export default async function Home({
             </section>
 
             <section>
-              <h2>Hollow vs thick vs filled circles</h2>
+              <h2>Hollow vs filled circles</h2>
               <div className="mode-explainer">
                 <div>
                   <span className="mode-icon hollow" aria-hidden="true" />
@@ -283,16 +280,6 @@ export default async function Home({
                   </p>
                 </div>
                 <div>
-                  <span className="mode-icon thick" aria-hidden="true" />
-                  <h3>Thick circles</h3>
-                  <p>
-                    Thick mode builds inward from the same outer footprint. Use
-                    it for defensive walls, broad circular roads, raised platform
-                    borders, or builds that need enough depth for stairs and
-                    interior detail.
-                  </p>
-                </div>
-                <div>
                   <span className="mode-icon filled" aria-hidden="true" />
                   <h3>Filled circles</h3>
                   <p>
@@ -302,12 +289,6 @@ export default async function Home({
                   </p>
                 </div>
               </div>
-              <p>
-                Increasing a thick ring eventually removes all usable space from
-                its center. When that happens, the generator treats the result
-                as filled and tells you directly, so the block count and row
-                instructions remain accurate.
-              </p>
             </section>
 
             <section>
@@ -395,7 +376,7 @@ export default async function Home({
                 </li>
                 <li>
                   <strong>Check every turn.</strong>
-                  Use the grid lines and coordinate readout before each turn in
+                  Use the grid lines before each turn in
                   the outline to avoid carrying a counting error through the build.
                 </li>
               </ul>
@@ -410,8 +391,7 @@ export default async function Home({
             </section>
 
             <section id="faq" className="faq-section">
-              <p className="section-label">FAQ</p>
-              <h2>Minecraft circle generator questions</h2>
+              <h2>Frequently Asked Questions</h2>
               <div className="faq-list">
                 {faqs.map((faq) => (
                   <details key={faq.question}>
@@ -421,6 +401,7 @@ export default async function Home({
                 ))}
               </div>
             </section>
+            <ToolDirectory toolKey="circle" />
           </div>
         </article>
       </main>

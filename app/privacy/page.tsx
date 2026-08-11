@@ -28,9 +28,9 @@ export default function PrivacyPage() {
       <section>
         <h2>Share links</h2>
         <p>
-          The diameter, mode, and thickness are included in the page URL when
-          you use Copy Link. Anyone who receives that URL can see those tool
-          settings.
+          The selected dimensions, fill mode, and layer are included in the
+          page URL when you use Copy Link. Anyone who receives that URL can see
+          those tool settings.
         </p>
       </section>
       <section>
