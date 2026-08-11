@@ -1,9 +1,25 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { GradientGenerator } from "@/components/gradient-generator/gradient-generator";
 import { DEFAULT_GRADIENT_OPTIONS } from "@/lib/gradient/gradient-url-state";
 
 describe("GradientGenerator", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("keeps the page URL clean while settings change", () => {
+    window.history.replaceState(null, "", "/minecraft-gradient-generator");
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
+
+    fireEvent.change(screen.getByRole("slider", { name: "Gradient length slider" }), {
+      target: { value: "5" },
+    });
+
+    expect(window.location.pathname).toBe("/minecraft-gradient-generator");
+    expect(window.location.search).toBe("");
+    expect(replaceState).not.toHaveBeenCalled();
+  });
+
   it("updates the live block list from the draggable length control", () => {
     render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
 

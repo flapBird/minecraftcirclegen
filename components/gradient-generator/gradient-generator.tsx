@@ -9,7 +9,6 @@ import {
   normalizeGradientOptions,
   normalizeHex,
 } from "@/lib/gradient/generate-gradient";
-import { serializeGradientOptions } from "@/lib/gradient/gradient-url-state";
 import type { GradientOptions, GradientPalette } from "@/lib/gradient/gradient-types";
 
 const PRESETS: Array<{ label: string; start: string; end: string }> = [
@@ -91,12 +90,6 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
   useEffect(() => () => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
   }, []);
-
-  useEffect(() => {
-    const params = serializeGradientOptions(options);
-    const query = params.toString();
-    window.history.replaceState(null, "", `${window.location.pathname}?${query}${window.location.hash}`);
-  }, [options]);
 
   const update = (updates: Partial<GradientOptions>) => {
     setOptions((current) => normalizeGradientOptions({ ...current, ...updates }));
