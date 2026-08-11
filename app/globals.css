@@ -565,8 +565,8 @@ a {
 .blueprint-workbench {
   display: grid;
   grid-template-columns:
-    minmax(240px, 280px)
-    minmax(420px, 1fr);
+    minmax(420px, 1fr)
+    minmax(240px, 280px);
   align-items: stretch;
   overflow: hidden;
   border: 1px solid #d5ded5;
@@ -581,7 +581,7 @@ a {
 }
 
 .workbench-settings {
-  border-right: 1px solid #dce3dc;
+  border-left: 1px solid #dce3dc;
 }
 
 .workbench-settings .blueprint-settings {
@@ -1352,7 +1352,7 @@ a {
 
 @media (max-width: 980px) {
   .blueprint-workbench {
-    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 250px);
   }
 
   .canvas-heading {
@@ -1517,8 +1517,8 @@ a {
   }
 
   .workbench-settings {
-    border-right: 0;
-    border-bottom: 1px solid #dce3dc;
+    border-top: 1px solid #dce3dc;
+    border-left: 0;
   }
 
   .canvas-shell {

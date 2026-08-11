@@ -8,7 +8,6 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
-  type WheelEvent as ReactWheelEvent,
 } from "react";
 import type { CircleResult } from "@/lib/circle/circle-types";
 import { coordinateForIndex, formatCoordinate } from "@/lib/circle/circle-utils";
@@ -228,12 +227,6 @@ export function CircleCanvas({
     setHoveredCell(cellFromPointer(event.clientX, event.clientY));
   };
 
-  const handleWheel = (event: ReactWheelEvent<HTMLCanvasElement>) => {
-    event.preventDefault();
-    const factor = event.deltaY < 0 ? 1.2 : 1 / 1.2;
-    setZoom((value) => Math.max(0.25, Math.min(8, value * factor)));
-  };
-
   const handleCanvasKeyDown = (
     event: ReactKeyboardEvent<HTMLCanvasElement>,
   ) => {
@@ -282,9 +275,6 @@ export function CircleCanvas({
         {summaryPanel}
       </div>
       <div className="blueprint-workbench">
-        <aside className="workbench-settings" aria-label="Shape settings panel">
-          {settingsPanel}
-        </aside>
         <div ref={workbenchRef} className="workbench-canvas">
           <div
             ref={containerRef}
@@ -299,7 +289,6 @@ export function CircleCanvas({
               tabIndex={0}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
-              onWheel={handleWheel}
               onKeyDown={handleCanvasKeyDown}
               onPointerLeave={() => setHoveredCell(null)}
             >
@@ -349,6 +338,9 @@ export function CircleCanvas({
             </button>
           </div>
         </div>
+        <aside className="workbench-settings" aria-label="Shape settings panel">
+          {settingsPanel}
+        </aside>
       </div>
       <div className="workbench-footer">
         {actionPanel}
