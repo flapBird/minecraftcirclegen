@@ -1,0 +1,26 @@
+# Minecraft Circle Gen
+
+> Minecraft Circle Gen is a free collection of browser-based tools for planning Minecraft block shapes, palettes, pixel art, map art, and pixel lettering. The tools provide visual blueprints, practical block layouts, material counts, and PNG exports for Java and Bedrock Edition builds.
+
+The site is an independent fan-made resource and is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft. All generators run in the browser and do not connect to a Minecraft account or game world.
+
+## Shape Generators
+
+- [Minecraft Circle Generator](https://minecraftcirclegen.com/): Create hollow or filled block-circle blueprints by diameter, with exact grid layouts and material counts.
+- [Minecraft Oval Generator](https://minecraftcirclegen.com/oval-generator): Generate symmetrical block ovals using independent width and height controls.
+- [Minecraft Sphere Generator](https://minecraftcirclegen.com/sphere-generator): Plan full 3D Minecraft spheres using horizontal, layer-by-layer block blueprints.
+- [Minecraft Dome Generator](https://minecraftcirclegen.com/dome-generator): Create hemisphere roof blueprints from the widest base layer to the peak.
+
+## Creative Tools
+
+- [Minecraft Gradient Generator](https://minecraftcirclegen.com/minecraft-gradient-generator): Match a color transition to an ordered palette of vanilla Minecraft building blocks.
+- [Minecraft Pixel Art Generator](https://minecraftcirclegen.com/minecraft-pixel-art-generator): Convert an uploaded image into a Minecraft block grid and material list.
+- [Minecraft Map Art Generator](https://minecraftcirclegen.com/minecraft-map-art-generator): Plan flat map art using Minecraft's 128 by 128 block map-tile format.
+- [Minecraft Font Generator](https://minecraftcirclegen.com/minecraft-font-generator): Turn text into readable pixel lettering and block-by-block building plans.
+
+## Site Information
+
+- [About Minecraft Circle Gen](https://minecraftcirclegen.com/about): Site purpose, tool overview, and contact information.
+- [Privacy Policy](https://minecraftcirclegen.com/privacy): Information about privacy, analytics, uploads, and browser processing.
+- [Terms of Use](https://minecraftcirclegen.com/terms): Conditions and limitations for using the site and generated plans.
+- [XML Sitemap](https://minecraftcirclegen.com/sitemap.xml): Complete index of public site pages.
