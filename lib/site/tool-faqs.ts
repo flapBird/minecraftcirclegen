@@ -139,7 +139,11 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   font: [
     {
       question: "What characters does the Minecraft font generator support?",
-      answer: "It supports letters, numbers, spaces, and common punctuation in an original 5×7 block alphabet, with up to three text lines.",
+      answer: "It supports letters, numbers, spaces, common punctuation, unlimited text lines, and Minecraft-style colour and formatting codes using § or &.",
+    },
+    {
+      question: "Which Minecraft formatting codes can I use?",
+      answer: "Use colour codes 0–9 and a–f, plus l for bold, o for italic, n for underline, m for strikethrough, k for obfuscated text, and r to reset formatting.",
     },
     {
       question: "Why does line spacing only affect some text?",
@@ -148,6 +152,14 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
     {
       question: "What does Pixel block size change?",
       answer: "It changes the rendered size of every block in the live preview and downloaded PNG without changing the number of Minecraft blocks in the blueprint.",
+    },
+    {
+      question: "What is the difference between Copy PNG and Copy block blueprint?",
+      answer: "Copy PNG copies the rendered image for pasting into compatible apps. Copy block blueprint copies a character grid that marks text, shadow, outline, and empty blocks for planning a Minecraft build.",
+    },
+    {
+      question: "Does the transparent checkerboard appear in the downloaded PNG?",
+      answer: "No. The checkerboard only identifies transparent areas in the preview. It is never included in the copied or downloaded PNG.",
     },
     {
       question: "Can I build the generated letters in Minecraft?",
