@@ -61,6 +61,8 @@ export function FontGenerator() {
     [alignment, letterSpacing, lineSpacing, outline, shadow, shadowDistance, style, text],
   );
 
+  const blueprintBlocks = result.mainBlocks + result.shadowBlocks + result.outlineBlocks;
+
   const exportOptions = useMemo<FontExportOptions>(() => ({
     blockSize,
     mainColor,
@@ -168,9 +170,9 @@ export function FontGenerator() {
                 />
               ))}
             </div>
-            <div className="creative-color-row font-base-colour-inputs">
-              <ColorSetting label="Text" value={mainColor} onChange={setMainColor} />
-              {fillMode === "gradient" && <ColorSetting label="Gradient end" value={gradientColor} onChange={setGradientColor} />}
+            <div className={`creative-color-row font-base-colour-inputs${fillMode === "gradient" ? "" : " single-color"}`}>
+              <ColorSetting label="Text" value={mainColor} showCode onChange={setMainColor} />
+              {fillMode === "gradient" && <ColorSetting label="Gradient end" value={gradientColor} showCode onChange={setGradientColor} />}
             </div>
             <div className="font-subcontrol-label">Fill</div>
             <div className="font-segmented three" role="group" aria-label="Text fill">
@@ -184,7 +186,7 @@ export function FontGenerator() {
 
           <section className="creative-settings-card font-settings-card font-panel">
             <h3 id="font-style-panel-title" className="font-panel-title">Size and style</h3>
-            <RangeSetting id="font-block-size" label="Pixel block size" value={blockSize} min={4} max={24} suffix="px" onChange={setBlockSize} />
+            <RangeSetting id="font-block-size" label="Scale" value={blockSize} min={4} max={24} suffix="×" onChange={setBlockSize} />
             <div className="font-subcontrol-label">Text style</div>
             <div className="font-toggle-grid font-style-grid">
               {STYLE_CONTROLS.map((control) => (
@@ -198,7 +200,18 @@ export function FontGenerator() {
               <button type="button" aria-pressed={outline} onClick={() => setOutline((value) => !value)}>Outline</button>
               <button type="button" aria-pressed={transparent} onClick={() => setTransparent((value) => !value)}>Transparent bg</button>
             </div>
-            {shadow && <RangeSetting id="font-shadow-distance" label="Shadow distance" value={shadowDistance} min={1} max={4} suffix=" blocks" onChange={setShadowDistance} />}
+            {shadow && (
+              <RangeSetting
+                id="font-shadow-distance"
+                label="Shadow distance"
+                value={shadowDistance}
+                min={1}
+                max={4}
+                suffix="px"
+                hint={`${shadowDistance * blockSize}px in the exported image at ${blockSize}× scale`}
+                onChange={setShadowDistance}
+              />
+            )}
             {shadow && (
               <button
                 type="button"
@@ -218,9 +231,36 @@ export function FontGenerator() {
 
           <section className="creative-settings-card font-settings-card font-panel">
             <h3 id="font-spacing-panel-title" className="font-panel-title">Spacing and layout</h3>
-            <RangeSetting id="font-padding" label="Padding" value={padding} min={0} max={8} suffix=" blocks" onChange={setPadding} />
-            <RangeSetting id="font-letter-spacing" label="Letter spacing" value={letterSpacing} min={0} max={3} suffix=" blocks" onChange={setLetterSpacing} />
-            <RangeSetting id="font-line-spacing" label="Line spacing" value={lineSpacing} min={0} max={12} suffix=" blocks" onChange={setLineSpacing} />
+            <RangeSetting
+              id="font-padding"
+              label="Padding"
+              value={padding}
+              min={0}
+              max={8}
+              suffix="px"
+              hint={`${padding * blockSize}px in the exported image`}
+              onChange={setPadding}
+            />
+            <RangeSetting
+              id="font-letter-spacing"
+              label="Letter spacing"
+              value={letterSpacing}
+              min={0}
+              max={3}
+              suffix="px"
+              hint={`${letterSpacing * blockSize}px in the exported image`}
+              onChange={setLetterSpacing}
+            />
+            <RangeSetting
+              id="font-line-spacing"
+              label="Line spacing"
+              value={lineSpacing}
+              min={0}
+              max={12}
+              suffix="px"
+              hint={`${lineSpacing * blockSize}px in the exported image`}
+              onChange={setLineSpacing}
+            />
             <div className="font-alignment-setting">
               <span>Alignment</span>
               <div className="font-segmented three" role="group" aria-label="Text alignment">
@@ -231,19 +271,16 @@ export function FontGenerator() {
                 ))}
               </div>
             </div>
-            <p className="font-layout-hint">Spacing is measured in build blocks and scales with the pixel block size. Alignment applies to multi-line text.</p>
+            <p className="font-layout-hint">Spacing uses the font’s pixel grid and scales with the export. Alignment applies to multi-line text.</p>
           </section>
 
-          <section className="creative-stats" aria-labelledby="font-stats-title">
-            <h3 id="font-stats-title">Blueprint stats</h3>
-            <dl>
-              <div><dt>Text blocks</dt><dd>{result.mainBlocks}</dd></div>
-              <div><dt>Shadow blocks</dt><dd>{result.shadowBlocks}</dd></div>
-              <div><dt>Outline blocks</dt><dd>{result.outlineBlocks}</dd></div>
-              <div><dt>Size</dt><dd>{result.width} × {result.height}</dd></div>
-            </dl>
+          <section className="font-blueprint-export" aria-labelledby="font-blueprint-title">
+            <div>
+              <h3 id="font-blueprint-title">Block blueprint</h3>
+              <p>{result.width} × {result.height} grid · {blueprintBlocks} blocks</p>
+            </div>
+            <button type="button" className="secondary-button font-blueprint-button" onClick={copyBlueprint}>Copy blueprint</button>
           </section>
-          <button type="button" className="secondary-button font-blueprint-button" onClick={copyBlueprint}>Copy block blueprint</button>
         </aside>
 
         <div className="font-output-stack">
@@ -292,16 +329,18 @@ export function FontGenerator() {
   );
 }
 
-function ColorSetting({ label, value, disabled, onChange }: {
+function ColorSetting({ label, value, disabled, showCode = false, onChange }: {
   label: string;
   value: string;
   disabled?: boolean;
+  showCode?: boolean;
   onChange: (value: string) => void;
 }) {
   return (
-    <label>
-      <span>{label}</span>
+    <label className={`font-color-setting${showCode ? " show-code" : ""}`}>
+      <span className={showCode ? "sr-only" : undefined}>{label}</span>
       <input type="color" aria-label={`${label} colour`} value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)} />
+      {showCode && <code aria-hidden="true">{value.toUpperCase()}</code>}
     </label>
   );
 }

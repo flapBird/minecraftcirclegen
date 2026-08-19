@@ -24,13 +24,13 @@ describe("creative generators", () => {
     expect(screen.queryByText("LIVE PIXEL PREVIEW")).not.toBeInTheDocument();
     expect(screen.queryByText("Your block text")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Your text")).toHaveValue("MINE\nCRAFT");
-    expect(screen.getByText("30 × 17")).toBeInTheDocument();
+    expect(screen.getByText(/^30 × 17 grid/)).toBeInTheDocument();
 
     const canvas = screen.getByLabelText("Generated Minecraft pixel text preview") as HTMLCanvasElement;
     expect(canvas.parentElement).toHaveClass("font-canvas-stage");
     expect(canvas.width).toBe(408);
     expect(canvas.height).toBe(252);
-    fireEvent.change(screen.getByRole("slider", { name: "Pixel block size" }), {
+    fireEvent.change(screen.getByRole("slider", { name: "Scale" }), {
       target: { value: "20" },
     });
     expect(canvas.width).toBe(680);
@@ -39,8 +39,8 @@ describe("creative generators", () => {
     fireEvent.change(screen.getByRole("slider", { name: "Line spacing" }), {
       target: { value: "10" },
     });
-    expect(screen.getByText("30 × 25")).toBeInTheDocument();
-    expect(screen.getByText(/Spacing is measured in build blocks/)).toBeInTheDocument();
+    expect(screen.getByText(/^30 × 25 grid/)).toBeInTheDocument();
+    expect(screen.getByText(/Spacing uses the font’s pixel grid/)).toBeInTheDocument();
     expect(canvas.height).toBe(580);
   });
 
@@ -52,7 +52,7 @@ describe("creative generators", () => {
     fireEvent.change(textInput, { target: { value: "ONE\nTWO\nTHREE\nFOUR\nFIVE" } });
 
     expect(screen.getByText("5 lines · 23 characters")).toBeInTheDocument();
-    expect(screen.getByText("30 × 44")).toBeInTheDocument();
+    expect(screen.getByText(/^30 × 44 grid/)).toBeInTheDocument();
     expect(canvas.height).toBe(576);
   });
 
@@ -69,11 +69,16 @@ describe("creative generators", () => {
     expect(screen.queryByRole("button", { name: "Bold &l" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Outline" })).toBeInTheDocument();
     expect(screen.getByRole("slider", { name: "Padding" })).toBeInTheDocument();
+    expect(screen.getAllByText("24px in the exported image")).toHaveLength(2);
     expect(screen.getByRole("group", { name: "Text alignment" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Blueprint stats" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Block blueprint" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy PNG" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Minecraft colour codes" })).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Set text colour to/ })).toHaveLength(16);
+    expect(screen.getByText("#FFFF55")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Set text colour to Blue (§9)" }));
+    expect(screen.getByText("#5555FF")).toBeInTheDocument();
     expect(screen.getByLabelText("Text colour")).toHaveValue("#5555ff");
   });
 
@@ -82,9 +87,9 @@ describe("creative generators", () => {
     const canvas = screen.getByLabelText("Generated Minecraft pixel text preview") as HTMLCanvasElement;
 
     fireEvent.click(screen.getByRole("button", { name: "Bold" }));
-    expect(screen.getByText("35 × 17")).toBeInTheDocument();
+    expect(screen.getByText(/^35 × 17 grid/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Outline" }));
-    expect(screen.getByText("37 × 19")).toBeInTheDocument();
+    expect(screen.getByText(/^37 × 19 grid/)).toBeInTheDocument();
     fireEvent.change(screen.getByRole("slider", { name: "Padding" }), { target: { value: "4" } });
     expect(canvas.width).toBe(540);
     fireEvent.click(screen.getByRole("button", { name: "Gradient" }));

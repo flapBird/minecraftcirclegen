@@ -139,7 +139,11 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   font: [
     {
       question: "What characters does the Minecraft font generator support?",
-      answer: "It supports letters, numbers, spaces, common punctuation, unlimited text lines, and Minecraft-style colour and formatting codes using § or &.",
+      answer: "It supports letters, numbers, spaces, common punctuation, multiple text lines, and Minecraft-style colour and formatting codes using § or &.",
+    },
+    {
+      question: "Does this use the official Minecraft font?",
+      answer: "No. The generator uses an original 5×7 pixel alphabet designed for a Minecraft-inspired block look; it does not include or extract Mojang font assets.",
     },
     {
       question: "Which Minecraft formatting codes can I use?",
@@ -150,12 +154,12 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
       answer: "Line spacing adds empty block rows between separate text lines. Add a line break in the text box to use it.",
     },
     {
-      question: "What does Pixel block size change?",
-      answer: "It changes the rendered size of every block in the live preview and downloaded PNG without changing the number of Minecraft blocks in the blueprint.",
+      question: "What does the Scale setting change?",
+      answer: "Scale changes how many exported image pixels are used for each pixel-grid cell without changing the number of Minecraft blocks in the blueprint.",
     },
     {
-      question: "What is the difference between Copy PNG and Copy block blueprint?",
-      answer: "Copy PNG copies the rendered image for pasting into compatible apps. Copy block blueprint copies a character grid that marks text, shadow, outline, and empty blocks for planning a Minecraft build.",
+      question: "What is the difference between Copy PNG and Copy blueprint?",
+      answer: "Copy PNG copies the rendered image for pasting into compatible apps. Copy blueprint copies a character grid that marks text, shadow, outline, and empty blocks for planning a Minecraft build.",
     },
     {
       question: "Does the transparent checkerboard appear in the downloaded PNG?",

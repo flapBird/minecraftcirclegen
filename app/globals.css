@@ -1901,7 +1901,7 @@ a {
   min-height: 40px;
   border: 1px solid #c8c5b8;
   border-radius: 5px;
-  background: #fffdf6;
+  background: transparent;
   color: #586158;
   padding: 7px 8px;
   cursor: pointer;
@@ -1909,8 +1909,16 @@ a {
   font-weight: 730;
 }
 
+.font-segmented button {
+  background: #fffdf6;
+}
+
 .font-segmented button:hover,
-.font-toggle-grid button:hover,
+.font-toggle-grid button:hover {
+  border-color: #4d7f47;
+  color: #29492e;
+}
+
 .font-segmented button[aria-pressed="true"],
 .font-toggle-grid button[aria-pressed="true"] {
   border-color: #4d7f47;
@@ -1927,28 +1935,92 @@ a {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.font-base-colour-inputs.single-color {
+  grid-template-columns: 1fr;
+}
+
 .font-effect-colours {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .font-panel .creative-range-setting {
-  margin-top: 17px;
+  margin-top: 12px;
 }
 
 .font-panel > .creative-range-setting:first-of-type {
   margin-top: 0;
 }
 
+.font-generator .gradient-range {
+  height: 28px;
+  margin-top: 3px;
+  background: transparent;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.font-generator .gradient-range:active,
+.font-generator .gradient-range:active::-webkit-slider-thumb,
+.font-generator .gradient-range:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+.font-generator .gradient-range::-webkit-slider-runnable-track {
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #4d8347 0,
+    #4d8347 var(--range-progress),
+    #d6d1c4 var(--range-progress),
+    #d6d1c4 100%
+  );
+}
+
+.font-generator .gradient-range::-webkit-slider-thumb {
+  width: 24px;
+  height: 24px;
+  margin-top: -8px;
+  border: 3px solid #315f35;
+  border-radius: 6px;
+  background: #71a968;
+  box-shadow: 0 2px 7px rgba(53, 70, 49, 0.25);
+  cursor: grab;
+}
+
+.font-generator .gradient-range::-moz-range-track {
+  height: 7px;
+  border-radius: 999px;
+  background: #d6d1c4;
+}
+
+.font-generator .gradient-range::-moz-range-progress {
+  height: 7px;
+  border-radius: 999px;
+  background: #4d8347;
+}
+
+.font-generator .gradient-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #315f35;
+  border-radius: 6px;
+  background: #71a968;
+  box-shadow: 0 2px 7px rgba(53, 70, 49, 0.25);
+  cursor: grab;
+}
+
+.font-generator .gradient-range:focus-visible {
+  outline: 2px solid #315f35;
+  outline-offset: 2px;
+}
+
 .font-effect-grid {
   margin-top: 10px;
 }
 
-.font-effect-grid button {
-  min-height: 52px;
-}
-
 .font-shadow-mode-button {
-  min-height: 42px;
+  min-height: 40px;
   margin-top: 12px;
   border: 1px solid #c8c5b8;
   border-radius: 5px;
@@ -1977,9 +2049,35 @@ a {
   line-height: 1.55;
 }
 
+.font-blueprint-export {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #c9c6b9;
+  border-radius: 8px;
+  background: #f8f5ed;
+  padding: 14px 15px;
+  box-shadow: 4px 4px 0 rgba(69, 85, 62, 0.1);
+}
+
+.font-blueprint-export h3 {
+  margin: 0;
+  color: #314431;
+  font-size: 0.78rem;
+  font-weight: 780;
+}
+
+.font-blueprint-export p {
+  margin: 4px 0 0;
+  color: #747a72;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 0.65rem;
+}
+
 .font-blueprint-button {
-  width: 100%;
-  margin-top: 12px;
+  flex: 0 0 auto;
+  margin-top: 0;
   border-radius: 6px;
 }
 
@@ -1998,9 +2096,23 @@ a {
   min-width: 0;
 }
 
+.font-color-setting.show-code {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+}
+
+.font-color-setting.show-code code {
+  color: #4d574e;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
 .creative-color-row input[type="color"] {
   width: 100%;
-  height: 44px;
+  height: 36px;
   display: block;
   overflow: hidden;
   border: 1px solid #bdbbad;
@@ -2008,6 +2120,10 @@ a {
   background: #fffdf6;
   padding: 0;
   cursor: pointer;
+}
+
+.font-color-setting.show-code input[type="color"] {
+  width: 44px;
 }
 
 .creative-color-row input[type="color"]:disabled {
@@ -2031,7 +2147,7 @@ a {
 
 .creative-range-hint {
   display: block;
-  margin-top: 9px;
+  margin-top: 5px;
   color: #858a82;
   font-size: 0.62rem;
 }
