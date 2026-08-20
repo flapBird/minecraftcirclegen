@@ -2147,8 +2147,7 @@ a {
 }
 
 .font-canvas-stage {
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
   min-height: 420px;
   display: grid;
   grid-auto-rows: max-content;
@@ -2262,7 +2261,7 @@ a {
 
 .font-canvas-board canvas {
   display: block;
-  max-width: none;
+  max-width: 100%;
   height: auto;
   image-rendering: pixelated;
 }
