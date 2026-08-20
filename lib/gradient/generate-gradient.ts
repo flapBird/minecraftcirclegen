@@ -10,10 +10,15 @@ import type {
 export const MIN_GRADIENT_STEPS = 3;
 export const MAX_GRADIENT_STEPS = 24;
 
-interface OklabColor {
+interface LabColor {
   l: number;
   a: number;
   b: number;
+}
+
+interface BlockCandidate {
+  block: MinecraftBlockColor;
+  color: LabColor;
 }
 
 const HEX_PATTERN = /^#[0-9a-f]{6}$/i;
@@ -94,40 +99,44 @@ function gammaChannel(value: number) {
   return clamped <= 0.0031308 ? clamped * 12.92 : 1.055 * clamped ** (1 / 2.4) - 0.055;
 }
 
-function hexToOklab(hex: string): OklabColor {
+function labPivot(value: number) {
+  return value > 0.008856 ? Math.cbrt(value) : 7.787 * value + 16 / 116;
+}
+
+function inverseLabPivot(value: number) {
+  const cube = value ** 3;
+  return cube > 0.008856 ? cube : (value - 16 / 116) / 7.787;
+}
+
+function hexToLab(hex: string): LabColor {
   const rgb = hexToRgb(hex);
   const r = linearChannel(rgb.r);
   const g = linearChannel(rgb.g);
   const b = linearChannel(rgb.b);
-  const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b;
-  const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b;
-  const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b;
-  const lRoot = Math.cbrt(l);
-  const mRoot = Math.cbrt(m);
-  const sRoot = Math.cbrt(s);
+  const x = labPivot((0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / 0.95047);
+  const y = labPivot(0.2126729 * r + 0.7151522 * g + 0.072175 * b);
+  const z = labPivot((0.0193339 * r + 0.119192 * g + 0.9503041 * b) / 1.08883);
   return {
-    l: 0.2104542553 * lRoot + 0.793617785 * mRoot - 0.0040720468 * sRoot,
-    a: 1.9779984951 * lRoot - 2.428592205 * mRoot + 0.4505937099 * sRoot,
-    b: 0.0259040371 * lRoot + 0.7827717662 * mRoot - 0.808675766 * sRoot,
+    l: 116 * y - 16,
+    a: 500 * (x - y),
+    b: 200 * (y - z),
   };
 }
 
-function oklabToHex(color: OklabColor) {
-  const lRoot = color.l + 0.3963377774 * color.a + 0.2158037573 * color.b;
-  const mRoot = color.l - 0.1055613458 * color.a - 0.0638541728 * color.b;
-  const sRoot = color.l - 0.0894841775 * color.a - 1.291485548 * color.b;
-  const l = lRoot ** 3;
-  const m = mRoot ** 3;
-  const s = sRoot ** 3;
-  const r = gammaChannel(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s);
-  const g = gammaChannel(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s);
-  const b = gammaChannel(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s);
+function labToHex(color: LabColor) {
+  const yRoot = (color.l + 16) / 116;
+  const x = 0.95047 * inverseLabPivot(yRoot + color.a / 500);
+  const y = inverseLabPivot(yRoot);
+  const z = 1.08883 * inverseLabPivot(yRoot - color.b / 200);
+  const r = gammaChannel(3.2404542 * x - 1.5371385 * y - 0.4985314 * z);
+  const g = gammaChannel(-0.969266 * x + 1.8760108 * y + 0.041556 * z);
+  const b = gammaChannel(0.0556434 * x - 0.2040259 * y + 1.0572252 * z);
   return `#${[r, g, b]
     .map((channel) => Math.round(channel * 255).toString(16).padStart(2, "0"))
     .join("")}`;
 }
 
-function interpolate(start: OklabColor, end: OklabColor, amount: number): OklabColor {
+function interpolate(start: LabColor, end: LabColor, amount: number): LabColor {
   return {
     l: start.l + (end.l - start.l) * amount,
     a: start.a + (end.a - start.a) * amount,
@@ -135,7 +144,7 @@ function interpolate(start: OklabColor, end: OklabColor, amount: number): OklabC
   };
 }
 
-function distance(left: OklabColor, right: OklabColor) {
+function distance(left: LabColor, right: LabColor) {
   return Math.hypot(left.l - right.l, left.a - right.a, left.b - right.b);
 }
 
@@ -153,26 +162,46 @@ export function generateBlockGradient(rawOptions: GradientOptions): GradientStep
   }
   const candidates = candidateBlocks.map((block) => ({
     block,
-    color: hexToOklab(block.hex),
+    color: hexToLab(block.hex),
   }));
-  const start = hexToOklab(options.startColor);
-  const end = hexToOklab(options.endColor);
-  const used = new Set<string>([startAnchor?.id, endAnchor?.id].filter(Boolean) as string[]);
+  const start = hexToLab(options.startColor);
+  const end = hexToLab(options.endColor);
+  const used = new Set(
+    [startAnchor?.id, endAnchor?.id].filter(Boolean) as string[],
+  );
 
   return Array.from({ length: options.steps }, (_, index) => {
     const amount = options.steps === 1 ? 0 : index / (options.steps - 1);
     const target = interpolate(start, end, amount);
     const anchor = index === 0 ? startAnchor : index === options.steps - 1 ? endAnchor : undefined;
-    const ranked = candidates
-      .map((candidate) => ({ ...candidate, score: distance(target, candidate.color) }))
-      .sort((left, right) => left.score - right.score);
-    const chosen = anchor
-      ? { block: anchor, color: hexToOklab(anchor.hex), score: 0 }
-      : ranked.find((candidate) => !used.has(candidate.block.id)) ?? ranked[0];
+    let chosen = anchor
+      ? { block: anchor, color: hexToLab(anchor.hex) }
+      : undefined;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    if (!chosen) {
+      for (const candidate of candidates) {
+        if (used.has(candidate.block.id)) continue;
+        const candidateDistance = distance(target, candidate.color);
+        if (candidateDistance < bestDistance) {
+          chosen = candidate;
+          bestDistance = candidateDistance;
+        }
+      }
+    }
+
+    if (!chosen) {
+      chosen = candidates.reduce((nearest, candidate) => (
+        distance(target, candidate.color) < distance(target, nearest.color)
+          ? candidate
+          : nearest
+      ));
+    }
+
     used.add(chosen.block.id);
     return {
       index: index + 1,
-      targetColor: oklabToHex(target),
+      targetColor: labToHex(target),
       block: chosen.block,
     };
   });

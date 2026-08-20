@@ -1,5 +1,26 @@
 export type BlockFamily = "color" | "stone" | "wood" | "earth" | "ocean" | "metal";
 
+export type BlockCategory =
+  | "aquatic"
+  | "concrete"
+  | "copper"
+  | "deepslate"
+  | "end"
+  | "glass"
+  | "mineral"
+  | "misc"
+  | "nature"
+  | "nether"
+  | "prismarine"
+  | "sand"
+  | "sculk"
+  | "shulker"
+  | "stone"
+  | "terracotta"
+  | "tuff"
+  | "wood"
+  | "wool";
+
 export type GradientPalette =
   | "all"
   | "common"
@@ -16,6 +37,8 @@ export interface MinecraftBlockColor {
   name: string;
   hex: string;
   family: BlockFamily;
+  category?: BlockCategory;
+  texture?: string;
   common: boolean;
 }
 

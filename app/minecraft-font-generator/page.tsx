@@ -3,7 +3,7 @@ import { FontGenerator } from "@/components/font-generator/font-generator";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
-const title = "Minecraft Font Generator";
+const title = "Minecraft Font Generator – Pixel Text & PNG Export";
 const description =
   "Turn text into crisp Minecraft-style pixel art with colour codes, gradients, outlines, drop shadows, transparent PNG export, and buildable block blueprints.";
 

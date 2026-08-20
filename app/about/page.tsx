@@ -3,7 +3,7 @@ import { ContactEmail } from "@/components/layout/contact-email";
 import { LegalPage } from "@/components/layout/legal-page";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Minecraft Circle Gen",
   description:
     "Learn why Minecraft Circle Gen was created and how its free block circle blueprints work.",
   alternates: { canonical: "https://minecraftcirclegen.com/about" },

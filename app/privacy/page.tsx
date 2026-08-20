@@ -3,7 +3,7 @@ import { ContactEmail } from "@/components/layout/contact-email";
 import { LegalPage } from "@/components/layout/legal-page";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Minecraft Circle Gen Privacy Policy",
   description:
     "Privacy information for Minecraft Circle Gen, including analytics, local browser storage, and share-link parameters.",
   alternates: { canonical: "https://minecraftcirclegen.com/privacy" },

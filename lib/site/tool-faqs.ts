@@ -85,19 +85,31 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   gradient: [
     {
       question: "What is a Minecraft block gradient?",
-      answer: "A block gradient is an ordered sequence of Minecraft materials that moves gradually from one color to another, adding depth and smoother transitions to builds.",
+      answer: "A Minecraft block gradient is an ordered sequence of real blocks that moves gradually from one color or material to another. Builders use gradients to add shading, depth, atmosphere, and smoother transitions to walls, roofs, terrain, statues, and pixel art.",
     },
     {
       question: "How are gradient blocks selected?",
-      answer: "The generator blends the selected colors and matches each step to a close block color in the chosen vanilla palette.",
+      answer: "The generator measures the representative color of each block texture, creates evenly spaced targets in a perceptual color space, and matches each target to a close unused block in the selected palette. In Minecraft blocks mode, your start and end blocks always stay fixed.",
+    },
+    {
+      question: "What is the difference between Minecraft blocks and Exact colors?",
+      answer: "Minecraft blocks mode starts from two materials you choose and keeps them as fixed endpoints. Exact colors mode starts from two hex colors and finds vanilla blocks that approximate those visual targets.",
     },
     {
       question: "Does the gradient include modded blocks?",
-      answer: "No. The current palettes focus on vanilla building blocks so the result works in ordinary Java and Bedrock worlds.",
+      answer: "No. The current library uses vanilla Java Edition block names and texture previews. Block availability and appearance can vary between Minecraft versions, and some materials may differ or be unavailable in Bedrock Edition, so check the final list against the version you play.",
+    },
+    {
+      question: "Why can a block look different in the finished build?",
+      answer: "The generator matches representative texture colors, but Minecraft lighting, shadows, biome tint, shaders, block faces, and directional textures can change the result in game. Use the real texture ribbon as a first check, then test a small section in your world before gathering every material.",
     },
     {
       question: "Can I use the gradient in survival?",
-      answer: "Yes. Choose the common survival palette to favor materials that are easier to gather, then copy the ordered block list.",
+      answer: "Yes. Select Common survival blocks to favor familiar building materials, then copy the ordered list or download the PNG plan. Always review the result because resource availability depends on your world and progression.",
+    },
+    {
+      question: "Does the generator create a 3D Minecraft model?",
+      answer: "No. The tool focuses on choosing a smooth, practical block sequence and shows it as a color target, real texture ribbon, and numbered build order. It does not create or export a 3D structure, schematic, or world file.",
     },
   ],
   "pixel-art": [

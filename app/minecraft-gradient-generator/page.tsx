@@ -54,28 +54,83 @@ export default function GradientGeneratorPage() {
         <div className="content-container">
           <section>
             <p className="section-label">ABOUT THE TOOL</p>
-            <h2>Build smoother Minecraft color transitions</h2>
+            <h2>Plan smoother Minecraft block gradients</h2>
             <p>
-              A Minecraft gradient replaces a smooth digital color blend with a practical sequence
-              of blocks. Choose the colors at both ends, set how many materials you want to use, and
-              the generator finds a progression that can be placed directly in your build.
+              A digital gradient can use thousands of colors, but a Minecraft build needs a short,
+              practical sequence of real blocks. This Minecraft gradient generator compares the
+              representative colors of vanilla block textures and creates an ordered palette between
+              the start and end points you choose.
             </p>
             <p>
-              Use shorter palettes for compact walls and paths, or longer palettes when a large roof,
-              cliff, statue, or organic structure has enough space for a gradual transition.
+              The smooth color bar shows the transition you are aiming for. The texture bar beneath
+              it shows the actual blocks you will place, including their patterns and material changes.
+              Use the numbered order for walls, roofs, floors, terrain, statues, pixel art, and other
+              builds that need controlled color shading.
             </p>
+          </section>
+
+          <section>
+            <p className="section-label">TWO STARTING POINTS</p>
+            <h2>Choose blocks or work from exact colors</h2>
+            <div className="mode-explainer">
+              <div>
+                <h3>Minecraft blocks</h3>
+                <p>
+                  Choose a real start block and end block from the searchable texture library. These
+                  two anchors always remain fixed, while the generator finds suitable blocks between
+                  them. Use this mode when the materials are already part of your build plan.
+                </p>
+              </div>
+              <div>
+                <h3>Exact colors</h3>
+                <p>
+                  Enter two hex colors or begin with a preset. The generator treats those colors as
+                  visual targets and selects vanilla blocks that approximate the transition. Use this
+                  mode when you have a color reference but have not chosen materials yet.
+                </p>
+              </div>
+            </div>
           </section>
 
           <section id="how-to-use">
             <p className="section-label">USING THE GENERATOR</p>
             <h2>How to make a Minecraft block gradient</h2>
             <ol className="guide-steps">
-              <li><strong>Choose two colors.</strong><span>Pick the light and dark ends of the transition, or enter exact hex values.</span></li>
-              <li><strong>Set the length.</strong><span>Use fewer blocks for a bold change and more blocks for a smoother blend.</span></li>
-              <li><strong>Choose a palette.</strong><span>Limit the result to common, colorful, or natural building materials.</span></li>
-              <li><strong>Build in order.</strong><span>Follow the numbered blocks from the first color to the last.</span></li>
-              <li><strong>Save the plan.</strong><span>Download a PNG or copy the full block list for later.</span></li>
+              <li><strong>Choose the endpoint mode.</strong><span>Use Minecraft blocks for fixed materials, or Exact colors for a color-led search.</span></li>
+              <li><strong>Set the start and end.</strong><span>Search the texture library for two blocks, or enter the colors your build should move between.</span></li>
+              <li><strong>Choose the length.</strong><span>Short gradients create a clear material change; longer gradients provide more intermediate shades for wide surfaces.</span></li>
+              <li><strong>Pick a block palette.</strong><span>Search all blocks, favor common survival materials, or narrow the candidates to a material family.</span></li>
+              <li><strong>Check color and texture.</strong><span>Use the top bar to judge color flow and the lower bar to check whether neighboring block patterns work together.</span></li>
+              <li><strong>Build or save the order.</strong><span>Place the numbered blocks from left to right, copy the list, or download the matching PNG plan.</span></li>
             </ol>
+          </section>
+
+          <section>
+            <p className="section-label">HOW MATCHING WORKS</p>
+            <h2>Why the suggested blocks form a smoother transition</h2>
+            <p>
+              The generator uses the average visible color of each real block texture rather than a
+              generic color label. It divides the start-to-end transition into evenly spaced visual
+              targets, then selects the closest unused block for each target from the active palette.
+              In Minecraft blocks mode, the chosen endpoints are never replaced.
+            </p>
+            <p>
+              Color matching is only the first part of a good gradient. A block with strong lines,
+              bright highlights, or a noisy texture can feel different from a smoother block even when
+              their average colors are close. That is why the generator displays the continuous color
+              goal and the real texture sequence together.
+            </p>
+          </section>
+
+          <section>
+            <p className="section-label">BUILDING TIPS</p>
+            <h2>Make the gradient look natural in your build</h2>
+            <ul className="tips-grid">
+              <li><strong>Give every step enough space.</strong> On a wide wall, repeat each material for several blocks instead of changing material in every column.</li>
+              <li><strong>Judge the blocks in game lighting.</strong> Sunlight, shadows, biome tint, shaders, and the face of a block can change how the transition reads.</li>
+              <li><strong>Watch texture direction.</strong> Logs, bricks, glazed terracotta, and other directional blocks may need careful orientation or a substitute.</li>
+              <li><strong>Remove a disruptive middle block.</strong> If one texture attracts too much attention, shorten the gradient or try a narrower block palette.</li>
+            </ul>
           </section>
 
           <ToolPageEnd toolKey="gradient" />

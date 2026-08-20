@@ -2,13 +2,13 @@ import { normalizeGradientOptions } from "./generate-gradient";
 import type { GradientOptions, GradientPalette } from "./gradient-types";
 
 export const DEFAULT_GRADIENT_OPTIONS: GradientOptions = {
-  startColor: "#ece5d8",
-  endColor: "#505052",
+  startColor: "#1f438c",
+  endColor: "#5ea919",
   steps: 8,
-  palette: "stone",
+  palette: "all",
   endpointMode: "block",
-  startBlockId: "quartz_block",
-  endBlockId: "deepslate",
+  startBlockId: "lapis_block",
+  endBlockId: "lime_concrete",
 };
 
 export function parseGradientOptions(query: string): GradientOptions {

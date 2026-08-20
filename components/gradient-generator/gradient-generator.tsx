@@ -18,10 +18,10 @@ import {
 } from "@/lib/gradient/generate-gradient";
 import { MINECRAFT_BLOCK_COLORS } from "@/lib/gradient/minecraft-block-colors";
 import type {
+  BlockCategory,
   GradientEndpointMode,
   GradientOptions,
   GradientPalette,
-  GradientStep,
   MinecraftBlockColor,
 } from "@/lib/gradient/gradient-types";
 
@@ -60,8 +60,8 @@ const PALETTES: Array<{ value: GradientPalette; label: string; hint: string }> =
   },
   {
     value: "colorful",
-    label: "Concrete & terracotta",
-    hint: "Clean color-led gradients for bold builds.",
+    label: "Colored building blocks",
+    hint: "Concrete, terracotta, wool, glass, and other dyed blocks.",
   },
   {
     value: "natural",
@@ -70,7 +70,212 @@ const PALETTES: Array<{ value: GradientPalette; label: string; hint: string }> =
   },
 ];
 
-type BuildPreviewMode = "wall" | "path";
+type BlockPickerCategory = "all" | BlockCategory;
+
+const BLOCK_PICKER_PAGE_SIZE = 72;
+
+const BLOCK_PICKER_CATEGORIES: Array<{
+  value: BlockPickerCategory;
+  label: string;
+}> = [
+  { value: "all", label: "All" },
+  { value: "concrete", label: "Color blocks" },
+  { value: "stone", label: "Stone" },
+  { value: "wood", label: "Wood" },
+  { value: "nature", label: "Nature" },
+  { value: "copper", label: "Copper" },
+  { value: "deepslate", label: "Deepslate" },
+  { value: "nether", label: "Nether" },
+  { value: "end", label: "End" },
+  { value: "glass", label: "Glass" },
+  { value: "mineral", label: "Mineral" },
+  { value: "aquatic", label: "Aquatic" },
+  { value: "prismarine", label: "Prismarine" },
+  { value: "terracotta", label: "Terracotta" },
+  { value: "wool", label: "Wool" },
+  { value: "sand", label: "Sand" },
+  { value: "tuff", label: "Tuff" },
+  { value: "sculk", label: "Sculk" },
+  { value: "shulker", label: "Shulker" },
+  { value: "misc", label: "Misc" },
+];
+
+function BlockVisual({
+  block,
+  className = "",
+}: {
+  block: MinecraftBlockColor;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`gradient-block-visual ${className}`.trim()}
+      style={{
+        "--block-color": block.hex,
+        "--block-texture": `url("/minecraft-blocks/${block.texture ?? `${block.id}.png`}")`,
+      } as CSSProperties}
+      aria-hidden="true"
+    />
+  );
+}
+
+function BlockPicker({
+  id,
+  label,
+  selectedBlockId,
+  onSelect,
+  onClose,
+}: {
+  id: string;
+  label: string;
+  selectedBlockId: string;
+  onSelect: (block: MinecraftBlockColor) => void;
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<BlockPickerCategory>("all");
+  const [page, setPage] = useState(1);
+  const titleId = `${id}-picker-title`;
+
+  const blocks = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    return MINECRAFT_BLOCK_COLORS.filter((block) => {
+      const isInCategory = category === "all" || block.category === category;
+      const matchesQuery = !normalizedQuery
+        || `${block.name} ${block.id}`.toLowerCase().includes(normalizedQuery);
+      return isInCategory && matchesQuery;
+    }).sort((left, right) => (
+      Number(right.id === selectedBlockId) - Number(left.id === selectedBlockId)
+    ));
+  }, [category, query, selectedBlockId]);
+  const pageCount = Math.max(1, Math.ceil(blocks.length / BLOCK_PICKER_PAGE_SIZE));
+  const visibleBlocks = blocks.slice(
+    (page - 1) * BLOCK_PICKER_PAGE_SIZE,
+    page * BLOCK_PICKER_PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="gradient-block-picker-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        className="gradient-block-picker"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
+        <header className="gradient-block-picker-header">
+          <div>
+            <p className="section-label">{label.toUpperCase()}</p>
+            <h2 id={titleId}>Pick a Minecraft block</h2>
+          </div>
+          <button type="button" aria-label="Close block picker" onClick={onClose}>×</button>
+        </header>
+
+        <label className="gradient-block-search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            aria-label="Search blocks"
+            placeholder="Search blocks by name…"
+            value={query}
+            autoFocus
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setPage(1);
+            }}
+          />
+        </label>
+
+        <div className="gradient-block-categories" aria-label="Block categories">
+          {BLOCK_PICKER_CATEGORIES.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              aria-pressed={category === item.value}
+              onClick={() => {
+                setCategory(item.value);
+                setPage(1);
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="gradient-block-picker-summary" aria-live="polite">
+          <strong>{blocks.length} {blocks.length === 1 ? "block" : "blocks"}</strong>
+          <span>Java Edition 26.1.2 textures</span>
+        </div>
+
+        {blocks.length > 0 ? (
+          <div className="gradient-block-picker-grid">
+            {visibleBlocks.map((block) => (
+              <button
+                key={block.id}
+                type="button"
+                className="gradient-block-option"
+                aria-label={`Select ${block.name}`}
+                aria-pressed={selectedBlockId === block.id}
+                onClick={() => onSelect(block)}
+              >
+                <BlockVisual block={block} className="gradient-block-option-visual" />
+                <span className="gradient-block-option-tooltip" role="tooltip">
+                  {block.name}
+                </span>
+                {selectedBlockId === block.id && (
+                  <span className="gradient-block-option-check" aria-hidden="true">✓</span>
+                )}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="gradient-block-picker-empty">
+            <strong>No blocks found</strong>
+            <p>Try another name or choose a different material category.</p>
+          </div>
+        )}
+        {blocks.length > BLOCK_PICKER_PAGE_SIZE && (
+          <nav className="gradient-block-picker-pagination" aria-label="Block picker pages">
+            <button
+              type="button"
+              disabled={page === 1}
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+            >
+              Previous
+            </button>
+            <span>Page {page} of {pageCount}</span>
+            <button
+              type="button"
+              disabled={page === pageCount}
+              onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
+            >
+              Next
+            </button>
+          </nav>
+        )}
+      </section>
+    </div>
+  );
+}
 
 function ColorControl({
   id,
@@ -134,117 +339,63 @@ function BlockControl({
   blockId: string;
   onChange: (block: MinecraftBlockColor) => void;
 }) {
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const block = MINECRAFT_BLOCK_COLORS.find((candidate) => candidate.id === blockId)
     ?? MINECRAFT_BLOCK_COLORS[0];
+  const closePicker = () => {
+    setIsPickerOpen(false);
+    window.requestAnimationFrame(() => triggerRef.current?.focus());
+  };
 
   return (
     <div className="gradient-block-field">
       <label htmlFor={id}>{label}</label>
-      <div className="gradient-block-select">
-        <span
-          className="gradient-block-select-swatch"
-          style={{ "--block-color": block.hex } as CSSProperties}
-          aria-hidden="true"
-        />
-        <select
-          id={id}
-          value={block.id}
-          onChange={(event) => {
-            const selected = MINECRAFT_BLOCK_COLORS.find(
-              (candidate) => candidate.id === event.target.value,
-            );
-            if (selected) onChange(selected);
-          }}
-        >
-          {MINECRAFT_BLOCK_COLORS.map((candidate) => (
-            <option key={candidate.id} value={candidate.id}>{candidate.name}</option>
-          ))}
-        </select>
-      </div>
+      <button
+        ref={triggerRef}
+        id={id}
+        type="button"
+        className="gradient-block-trigger"
+        aria-label={`${label}: ${block.name}`}
+        aria-haspopup="dialog"
+        aria-expanded={isPickerOpen}
+        onClick={() => setIsPickerOpen(true)}
+      >
+        <BlockVisual block={block} className="gradient-block-trigger-visual" />
+        <span className="gradient-block-trigger-copy">
+          <strong>{block.name}</strong>
+          <small>{block.category ?? block.family}</small>
+        </span>
+        <span className="gradient-block-trigger-chevron" aria-hidden="true">⌄</span>
+      </button>
       <p>{helper}</p>
+      {isPickerOpen && (
+        <BlockPicker
+          id={id}
+          label={label}
+          selectedBlockId={block.id}
+          onClose={closePicker}
+          onSelect={(selected) => {
+            onChange(selected);
+            closePicker();
+          }}
+        />
+      )}
     </div>
-  );
-}
-
-function BuildPreview({
-  steps,
-  mode,
-  onModeChange,
-}: {
-  steps: GradientStep[];
-  mode: BuildPreviewMode;
-  onModeChange: (mode: BuildPreviewMode) => void;
-}) {
-  const style = { "--preview-step-count": steps.length } as CSSProperties;
-
-  return (
-    <section className="gradient-build-preview" aria-labelledby="gradient-build-preview-title">
-      <div className="gradient-build-preview-heading">
-        <div>
-          <p className="section-label">BUILD PREVIEW</p>
-          <h3 id="gradient-build-preview-title">See the transition in context</h3>
-        </div>
-        <div className="gradient-preview-tabs" aria-label="Build preview type">
-          <button
-            type="button"
-            aria-pressed={mode === "wall"}
-            onClick={() => onModeChange("wall")}
-          >
-            Wall
-          </button>
-          <button
-            type="button"
-            aria-pressed={mode === "path"}
-            onClick={() => onModeChange("path")}
-          >
-            Path
-          </button>
-        </div>
-      </div>
-
-      <figure className="gradient-build-figure">
-        <div className={`gradient-build-surface is-${mode}`} style={style} aria-hidden="true">
-          {mode === "wall"
-            ? [...steps].reverse().map((step, rowIndex) => (
-                <div className="gradient-build-row" key={`wall-${step.index}`}>
-                  {Array.from({ length: 10 }, (_, cellIndex) => (
-                    <span
-                      key={`${rowIndex}-${cellIndex}`}
-                      style={{ "--block-color": step.block.hex } as CSSProperties}
-                    />
-                  ))}
-                </div>
-              ))
-            : Array.from({ length: 5 }, (_, rowIndex) => (
-                <div className="gradient-build-row" key={`path-${rowIndex}`}>
-                  {steps.map((step) => (
-                    <span
-                      key={`${rowIndex}-${step.index}`}
-                      style={{ "--block-color": step.block.hex } as CSSProperties}
-                    />
-                  ))}
-                </div>
-              ))}
-        </div>
-        <figcaption>
-          {mode === "wall"
-            ? "Start at the bottom and move upward. Break up each boundary in-game for a softer blend."
-            : "Move from the start block at one edge to the end block at the other. Use wider bands on large paths."}
-        </figcaption>
-      </figure>
-    </section>
   );
 }
 
 export function GradientGenerator({ initialOptions }: { initialOptions: GradientOptions }) {
   const [options, setOptions] = useState(() => normalizeGradientOptions(initialOptions));
-  const [previewMode, setPreviewMode] = useState<BuildPreviewMode>("wall");
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
   const steps = useMemo(() => generateBlockGradient(options), [options]);
-  const families = useMemo(() => new Set(steps.map((step) => step.block.family)).size, [steps]);
   const palette = PALETTES.find((item) => item.value === options.palette) ?? PALETTES[0];
   const endpointMode = options.endpointMode ?? "color";
+  const ribbonStart = endpointMode === "block" ? steps[0].block.hex : options.startColor;
+  const ribbonEnd = endpointMode === "block"
+    ? (steps.at(-1)?.block.hex ?? options.endColor)
+    : options.endColor;
 
   const showStatus = useCallback((message: string) => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
@@ -272,9 +423,9 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
     }
   };
 
-  const download = () => {
+  const download = async () => {
     try {
-      downloadGradientPng(steps, options);
+      await downloadGradientPng(steps, options);
       showStatus("PNG downloaded");
     } catch {
       showStatus("The PNG could not be created");
@@ -305,15 +456,30 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
             <span>{steps.length} blocks · build in order</span>
           </div>
 
-          <div className="gradient-ribbon" aria-label="Generated block gradient">
+          <div
+            className="gradient-ribbon"
+            aria-label={`Continuous gradient from ${ribbonStart} to ${ribbonEnd}`}
+            style={{
+              "--gradient-start": ribbonStart,
+              "--gradient-end": ribbonEnd,
+            } as CSSProperties}
+          />
+
+          <div className="gradient-texture-ribbon" aria-label="Generated Minecraft block sequence">
             {steps.map((step) => (
               <span
-                key={step.index}
-                style={{ backgroundColor: step.block.hex }}
+                key={`texture-${step.index}-${step.block.id}`}
+                aria-label={`${step.index}. ${step.block.name}`}
                 title={`${step.index}. ${step.block.name}`}
-              />
+              >
+                <BlockVisual block={step.block} />
+                <span aria-hidden="true">{step.index}</span>
+              </span>
             ))}
           </div>
+          <p className="gradient-texture-ribbon-note">
+            Actual block textures · place from left to right
+          </p>
 
           <ol className="gradient-block-list">
             {steps.map((step) => {
@@ -324,11 +490,7 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
                   : "";
               return (
                 <li key={`${step.index}-${step.block.id}`}>
-                  <span
-                    className="gradient-block-swatch"
-                    style={{ "--block-color": step.block.hex } as CSSProperties}
-                    aria-hidden="true"
-                  />
+                  <BlockVisual block={step.block} className="gradient-block-swatch" />
                   <span className="gradient-block-copy">
                     <strong>{step.block.name}</strong>
                     <small>{step.block.family} · {step.block.hex.toUpperCase()}</small>
@@ -344,8 +506,6 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
               );
             })}
           </ol>
-
-          <BuildPreview steps={steps} mode={previewMode} onModeChange={setPreviewMode} />
         </section>
 
         <aside className="gradient-settings" aria-labelledby="gradient-settings-title">
@@ -393,7 +553,7 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
                   id="gradient-start-block"
                   label="Start block"
                   helper="The material already in your build."
-                  blockId={options.startBlockId ?? "quartz_block"}
+                  blockId={options.startBlockId ?? "lapis_block"}
                   onChange={(block) => update({ startBlockId: block.id, startColor: block.hex })}
                 />
                 <button
@@ -409,7 +569,7 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
                   id="gradient-end-block"
                   label="End block"
                   helper="The material the transition should reach."
-                  blockId={options.endBlockId ?? "deepslate"}
+                  blockId={options.endBlockId ?? "lime_concrete"}
                   onChange={(block) => update({ endBlockId: block.id, endColor: block.hex })}
                 />
               </div>
@@ -486,16 +646,6 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
               <p>{palette.hint} Your chosen start and end blocks always stay fixed.</p>
             </div>
           </div>
-
-          <section className="gradient-stats" aria-labelledby="gradient-stats-title">
-            <h3 id="gradient-stats-title">Build plan</h3>
-            <dl>
-              <div><dt>Ordered blocks</dt><dd>{steps.length}</dd></div>
-              <div><dt>Material families</dt><dd>{families}</dd></div>
-              <div><dt>Start anchor</dt><dd>{steps[0].block.name}</dd></div>
-              <div><dt>End anchor</dt><dd>{steps.at(-1)?.block.name}</dd></div>
-            </dl>
-          </section>
 
           <div className="settings-actions gradient-actions">
             <button type="button" className="primary-button" onClick={download}>

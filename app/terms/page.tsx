@@ -3,7 +3,7 @@ import { ContactEmail } from "@/components/layout/contact-email";
 import { LegalPage } from "@/components/layout/legal-page";
 
 export const metadata: Metadata = {
-  title: "Terms of Use",
+  title: "Minecraft Circle Gen Terms of Use",
   description: "Terms for using the free Minecraft Circle Gen planning tool.",
   alternates: { canonical: "https://minecraftcirclegen.com/terms" },
 };

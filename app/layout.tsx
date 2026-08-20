@@ -9,10 +9,7 @@ const siteUrl = "https://minecraftcirclegen.com/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: "Minecraft Circle Gen",
-    template: "%s | Minecraft Circle Gen",
-  },
+  title: "Minecraft Circle Gen",
   description:
     "Free Minecraft building generators for block shapes, gradients, blueprints, material counts, and PNG export.",
   applicationName: "Minecraft Circle Gen",

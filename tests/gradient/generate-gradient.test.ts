@@ -4,8 +4,14 @@ import {
   generateBlockGradient,
   normalizeGradientOptions,
 } from "@/lib/gradient/generate-gradient";
+import { MINECRAFT_BLOCK_COLORS } from "@/lib/gradient/minecraft-block-colors";
 
 describe("generateBlockGradient", () => {
+  it("uses the complete Java Edition block catalog", () => {
+    expect(MINECRAFT_BLOCK_COLORS).toHaveLength(586);
+    expect(new Set(MINECRAFT_BLOCK_COLORS.map((block) => block.texture)).size).toBe(414);
+  });
+
   it("creates the requested number of unique ordered block matches", () => {
     const result = generateBlockGradient({
       startColor: "#f2ead7",
@@ -62,5 +68,23 @@ describe("generateBlockGradient", () => {
     expect(result[0].block.id).toBe("red_concrete");
     expect(result.at(-1)?.block.id).toBe("yellow_concrete");
     expect(result.slice(1, -1).every((step) => step.block.family === "stone")).toBe(true);
+  });
+
+  it("keeps a blue-to-green block path chromatic instead of detouring through gray", () => {
+    const result = generateBlockGradient({
+      startColor: "#000000",
+      endColor: "#ffffff",
+      steps: 8,
+      palette: "all",
+      endpointMode: "block",
+      startBlockId: "lapis_block",
+      endBlockId: "lime_concrete",
+    });
+
+    expect(result[0].block.id).toBe("lapis_block");
+    expect(result.at(-1)?.block.id).toBe("lime_concrete");
+    expect(result.slice(1, -1).every((step) => step.block.family !== "stone")).toBe(true);
+    expect(result.map((step) => step.block.id)).toContain("deepslate_lapis_ore");
+    expect(result.map((step) => step.block.id)).toContain("green_glazed_terracotta");
   });
 });

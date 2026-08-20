@@ -24,6 +24,11 @@ describe("GradientGenerator", () => {
     render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
 
     expect(screen.getByRole("heading", { name: "Your gradient" })).toBeInTheDocument();
+    expect(screen.queryByText("See the transition in context")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Build plan" })).not.toBeInTheDocument();
+    const ribbon = screen.getByLabelText(/Continuous gradient from/);
+    expect(ribbon.style.getPropertyValue("--gradient-start")).toBe("#1f438c");
+    expect(ribbon.style.getPropertyValue("--gradient-end")).toBe("#5ea919");
     expect(screen.getAllByRole("listitem")).toHaveLength(8);
     fireEvent.change(screen.getByRole("slider", { name: "Gradient length slider" }), {
       target: { value: "5" },
@@ -44,32 +49,43 @@ describe("GradientGenerator", () => {
 
     const start = screen.getByRole("textbox", { name: "Start color hex value" });
     const end = screen.getByRole("textbox", { name: "End color hex value" });
-    expect(start).toHaveValue("#ECE5D8");
-    expect(end).toHaveValue("#505052");
+    expect(start).toHaveValue("#1F438C");
+    expect(end).toHaveValue("#5EA919");
     fireEvent.click(screen.getByRole("button", { name: "Reverse gradient colors" }));
-    expect(screen.getByRole("textbox", { name: "Start color hex value" })).toHaveValue("#505052");
-    expect(screen.getByRole("textbox", { name: "End color hex value" })).toHaveValue("#ECE5D8");
+    expect(screen.getByRole("textbox", { name: "Start color hex value" })).toHaveValue("#5EA919");
+    expect(screen.getByRole("textbox", { name: "End color hex value" })).toHaveValue("#1F438C");
 
     fireEvent.click(screen.getByRole("button", { name: "Copy block list" }));
     expect(writeText).toHaveBeenCalledOnce();
     expect(writeText.mock.calls[0][0]).toContain("1.");
   });
 
-  it("uses selected Minecraft blocks as fixed gradient endpoints", () => {
+  it("uses the searchable visual picker to set fixed Minecraft block endpoints", () => {
     render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
 
-    expect(screen.getByRole("combobox", { name: "Start block" })).toHaveValue("quartz_block");
-    expect(screen.getByRole("combobox", { name: "End block" })).toHaveValue("deepslate");
-    expect(screen.getAllByText("Quartz Block").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Deepslate").length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: "Start block: Lapis Block" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "End block: Lime Concrete" })).toBeInTheDocument();
+    expect(screen.getAllByText("Lapis Block").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Lime Concrete").length).toBeGreaterThan(0);
 
-    fireEvent.change(screen.getByRole("combobox", { name: "Start block" }), {
-      target: { value: "red_concrete" },
+    fireEvent.click(screen.getByRole("button", { name: "Start block: Lapis Block" }));
+    expect(screen.getByRole("dialog", { name: "Pick a Minecraft block" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Color blocks" })).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search blocks" }), {
+      target: { value: "red concrete" },
     });
-    fireEvent.change(screen.getByRole("combobox", { name: "End block" }), {
-      target: { value: "yellow_concrete" },
-    });
+    fireEvent.click(screen.getByRole("button", { name: "Select Red Concrete" }));
 
+    fireEvent.click(screen.getByRole("button", { name: "End block: Lime Concrete" }));
+    fireEvent.click(screen.getByRole("button", { name: "Color blocks" }));
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search blocks" }), {
+      target: { value: "yellow" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Select Yellow Concrete" }));
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Start block: Red Concrete" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "End block: Yellow Concrete" })).toBeInTheDocument();
     expect(screen.getAllByText("Red Concrete").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Yellow Concrete").length).toBeGreaterThan(0);
   });
