@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { downloadGradientPng } from "@/lib/gradient/export-gradient-png";
 import {
   generateBlockGradient,
@@ -9,7 +16,14 @@ import {
   normalizeGradientOptions,
   normalizeHex,
 } from "@/lib/gradient/generate-gradient";
-import type { GradientOptions, GradientPalette } from "@/lib/gradient/gradient-types";
+import { MINECRAFT_BLOCK_COLORS } from "@/lib/gradient/minecraft-block-colors";
+import type {
+  GradientEndpointMode,
+  GradientOptions,
+  GradientPalette,
+  GradientStep,
+  MinecraftBlockColor,
+} from "@/lib/gradient/gradient-types";
 
 const PRESETS: Array<{ label: string; start: string; end: string }> = [
   { label: "Stone", start: "#eee5cf", end: "#24282b" },
@@ -18,12 +32,45 @@ const PRESETS: Array<{ label: string; start: string; end: string }> = [
   { label: "Nether", start: "#e1a15f", end: "#30151d" },
 ];
 
-const PALETTES: Array<{ value: GradientPalette; label: string }> = [
-  { value: "all", label: "All building blocks" },
-  { value: "common", label: "Common survival blocks" },
-  { value: "colorful", label: "Concrete & terracotta" },
-  { value: "natural", label: "Natural materials" },
+const PALETTES: Array<{ value: GradientPalette; label: string; hint: string }> = [
+  {
+    value: "all",
+    label: "All building blocks",
+    hint: "Best color match across the full block list.",
+  },
+  {
+    value: "common",
+    label: "Common survival blocks",
+    hint: "Avoids costly mineral and light-source blocks.",
+  },
+  {
+    value: "stone",
+    label: "Stone masonry",
+    hint: "Keeps intermediate blocks inside the stone family.",
+  },
+  {
+    value: "wood",
+    label: "Wood materials",
+    hint: "Uses planks from different wood families.",
+  },
+  {
+    value: "terrain",
+    label: "Terrain & paths",
+    hint: "Stone, earth, and ocean materials for outdoor transitions.",
+  },
+  {
+    value: "colorful",
+    label: "Concrete & terracotta",
+    hint: "Clean color-led gradients for bold builds.",
+  },
+  {
+    value: "natural",
+    label: "All natural materials",
+    hint: "Stone, wood, earth, and ocean block families.",
+  },
 ];
+
+type BuildPreviewMode = "wall" | "path";
 
 function ColorControl({
   id,
@@ -74,12 +121,130 @@ function ColorControl({
   );
 }
 
+function BlockControl({
+  id,
+  label,
+  helper,
+  blockId,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  helper: string;
+  blockId: string;
+  onChange: (block: MinecraftBlockColor) => void;
+}) {
+  const block = MINECRAFT_BLOCK_COLORS.find((candidate) => candidate.id === blockId)
+    ?? MINECRAFT_BLOCK_COLORS[0];
+
+  return (
+    <div className="gradient-block-field">
+      <label htmlFor={id}>{label}</label>
+      <div className="gradient-block-select">
+        <span
+          className="gradient-block-select-swatch"
+          style={{ "--block-color": block.hex } as CSSProperties}
+          aria-hidden="true"
+        />
+        <select
+          id={id}
+          value={block.id}
+          onChange={(event) => {
+            const selected = MINECRAFT_BLOCK_COLORS.find(
+              (candidate) => candidate.id === event.target.value,
+            );
+            if (selected) onChange(selected);
+          }}
+        >
+          {MINECRAFT_BLOCK_COLORS.map((candidate) => (
+            <option key={candidate.id} value={candidate.id}>{candidate.name}</option>
+          ))}
+        </select>
+      </div>
+      <p>{helper}</p>
+    </div>
+  );
+}
+
+function BuildPreview({
+  steps,
+  mode,
+  onModeChange,
+}: {
+  steps: GradientStep[];
+  mode: BuildPreviewMode;
+  onModeChange: (mode: BuildPreviewMode) => void;
+}) {
+  const style = { "--preview-step-count": steps.length } as CSSProperties;
+
+  return (
+    <section className="gradient-build-preview" aria-labelledby="gradient-build-preview-title">
+      <div className="gradient-build-preview-heading">
+        <div>
+          <p className="section-label">BUILD PREVIEW</p>
+          <h3 id="gradient-build-preview-title">See the transition in context</h3>
+        </div>
+        <div className="gradient-preview-tabs" aria-label="Build preview type">
+          <button
+            type="button"
+            aria-pressed={mode === "wall"}
+            onClick={() => onModeChange("wall")}
+          >
+            Wall
+          </button>
+          <button
+            type="button"
+            aria-pressed={mode === "path"}
+            onClick={() => onModeChange("path")}
+          >
+            Path
+          </button>
+        </div>
+      </div>
+
+      <figure className="gradient-build-figure">
+        <div className={`gradient-build-surface is-${mode}`} style={style} aria-hidden="true">
+          {mode === "wall"
+            ? [...steps].reverse().map((step, rowIndex) => (
+                <div className="gradient-build-row" key={`wall-${step.index}`}>
+                  {Array.from({ length: 10 }, (_, cellIndex) => (
+                    <span
+                      key={`${rowIndex}-${cellIndex}`}
+                      style={{ "--block-color": step.block.hex } as CSSProperties}
+                    />
+                  ))}
+                </div>
+              ))
+            : Array.from({ length: 5 }, (_, rowIndex) => (
+                <div className="gradient-build-row" key={`path-${rowIndex}`}>
+                  {steps.map((step) => (
+                    <span
+                      key={`${rowIndex}-${step.index}`}
+                      style={{ "--block-color": step.block.hex } as CSSProperties}
+                    />
+                  ))}
+                </div>
+              ))}
+        </div>
+        <figcaption>
+          {mode === "wall"
+            ? "Start at the bottom and move upward. Break up each boundary in-game for a softer blend."
+            : "Move from the start block at one edge to the end block at the other. Use wider bands on large paths."}
+        </figcaption>
+      </figure>
+    </section>
+  );
+}
+
 export function GradientGenerator({ initialOptions }: { initialOptions: GradientOptions }) {
   const [options, setOptions] = useState(() => normalizeGradientOptions(initialOptions));
+  const [previewMode, setPreviewMode] = useState<BuildPreviewMode>("wall");
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
   const steps = useMemo(() => generateBlockGradient(options), [options]);
   const families = useMemo(() => new Set(steps.map((step) => step.block.family)).size, [steps]);
+  const palette = PALETTES.find((item) => item.value === options.palette) ?? PALETTES[0];
+  const endpointMode = options.endpointMode ?? "color";
 
   const showStatus = useCallback((message: string) => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
@@ -116,6 +281,15 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
     }
   };
 
+  const reverse = () => {
+    update({
+      startColor: options.endColor,
+      endColor: options.startColor,
+      startBlockId: options.endBlockId,
+      endBlockId: options.startBlockId,
+    });
+  };
+
   const progress = ((options.steps - MIN_GRADIENT_STEPS) /
     (MAX_GRADIENT_STEPS - MIN_GRADIENT_STEPS)) * 100;
 
@@ -128,7 +302,7 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
               <p className="section-label">LIVE BLOCK PALETTE</p>
               <h2 id="gradient-preview-title">Your gradient</h2>
             </div>
-            <span>{steps.length} blocks</span>
+            <span>{steps.length} blocks · build in order</span>
           </div>
 
           <div className="gradient-ribbon" aria-label="Generated block gradient">
@@ -142,72 +316,137 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
           </div>
 
           <ol className="gradient-block-list">
-            {steps.map((step) => (
-              <li key={`${step.index}-${step.block.id}`}>
-                <span
-                  className="gradient-block-swatch"
-                  style={{ "--block-color": step.block.hex } as CSSProperties}
-                  aria-hidden="true"
-                />
-                <span className="gradient-block-copy">
-                  <strong>{step.block.name}</strong>
-                  <small>{step.block.hex.toUpperCase()}</small>
-                </span>
-                <span className="gradient-step-number">{String(step.index).padStart(2, "0")}</span>
-              </li>
-            ))}
+            {steps.map((step) => {
+              const endpoint = step.index === 1
+                ? "START"
+                : step.index === steps.length
+                  ? "END"
+                  : "";
+              return (
+                <li key={`${step.index}-${step.block.id}`}>
+                  <span
+                    className="gradient-block-swatch"
+                    style={{ "--block-color": step.block.hex } as CSSProperties}
+                    aria-hidden="true"
+                  />
+                  <span className="gradient-block-copy">
+                    <strong>{step.block.name}</strong>
+                    <small>{step.block.family} · {step.block.hex.toUpperCase()}</small>
+                  </span>
+                  {endpoint
+                    ? <span className="gradient-endpoint-badge">{endpoint}</span>
+                    : (
+                      <span className="gradient-step-number">
+                        {String(step.index).padStart(2, "0")}
+                      </span>
+                    )}
+                </li>
+              );
+            })}
           </ol>
+
+          <BuildPreview steps={steps} mode={previewMode} onModeChange={setPreviewMode} />
         </section>
 
         <aside className="gradient-settings" aria-labelledby="gradient-settings-title">
-          <h2 id="gradient-settings-title" className="sr-only">Gradient settings</h2>
+          <div className="gradient-settings-intro">
+            <p className="section-label">GRADIENT SETUP</p>
+            <h2 id="gradient-settings-title">Choose both ends of the build</h2>
+            <p>Anchor the gradient to blocks already in your plan, or switch to exact colors.</p>
+          </div>
 
-          <div className="gradient-preset-row" aria-label="Gradient presets">
-            {PRESETS.map((preset) => (
+          <div className="gradient-endpoint-mode" aria-label="Gradient endpoint type">
+            {(["block", "color"] as GradientEndpointMode[]).map((mode) => (
               <button
-                key={preset.label}
+                key={mode}
                 type="button"
-                onClick={() => update({ startColor: preset.start, endColor: preset.end })}
+                aria-pressed={endpointMode === mode}
+                onClick={() => update({ endpointMode: mode })}
               >
-                <span
-                  aria-hidden="true"
-                  style={{ background: `linear-gradient(90deg, ${preset.start}, ${preset.end})` }}
-                />
-                {preset.label}
+                {mode === "block" ? "Minecraft blocks" : "Exact colors"}
               </button>
             ))}
           </div>
 
-          <div className="gradient-settings-card">
-            <div className="gradient-color-grid">
-              <ColorControl
-                key={`start-${options.startColor}`}
-                id="start-color"
-                label="Start color"
-                value={options.startColor}
-                onChange={(startColor) => update({ startColor })}
-              />
-              <button
-                type="button"
-                className="gradient-reverse-button"
-                aria-label="Reverse gradient colors"
-                title="Reverse colors"
-                onClick={() => update({ startColor: options.endColor, endColor: options.startColor })}
-              >
-                ⇄
-              </button>
-              <ColorControl
-                key={`end-${options.endColor}`}
-                id="end-color"
-                label="End color"
-                value={options.endColor}
-                onChange={(endColor) => update({ endColor })}
-              />
+          {endpointMode === "color" && (
+            <div className="gradient-preset-row" aria-label="Gradient presets">
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => update({ startColor: preset.start, endColor: preset.end })}
+                >
+                  <span
+                    aria-hidden="true"
+                    style={{ background: `linear-gradient(90deg, ${preset.start}, ${preset.end})` }}
+                  />
+                  {preset.label}
+                </button>
+              ))}
             </div>
+          )}
+
+          <div className="gradient-settings-card">
+            {endpointMode === "block" ? (
+              <div className="gradient-block-endpoints">
+                <BlockControl
+                  id="gradient-start-block"
+                  label="Start block"
+                  helper="The material already in your build."
+                  blockId={options.startBlockId ?? "quartz_block"}
+                  onChange={(block) => update({ startBlockId: block.id, startColor: block.hex })}
+                />
+                <button
+                  type="button"
+                  className="gradient-reverse-button"
+                  aria-label="Reverse gradient blocks"
+                  title="Reverse blocks"
+                  onClick={reverse}
+                >
+                  ⇄
+                </button>
+                <BlockControl
+                  id="gradient-end-block"
+                  label="End block"
+                  helper="The material the transition should reach."
+                  blockId={options.endBlockId ?? "deepslate"}
+                  onChange={(block) => update({ endBlockId: block.id, endColor: block.hex })}
+                />
+              </div>
+            ) : (
+              <div className="gradient-color-grid">
+                <ColorControl
+                  key={`start-${options.startColor}`}
+                  id="start-color"
+                  label="Start color"
+                  value={options.startColor}
+                  onChange={(startColor) => update({ startColor })}
+                />
+                <button
+                  type="button"
+                  className="gradient-reverse-button"
+                  aria-label="Reverse gradient colors"
+                  title="Reverse colors"
+                  onClick={reverse}
+                >
+                  ⇄
+                </button>
+                <ColorControl
+                  key={`end-${options.endColor}`}
+                  id="end-color"
+                  label="End color"
+                  value={options.endColor}
+                  onChange={(endColor) => update({ endColor })}
+                />
+              </div>
+            )}
 
             <div className="gradient-setting-group">
               <div className="setting-heading">
-                <label htmlFor="gradient-steps">Gradient length</label>
+                <div>
+                  <label htmlFor="gradient-steps">Gradient length</label>
+                  <small>Use fewer steps on small builds and more on wide surfaces.</small>
+                </div>
                 <input
                   id="gradient-step-number"
                   className="setting-number-input"
@@ -240,27 +479,31 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
                 value={options.palette}
                 onChange={(event) => update({ palette: event.target.value as GradientPalette })}
               >
-                {PALETTES.map((palette) => (
-                  <option key={palette.value} value={palette.value}>{palette.label}</option>
+                {PALETTES.map((item) => (
+                  <option key={item.value} value={item.value}>{item.label}</option>
                 ))}
               </select>
-              <p>Colors are matched to representative vanilla building blocks.</p>
+              <p>{palette.hint} Your chosen start and end blocks always stay fixed.</p>
             </div>
           </div>
 
           <section className="gradient-stats" aria-labelledby="gradient-stats-title">
-            <h3 id="gradient-stats-title">Palette stats</h3>
+            <h3 id="gradient-stats-title">Build plan</h3>
             <dl>
-              <div><dt>Blocks</dt><dd>{steps.length}</dd></div>
+              <div><dt>Ordered blocks</dt><dd>{steps.length}</dd></div>
               <div><dt>Material families</dt><dd>{families}</dd></div>
-              <div><dt>Start match</dt><dd>{steps[0].block.name}</dd></div>
-              <div><dt>End match</dt><dd>{steps.at(-1)?.block.name}</dd></div>
+              <div><dt>Start anchor</dt><dd>{steps[0].block.name}</dd></div>
+              <div><dt>End anchor</dt><dd>{steps.at(-1)?.block.name}</dd></div>
             </dl>
           </section>
 
           <div className="settings-actions gradient-actions">
-            <button type="button" className="primary-button" onClick={download}>↓ Download as PNG</button>
-            <button type="button" className="secondary-button" onClick={copyBlocks}>Copy block list</button>
+            <button type="button" className="primary-button" onClick={download}>
+              ↓ Download as PNG
+            </button>
+            <button type="button" className="secondary-button" onClick={copyBlocks}>
+              Copy block list
+            </button>
           </div>
         </aside>
       </div>

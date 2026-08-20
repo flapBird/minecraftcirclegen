@@ -1,6 +1,15 @@
 export type BlockFamily = "color" | "stone" | "wood" | "earth" | "ocean" | "metal";
 
-export type GradientPalette = "all" | "common" | "colorful" | "natural";
+export type GradientPalette =
+  | "all"
+  | "common"
+  | "colorful"
+  | "natural"
+  | "stone"
+  | "wood"
+  | "terrain";
+
+export type GradientEndpointMode = "block" | "color";
 
 export interface MinecraftBlockColor {
   id: string;
@@ -15,6 +24,9 @@ export interface GradientOptions {
   endColor: string;
   steps: number;
   palette: GradientPalette;
+  endpointMode?: GradientEndpointMode;
+  startBlockId?: string;
+  endBlockId?: string;
 }
 
 export interface GradientStep {

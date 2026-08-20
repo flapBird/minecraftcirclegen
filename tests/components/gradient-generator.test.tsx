@@ -29,7 +29,7 @@ describe("GradientGenerator", () => {
       target: { value: "5" },
     });
     expect(screen.getAllByRole("listitem")).toHaveLength(5);
-    expect(screen.getByText("5 blocks")).toBeInTheDocument();
+    expect(screen.getByText("5 blocks · build in order")).toBeInTheDocument();
   });
 
   it("reverses colors and copies the generated block list", async () => {
@@ -40,16 +40,37 @@ describe("GradientGenerator", () => {
     });
     render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
 
+    fireEvent.click(screen.getByRole("button", { name: "Exact colors" }));
+
     const start = screen.getByRole("textbox", { name: "Start color hex value" });
     const end = screen.getByRole("textbox", { name: "End color hex value" });
-    expect(start).toHaveValue("#EEE5CF");
-    expect(end).toHaveValue("#26352C");
+    expect(start).toHaveValue("#ECE5D8");
+    expect(end).toHaveValue("#505052");
     fireEvent.click(screen.getByRole("button", { name: "Reverse gradient colors" }));
-    expect(screen.getByRole("textbox", { name: "Start color hex value" })).toHaveValue("#26352C");
-    expect(screen.getByRole("textbox", { name: "End color hex value" })).toHaveValue("#EEE5CF");
+    expect(screen.getByRole("textbox", { name: "Start color hex value" })).toHaveValue("#505052");
+    expect(screen.getByRole("textbox", { name: "End color hex value" })).toHaveValue("#ECE5D8");
 
     fireEvent.click(screen.getByRole("button", { name: "Copy block list" }));
     expect(writeText).toHaveBeenCalledOnce();
     expect(writeText.mock.calls[0][0]).toContain("1.");
+  });
+
+  it("uses selected Minecraft blocks as fixed gradient endpoints", () => {
+    render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
+
+    expect(screen.getByRole("combobox", { name: "Start block" })).toHaveValue("quartz_block");
+    expect(screen.getByRole("combobox", { name: "End block" })).toHaveValue("deepslate");
+    expect(screen.getAllByText("Quartz Block").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Deepslate").length).toBeGreaterThan(0);
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Start block" }), {
+      target: { value: "red_concrete" },
+    });
+    fireEvent.change(screen.getByRole("combobox", { name: "End block" }), {
+      target: { value: "yellow_concrete" },
+    });
+
+    expect(screen.getAllByText("Red Concrete").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Yellow Concrete").length).toBeGreaterThan(0);
   });
 });

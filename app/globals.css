@@ -1315,8 +1315,73 @@ a {
   font-weight: 800;
 }
 
+.gradient-endpoint-badge {
+  border: 1px solid #8fa28a;
+  border-radius: 999px;
+  background: #edf3e9;
+  color: #365f35;
+  padding: 3px 7px;
+  font-family: var(--pixel-font);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
 .gradient-settings {
   min-width: 0;
+}
+
+.gradient-settings-intro {
+  margin-bottom: 12px;
+  border-left: 3px solid #4d7f47;
+  padding: 2px 0 2px 13px;
+}
+
+.gradient-settings-intro .section-label {
+  margin-bottom: 3px;
+}
+
+.gradient-settings-intro h2 {
+  margin: 0;
+  color: #273229;
+  font-size: 1.12rem;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.gradient-settings-intro > p:last-child {
+  margin: 5px 0 0;
+  color: #687168;
+  font-size: 0.73rem;
+  line-height: 1.45;
+}
+
+.gradient-endpoint-mode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 12px;
+  border: 1px solid #cbc8bb;
+  border-radius: 7px;
+  background: #e9e7de;
+  padding: 4px;
+}
+
+.gradient-endpoint-mode button {
+  min-height: 39px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #687168;
+  cursor: pointer;
+  font-size: 0.73rem;
+  font-weight: 760;
+}
+
+.gradient-endpoint-mode button[aria-pressed="true"] {
+  background: #fffdf6;
+  color: #315931;
+  box-shadow: 0 1px 4px rgba(43, 58, 42, 0.13);
 }
 
 .gradient-preset-row {
@@ -1360,6 +1425,13 @@ a {
   padding: 17px;
 }
 
+.gradient-block-endpoints {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+
 .gradient-color-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
@@ -1367,6 +1439,7 @@ a {
   gap: 8px;
 }
 
+.gradient-block-field label,
 .gradient-color-field label,
 .gradient-setting-group > label {
   display: block;
@@ -1374,6 +1447,49 @@ a {
   color: #29342b;
   font-size: 0.75rem;
   font-weight: 750;
+}
+
+.gradient-block-select {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 43px minmax(0, 1fr);
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #bdbbad;
+  border-radius: 6px;
+  background: #fffdf6;
+}
+
+.gradient-block-select-swatch {
+  width: 43px;
+  height: 43px;
+  display: block;
+  border-right: 1px solid rgba(35, 42, 36, 0.18);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%) 0 0 / 9px 9px,
+    linear-gradient(315deg, rgba(0, 0, 0, 0.08) 25%, transparent 25%) 0 0 / 9px 9px,
+    var(--block-color);
+}
+
+.gradient-block-select select {
+  width: 100%;
+  height: 43px;
+  min-width: 0;
+  border: 0;
+  background: #fffdf6;
+  color: #273229;
+  padding: 0 28px 0 9px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.gradient-block-field > p {
+  min-height: 29px;
+  margin: 6px 0 0;
+  color: #777c75;
+  font-size: 0.62rem;
+  line-height: 1.35;
 }
 
 .gradient-color-inputs {
@@ -1428,6 +1544,11 @@ a {
   font-weight: 800;
 }
 
+.gradient-block-endpoints .gradient-reverse-button {
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+
 .gradient-reverse-button:hover {
   border-color: #8ea087;
   background: #eef2e9;
@@ -1444,6 +1565,26 @@ a {
   border-radius: 6px;
   background: #fffdf6;
   color: #273229;
+}
+
+.gradient-setting-group .setting-heading > div {
+  min-width: 0;
+}
+
+.gradient-setting-group .setting-heading label {
+  display: block;
+  color: #29342b;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.gradient-setting-group .setting-heading small {
+  display: block;
+  margin-top: 2px;
+  color: #777c75;
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .gradient-range {
@@ -1556,6 +1697,114 @@ a {
   border-radius: 6px;
   background: #fffdf6;
   color: #3d493e;
+}
+
+.gradient-build-preview {
+  margin-top: 22px;
+  border-top: 1px solid #d4d0c3;
+  padding-top: 20px;
+}
+
+.gradient-build-preview-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.gradient-build-preview-heading .section-label {
+  margin-bottom: 3px;
+}
+
+.gradient-build-preview-heading h3 {
+  margin: 0;
+  color: #273229;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.gradient-preview-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 3px;
+  border: 1px solid #cbc8bb;
+  border-radius: 6px;
+  background: #e9e7de;
+  padding: 3px;
+}
+
+.gradient-preview-tabs button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #687168;
+  padding: 0 11px;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 760;
+}
+
+.gradient-preview-tabs button[aria-pressed="true"] {
+  background: #fffdf6;
+  color: #315931;
+  box-shadow: 0 1px 3px rgba(43, 58, 42, 0.12);
+}
+
+.gradient-build-figure {
+  margin: 0;
+}
+
+.gradient-build-surface {
+  height: 210px;
+  overflow: hidden;
+  border: 1px solid #aaa99d;
+  border-radius: 6px;
+  background: #d7d4c9;
+  padding: 9px;
+  box-shadow: inset 0 2px 6px rgba(38, 49, 39, 0.15);
+}
+
+.gradient-build-row {
+  min-height: 0;
+  display: grid;
+}
+
+.gradient-build-surface.is-wall {
+  display: grid;
+  grid-template-rows: repeat(var(--preview-step-count), minmax(0, 1fr));
+}
+
+.gradient-build-surface.is-wall .gradient-build-row {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.gradient-build-surface.is-path {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+}
+
+.gradient-build-surface.is-path .gradient-build-row {
+  grid-template-columns: repeat(var(--preview-step-count), minmax(0, 1fr));
+}
+
+.gradient-build-row span {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(30, 36, 31, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%) 0 0 / 10px 10px,
+    linear-gradient(315deg, rgba(0, 0, 0, 0.08) 25%, transparent 25%) 0 0 / 10px 10px,
+    var(--block-color);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.gradient-build-figure figcaption {
+  margin-top: 8px;
+  color: #6f776f;
+  font-size: 0.66rem;
+  line-height: 1.5;
 }
 
 .creative-generator {
@@ -3307,6 +3556,10 @@ a {
     padding: 17px;
   }
 
+  .gradient-build-surface {
+    height: 190px;
+  }
+
   .gradient-ribbon {
     height: 64px;
   }
@@ -3485,9 +3738,23 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .gradient-block-endpoints {
+    grid-template-columns: 1fr;
+  }
+
   .gradient-reverse-button {
     width: 100%;
     margin: 0;
+  }
+
+  .gradient-block-endpoints .gradient-reverse-button {
+    margin: 0;
+  }
+
+  .gradient-build-preview-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
   }
 
   .creative-preview-heading {

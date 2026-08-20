@@ -1,5 +1,6 @@
 import { MINECRAFT_BLOCK_COLORS } from "./minecraft-block-colors";
 import type {
+  GradientEndpointMode,
   GradientOptions,
   GradientPalette,
   GradientStep,
@@ -24,13 +25,28 @@ export function normalizeHex(value: string, fallback = "#ffffff") {
 }
 
 export function normalizeGradientOptions(options: GradientOptions): GradientOptions {
+  const endpointMode = (["block", "color"] as GradientEndpointMode[]).includes(
+    options.endpointMode as GradientEndpointMode,
+  )
+    ? options.endpointMode
+    : "color";
+  const startBlock = MINECRAFT_BLOCK_COLORS.find((block) => block.id === options.startBlockId);
+  const endBlock = MINECRAFT_BLOCK_COLORS.find((block) => block.id === options.endBlockId);
+
   return {
-    startColor: normalizeHex(options.startColor, "#eee5cf"),
-    endColor: normalizeHex(options.endColor, "#26352c"),
+    startColor: endpointMode === "block" && startBlock
+      ? startBlock.hex
+      : normalizeHex(options.startColor, "#eee5cf"),
+    endColor: endpointMode === "block" && endBlock
+      ? endBlock.hex
+      : normalizeHex(options.endColor, "#26352c"),
     steps: Math.max(MIN_GRADIENT_STEPS, Math.min(MAX_GRADIENT_STEPS, Math.round(options.steps))),
-    palette: (["all", "common", "colorful", "natural"] as GradientPalette[]).includes(options.palette)
+    palette: (["all", "common", "colorful", "natural", "stone", "wood", "terrain"] as GradientPalette[]).includes(options.palette)
       ? options.palette
       : "all",
+    endpointMode,
+    startBlockId: startBlock?.id,
+    endBlockId: endBlock?.id,
   };
 }
 
@@ -41,6 +57,19 @@ export function blocksForPalette(palette: GradientPalette): MinecraftBlockColor[
     return MINECRAFT_BLOCK_COLORS.filter((block) =>
       (["stone", "wood", "earth", "ocean"] as const).includes(
         block.family as "stone" | "wood" | "earth" | "ocean",
+      ),
+    );
+  }
+  if (palette === "stone") {
+    return MINECRAFT_BLOCK_COLORS.filter((block) => block.family === "stone");
+  }
+  if (palette === "wood") {
+    return MINECRAFT_BLOCK_COLORS.filter((block) => block.family === "wood");
+  }
+  if (palette === "terrain") {
+    return MINECRAFT_BLOCK_COLORS.filter((block) =>
+      (["stone", "earth", "ocean"] as const).includes(
+        block.family as "stone" | "earth" | "ocean",
       ),
     );
   }
@@ -112,21 +141,34 @@ function distance(left: OklabColor, right: OklabColor) {
 
 export function generateBlockGradient(rawOptions: GradientOptions): GradientStep[] {
   const options = normalizeGradientOptions(rawOptions);
-  const candidates = blocksForPalette(options.palette).map((block) => ({
+  const startAnchor = options.endpointMode === "block"
+    ? MINECRAFT_BLOCK_COLORS.find((block) => block.id === options.startBlockId)
+    : undefined;
+  const endAnchor = options.endpointMode === "block"
+    ? MINECRAFT_BLOCK_COLORS.find((block) => block.id === options.endBlockId)
+    : undefined;
+  const candidateBlocks = [...blocksForPalette(options.palette)];
+  for (const anchor of [startAnchor, endAnchor]) {
+    if (anchor && !candidateBlocks.some((block) => block.id === anchor.id)) candidateBlocks.push(anchor);
+  }
+  const candidates = candidateBlocks.map((block) => ({
     block,
     color: hexToOklab(block.hex),
   }));
   const start = hexToOklab(options.startColor);
   const end = hexToOklab(options.endColor);
-  const used = new Set<string>();
+  const used = new Set<string>([startAnchor?.id, endAnchor?.id].filter(Boolean) as string[]);
 
   return Array.from({ length: options.steps }, (_, index) => {
     const amount = options.steps === 1 ? 0 : index / (options.steps - 1);
     const target = interpolate(start, end, amount);
+    const anchor = index === 0 ? startAnchor : index === options.steps - 1 ? endAnchor : undefined;
     const ranked = candidates
       .map((candidate) => ({ ...candidate, score: distance(target, candidate.color) }))
       .sort((left, right) => left.score - right.score);
-    const chosen = ranked.find((candidate) => !used.has(candidate.block.id)) ?? ranked[0];
+    const chosen = anchor
+      ? { block: anchor, color: hexToOklab(anchor.hex), score: 0 }
+      : ranked.find((candidate) => !used.has(candidate.block.id)) ?? ranked[0];
     used.add(chosen.block.id);
     return {
       index: index + 1,

@@ -42,6 +42,25 @@ describe("generateBlockGradient", () => {
       endColor: "#ffffff",
       steps: 24,
       palette: "all",
+      endpointMode: "color",
+      startBlockId: undefined,
+      endBlockId: undefined,
     });
+  });
+
+  it("keeps selected start and end blocks as exact anchors", () => {
+    const result = generateBlockGradient({
+      startColor: "#000000",
+      endColor: "#ffffff",
+      steps: 7,
+      palette: "stone",
+      endpointMode: "block",
+      startBlockId: "red_concrete",
+      endBlockId: "yellow_concrete",
+    });
+
+    expect(result[0].block.id).toBe("red_concrete");
+    expect(result.at(-1)?.block.id).toBe("yellow_concrete");
+    expect(result.slice(1, -1).every((step) => step.block.family === "stone")).toBe(true);
   });
 });
