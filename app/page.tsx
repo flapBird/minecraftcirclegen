@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
@@ -132,7 +133,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <main>
+      <main id="main-content">
         <section className="hero">
           <div className="page-container">
             <PageBreadcrumb toolKey="circle" />
@@ -382,6 +383,39 @@ export default function Home() {
                 decoration, entrances, and structural details remain yours to
                 design in game.
               </p>
+            </section>
+
+            <section className="home-house-resource">
+              <div>
+                <p className="section-label">BUILDING RESOURCES</p>
+                <h2>Minecraft house designs you can actually build</h2>
+                <p>
+                  Move from a shape generator to a complete project. Browse
+                  starter, small, modern, and survival houses with dimensions,
+                  material counts, build times, and layer-by-layer plans.
+                </p>
+                <div className="home-resource-links">
+                  <Link href="/house-designs">Explore house designs →</Link>
+                  <Link href="/house-blueprints">Open house blueprints</Link>
+                </div>
+              </div>
+              <div
+                className="home-resource-grid"
+                aria-label="Decorative house blueprint footprint"
+              >
+                {Array.from({ length: 49 }, (_, index) => {
+                  const x = index % 7;
+                  const z = Math.floor(index / 7);
+                  const edge = x === 0 || z === 0 || x === 6 || z === 6;
+                  const door = z === 6 && x === 3;
+                  return (
+                    <span
+                      key={index}
+                      className={door ? "is-door" : edge ? "is-wall" : "is-floor"}
+                    />
+                  );
+                })}
+              </div>
             </section>
 
             <section id="faq" className="faq-section">

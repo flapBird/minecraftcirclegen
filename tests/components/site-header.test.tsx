@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -17,59 +17,86 @@ describe("SiteHeader", () => {
     window.scrollTo = vi.fn();
   });
 
-  it("shows every generator as a top-level desktop link with Font last", () => {
+  it("keeps four primary desktop choices and groups the remaining generators", async () => {
     navigationState.pathname = "/sphere-generator";
     render(<SiteHeader />);
     const navigation = screen.getByRole("navigation", { name: "Main navigation" });
-    const links = within(navigation).getAllByRole("link");
-    const labels = links.map((link) => link.textContent);
+    const primaryLinks = Array.from(navigation.children)
+      .filter((element): element is HTMLAnchorElement => element instanceof HTMLAnchorElement);
 
-    expect(labels).toEqual([
+    expect(primaryLinks.map((link) => link.textContent)).toEqual([
       "Circle",
-      "Oval",
-      "Sphere",
-      "Dome",
-      "Gradient",
-      "Pixel Art",
-      "Map Art",
-      "Font",
+      "House Designs",
+      "Blueprints",
     ]);
-    expect(within(navigation).queryByText("More Tools")).not.toBeInTheDocument();
-    expect(within(navigation).queryByText("How to Use")).not.toBeInTheDocument();
-    expect(within(navigation).queryByText("FAQ")).not.toBeInTheDocument();
-    expect(links.map((link) => link.getAttribute("href"))).toEqual([
+    expect(primaryLinks.map((link) => link.getAttribute("href"))).toEqual([
       "/",
-      "/oval-generator",
-      "/sphere-generator",
-      "/dome-generator",
-      "/minecraft-gradient-generator",
-      "/minecraft-pixel-art-generator",
-      "/minecraft-map-art-generator",
-      "/minecraft-font-generator",
+      "/house-designs",
+      "/house-blueprints",
     ]);
-    expect(links.every((link) => !link.getAttribute("href")?.includes("#"))).toBe(true);
-    expect(within(navigation).getByRole("link", { name: "Sphere" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
-    expect(within(navigation).getByRole("link", { name: "Circle" })).not.toHaveAttribute(
-      "aria-current",
-    );
+
+    const tools = navigation.querySelector(".desktop-tools-menu > summary");
+    expect(tools).toHaveAttribute("aria-current", "page");
+    await userEvent.click(tools!);
+
+    expect(within(navigation).getByRole("heading", { name: "Shape Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("heading", { name: "Creative Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("link", { name: /Oval/ })).toHaveAttribute("href", "/oval-generator");
+    expect(within(navigation).getByRole("link", { name: /Font/ })).toHaveAttribute("href", "/minecraft-font-generator");
   });
 
-  it("closes the mobile menu after choosing a generator", async () => {
-    render(
-      <>
-        <SiteHeader />
-        <div id="generator" />
-      </>,
-    );
+  it("gives Blueprints its own active state", () => {
+    navigationState.pathname = "/house-blueprints/7x7-starter-house";
+    render(<SiteHeader />);
+    const navigation = screen.getByRole("navigation", { name: "Main navigation" });
+
+    expect(within(navigation).getByRole("link", { name: "Blueprints" })).toHaveAttribute("aria-current", "page");
+    expect(within(navigation).getByRole("link", { name: "House Designs" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("uses a short hover-intent delay for the desktop Tools menu", () => {
+    vi.useFakeTimers();
+
+    try {
+      render(<SiteHeader />);
+      const navigation = screen.getByRole("navigation", { name: "Main navigation" });
+      const toolsMenu = navigation.querySelector(".desktop-tools-menu");
+
+      expect(toolsMenu).not.toHaveAttribute("open");
+      fireEvent.mouseEnter(toolsMenu!);
+      act(() => vi.advanceTimersByTime(259));
+      expect(toolsMenu).not.toHaveAttribute("open");
+
+      act(() => vi.advanceTimersByTime(1));
+      expect(toolsMenu).toHaveAttribute("open");
+
+      fireEvent.mouseLeave(toolsMenu!);
+      act(() => vi.advanceTimersByTime(179));
+      expect(toolsMenu).toHaveAttribute("open");
+
+      act(() => vi.advanceTimersByTime(1));
+      expect(toolsMenu).not.toHaveAttribute("open");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("groups mobile tools and closes the menu after choosing a page", async () => {
+    render(<SiteHeader />);
     await userEvent.click(screen.getByLabelText("Open navigation menu"));
-    await waitFor(() =>
-      expect(screen.getByLabelText("Close navigation menu")).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByLabelText("Close navigation menu")).toBeInTheDocument());
+
     const navigation = screen.getByRole("navigation", { name: "Mobile navigation" });
-    expect(within(navigation).getAllByRole("link").map((link) => link.textContent)).toEqual([
+    const primaryMobileLinks = Array.from(navigation.children)
+      .filter((element): element is HTMLAnchorElement => element instanceof HTMLAnchorElement);
+    expect(primaryMobileLinks.map((link) => link.textContent)).toEqual([
+      "Circle",
+      "House Designs",
+      "Blueprints",
+    ]);
+
+    await userEvent.click(within(navigation).getByText("Tools", { exact: true }));
+    expect(within(navigation).getAllByRole("link").map((link) => link.querySelector("strong")?.textContent ?? link.textContent?.trim())).toEqual([
       "Circle",
       "Oval",
       "Sphere",
@@ -78,10 +105,11 @@ describe("SiteHeader", () => {
       "Pixel Art",
       "Map Art",
       "Font",
+      "House Designs",
+      "Blueprints",
     ]);
+
     await userEvent.click(within(navigation).getByRole("link", { name: "Circle" }));
-    await waitFor(() =>
-      expect(screen.getByLabelText("Open navigation menu")).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByLabelText("Open navigation menu")).toBeInTheDocument());
   });
 });

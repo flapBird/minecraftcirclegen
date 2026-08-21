@@ -16,6 +16,14 @@ export interface ToolPage {
   description: string;
 }
 
+export interface ContentPage {
+  key: "house-designs" | "house-blueprints";
+  href: string;
+  navLabel: string;
+  title: string;
+  description: string;
+}
+
 export const TOOL_PAGES: ToolPage[] = [
   {
     key: "circle",
@@ -72,6 +80,23 @@ export const TOOL_PAGES: ToolPage[] = [
     navLabel: "Font",
     title: "Font Generator",
     description: "Turn words into readable pixel text and block-letter blueprints.",
+  },
+];
+
+export const CONTENT_PAGES: ContentPage[] = [
+  {
+    key: "house-designs",
+    href: "/house-designs",
+    navLabel: "House Designs",
+    title: "Minecraft House Designs",
+    description: "Buildable house ideas with dimensions, materials, and exact blueprints.",
+  },
+  {
+    key: "house-blueprints",
+    href: "/house-blueprints",
+    navLabel: "Blueprints",
+    title: "Minecraft House Blueprints",
+    description: "Exact house layers, material counts, and downloadable block plans.",
   },
 ];
 

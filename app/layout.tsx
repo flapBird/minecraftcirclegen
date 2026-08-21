@@ -63,8 +63,8 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <a className="skip-link" href="#generator">
-          Skip to generator
+        <a className="skip-link" href="#main-content">
+          Skip to main content
         </a>
         <SiteHeader />
         {children}

@@ -15,7 +15,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <main className="error-page">
+    <main id="main-content" className="error-page">
       <section className="error-card" aria-labelledby="error-title">
         <p className="eyebrow">Something went wrong</p>
         <h1 id="error-title">The generator hit an unexpected problem.</h1>

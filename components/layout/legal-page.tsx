@@ -12,7 +12,7 @@ export function LegalPage({
   children: ReactNode;
 }) {
   return (
-    <main className="legal-page">
+    <main id="main-content" className="legal-page">
       <div className="content-container">
         <p className="section-label">{eyebrow}</p>
         <h1>{title}</h1>

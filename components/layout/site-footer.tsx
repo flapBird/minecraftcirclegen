@@ -22,6 +22,15 @@ export function SiteFooter() {
           </nav>
         </section>
         <section className="footer-column">
+          <h2>Build Resources</h2>
+          <nav aria-label="Minecraft building resources">
+            <Link href="/house-designs">House Designs</Link>
+            <Link href="/house-blueprints">House Blueprints</Link>
+            <Link href="/house-designs/starter">Starter Houses</Link>
+            <Link href="/house-designs/staircases">Staircase Designs</Link>
+          </nav>
+        </section>
+        <section className="footer-column">
           <h2>Site</h2>
           <nav aria-label="Site information">
             <Link href="/about">About</Link>

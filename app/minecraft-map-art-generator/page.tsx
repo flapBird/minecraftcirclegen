@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function MinecraftMapArtGeneratorPage() {
   return (
-    <main>
+    <main id="main-content">
       <section className="hero">
         <div className="page-container">
           <PageBreadcrumb toolKey="map-art" />

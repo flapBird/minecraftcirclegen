@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function MinecraftFontGeneratorPage() {
   return (
-    <main>
+    <main id="main-content">
       <section className="hero font-hero">
         <div className="page-container">
           <PageBreadcrumb toolKey="font" />

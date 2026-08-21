@@ -42,7 +42,7 @@ export function GeometryLanding({ shape }: {
 }) {
   const copy = COPY[shape];
   return (
-    <main>
+    <main id="main-content">
       <section className="hero geometry-hero">
         <div className="page-container">
           <PageBreadcrumb toolKey={copy.toolKey} />

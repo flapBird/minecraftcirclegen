@@ -178,36 +178,142 @@ a {
 }
 
 .desktop-nav {
+  position: relative;
   display: flex;
-  gap: clamp(7px, 0.8vw, 13px);
+  gap: clamp(10px, 1.05vw, 18px);
   align-items: center;
 }
 
-.desktop-nav a {
+.desktop-nav > a,
+.desktop-tools-menu > summary {
   min-height: 38px;
   display: inline-flex;
   align-items: center;
   border-radius: 7px;
   color: #566158;
-  padding: 0 10px;
+  padding: 0 12px;
   font-size: 0.93rem;
   font-weight: 650;
   text-decoration: none;
   transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
 }
 
-.desktop-nav a:hover {
+.desktop-nav > a:hover,
+.desktop-tools-menu > summary:hover {
   color: #3f713b;
 }
 
-.desktop-nav a.is-active {
+.desktop-nav > a.is-active,
+.desktop-tools-menu.is-active > summary {
   background: #4d7f47;
   color: white;
   box-shadow: 3px 3px 0 rgba(52, 75, 48, 0.14);
 }
 
-.desktop-nav a.is-active:hover {
+.desktop-nav > a.is-active:hover,
+.desktop-tools-menu.is-active > summary:hover {
   color: white;
+}
+
+.desktop-tools-menu {
+  position: relative;
+}
+
+.desktop-tools-menu > summary {
+  gap: 9px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.desktop-tools-menu > summary::-webkit-details-marker,
+.mobile-tools-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.desktop-tools-menu > summary .tools-chevron,
+.mobile-tools-menu > summary .tools-chevron {
+  width: 14px;
+  height: 14px;
+  display: inline-grid;
+  flex: 0 0 14px;
+  place-items: center;
+  font-style: normal;
+}
+
+.desktop-tools-menu > summary .tools-chevron::before,
+.mobile-tools-menu > summary .tools-chevron::before {
+  width: 6px;
+  height: 6px;
+  content: "";
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.desktop-tools-menu[open] > summary .tools-chevron::before,
+.mobile-tools-menu[open] > summary .tools-chevron::before {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.desktop-tools-panel {
+  position: absolute;
+  top: calc(100% + 13px);
+  right: 0;
+  width: min(640px, calc(100vw - 40px));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  border: 1px solid #cbc8bb;
+  border-radius: 12px;
+  background: #f8f5ed;
+  box-shadow: 0 18px 45px rgba(39, 52, 41, 0.16);
+  padding: 15px;
+  animation: menu-in 150ms ease-out;
+}
+
+.desktop-tools-panel section {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+
+.desktop-tools-panel h2 {
+  margin: 0;
+  padding: 7px 12px 8px;
+  color: #738076;
+  font-family: var(--pixel-font);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.desktop-tools-panel a {
+  display: grid;
+  min-height: 64px;
+  border-radius: 8px;
+  padding: 12px 13px;
+  text-decoration: none;
+}
+
+.desktop-tools-panel a:hover {
+  background: #e8efe4;
+}
+
+.desktop-tools-panel strong {
+  color: #2e3a31;
+  font-size: 0.82rem;
+}
+
+.desktop-tools-panel a:hover strong {
+  color: #315f30;
+}
+
+.desktop-tools-panel a span {
+  margin-top: 2px;
+  color: #6b756d;
+  font-size: 0.68rem;
+  line-height: 1.45;
 }
 
 .mobile-nav {
@@ -215,7 +321,7 @@ a {
   position: relative;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 860px) {
   .desktop-nav {
     display: none;
   }
@@ -224,7 +330,7 @@ a {
     display: block;
   }
 
-  .mobile-nav summary {
+  .mobile-nav > summary {
     width: 44px;
     height: 44px;
     display: grid;
@@ -234,11 +340,11 @@ a {
     list-style: none;
   }
 
-  .mobile-nav summary::-webkit-details-marker {
+  .mobile-nav > summary::-webkit-details-marker {
     display: none;
   }
 
-  .mobile-nav summary span {
+  .mobile-nav > summary > span {
     width: 21px;
     height: 2px;
     display: block;
@@ -246,23 +352,23 @@ a {
     transition: transform 160ms ease, opacity 160ms ease;
   }
 
-  .mobile-nav[open] summary span:first-child {
+  .mobile-nav[open] > summary > span:first-child {
     transform: translateY(6px) rotate(45deg);
   }
 
-  .mobile-nav[open] summary span:nth-child(2) {
+  .mobile-nav[open] > summary > span:nth-child(2) {
     opacity: 0;
   }
 
-  .mobile-nav[open] summary span:last-child {
+  .mobile-nav[open] > summary > span:last-child {
     transform: translateY(-6px) rotate(-45deg);
   }
 
-  .mobile-nav nav {
+  .mobile-nav > nav {
     position: absolute;
     top: 48px;
     right: 0;
-    width: 210px;
+    width: min(330px, calc(100vw - 24px));
     display: grid;
     border: 1px solid #cbc8bb;
     border-radius: 10px;
@@ -273,7 +379,7 @@ a {
     animation: menu-in 150ms ease-out;
   }
 
-  .mobile-nav nav a {
+  .mobile-nav > nav > a {
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -288,9 +394,78 @@ a {
     background: #e1ebdc;
     color: #315f30;
   }
+
+  .mobile-tools-menu {
+    border-top: 1px solid #dedbd0;
+    border-bottom: 1px solid #dedbd0;
+  }
+
+  .mobile-tools-menu > summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0 10px;
+    color: #354138;
+    font-size: 0.85rem;
+    font-weight: 700;
+    list-style: none;
+  }
+
+  .mobile-tools-menu > summary .tools-chevron {
+    color: #5d6c60;
+  }
+
+  .mobile-tools-menu > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    border-top: 1px solid #dedbd0;
+    background: #f1eee5;
+    padding: 9px;
+  }
+
+  .mobile-tools-menu section {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+  }
+
+  .mobile-tools-menu h2 {
+    margin: 0;
+    padding: 4px 6px;
+    color: #79837b;
+    font-family: var(--pixel-font);
+    font-size: 0.57rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .mobile-tools-menu section a {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 5px 6px;
+    text-decoration: none;
+  }
+
+  .mobile-tools-menu section a:hover {
+    background: #e1eadc;
+  }
+
+  .mobile-tools-menu section a strong {
+    color: #405045;
+    font-size: 0.72rem;
+  }
+
+  .mobile-tools-menu section a span {
+    display: none;
+  }
 }
 
-.site-header .mobile-nav summary span {
+.site-header .mobile-nav > summary > span {
   background: #253027;
 }
 
@@ -3544,7 +3719,7 @@ a {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(260px, 1.45fr) minmax(180px, 0.7fr) minmax(180px, 0.7fr);
+  grid-template-columns: minmax(260px, 1.25fr) repeat(3, minmax(150px, 0.6fr));
   gap: 58px;
 }
 
@@ -3688,74 +3863,6 @@ a {
 
   .header-inner {
     min-height: 61px;
-  }
-
-  .desktop-nav {
-    display: none;
-  }
-
-  .mobile-nav {
-    display: block;
-  }
-
-  .mobile-nav summary {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-content: center;
-    gap: 4px;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .mobile-nav summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .mobile-nav summary span {
-    width: 21px;
-    height: 2px;
-    display: block;
-    background: var(--ink);
-    transition: transform 160ms ease, opacity 160ms ease;
-  }
-
-  .mobile-nav[open] summary span:first-child {
-    transform: translateY(6px) rotate(45deg);
-  }
-
-  .mobile-nav[open] summary span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .mobile-nav[open] summary span:last-child {
-    transform: translateY(-6px) rotate(-45deg);
-  }
-
-  .mobile-nav nav {
-    position: absolute;
-    top: 48px;
-    right: 0;
-    width: 210px;
-    display: grid;
-    border: 1px solid #cbc8bb;
-    border-radius: 10px;
-    background: #f8f5ed;
-    color: #273229;
-    box-shadow: var(--shadow);
-    padding: 8px;
-    animation: menu-in 150ms ease-out;
-  }
-
-  .mobile-nav nav a {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    border-radius: 6px;
-    padding: 0 10px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-decoration: none;
   }
 
   .hero {
@@ -4169,4 +4276,794 @@ a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* House designs and blueprint content cluster */
+.house-content-page {
+  overflow: clip;
+  background: #f4f1e8;
+}
+
+.home-house-resource {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+  align-items: center;
+  gap: clamp(34px, 7vw, 80px);
+  border: 1px solid #c9c5b8;
+  border-radius: 13px;
+  background: #fffaf0;
+  box-shadow: 6px 7px 0 rgba(61, 77, 57, 0.07);
+  padding: clamp(24px, 5vw, 42px);
+}
+
+.seo-content .home-house-resource {
+  margin-top: 84px;
+}
+
+.home-house-resource h2 { font-size: clamp(1.75rem, 3.5vw, 2.55rem); }
+.home-house-resource p { margin-bottom: 0; }
+
+.home-resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 23px;
+}
+
+.home-resource-links a {
+  color: #356a3b;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.home-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  transform: rotate(1.5deg);
+  border: 1px solid #d1cec3;
+  border-radius: 9px;
+  background: #f1f4ec;
+  box-shadow: 6px 7px 0 rgba(61, 77, 57, 0.07);
+  padding: 18px;
+}
+
+.home-resource-grid span {
+  aspect-ratio: 1;
+  border: 1px solid #d5dbd2;
+  border-radius: 2px;
+}
+
+.home-resource-grid .is-wall { background: #61735e; }
+.home-resource-grid .is-floor { background: #e1be84; }
+.home-resource-grid .is-door { background: #a96535; }
+
+.house-hero,
+.house-detail-hero {
+  position: relative;
+  padding: 42px 0 54px;
+  background:
+    linear-gradient(rgba(70, 110, 65, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(70, 110, 65, 0.055) 1px, transparent 1px),
+    #f4f1e8;
+  background-size: 32px 32px;
+}
+
+.house-hero::after,
+.house-detail-hero::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 52px;
+  background: linear-gradient(to bottom, transparent, rgba(217, 213, 200, 0.32));
+  content: "";
+  pointer-events: none;
+}
+
+.house-hero > .page-container,
+.house-detail-hero > .page-container {
+  position: relative;
+  z-index: 1;
+}
+
+.house-hero .page-breadcrumb,
+.house-detail-hero .page-breadcrumb {
+  margin-bottom: 34px;
+}
+
+.house-hero h1,
+.house-detail-hero h1 {
+  max-width: 880px;
+  margin: 0;
+  color: #253027;
+  font-size: clamp(2.35rem, 5.6vw, 4.8rem);
+  font-weight: 850;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.house-hero > .page-container > p:last-child,
+.house-hero-layout > div > p,
+.house-detail-copy > p {
+  max-width: 760px;
+  margin: 20px 0 0;
+  color: #566158;
+  font-size: clamp(1rem, 1.6vw, 1.16rem);
+  line-height: 1.72;
+}
+
+.house-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+  align-items: center;
+  gap: clamp(42px, 7vw, 90px);
+}
+
+.house-hero-blueprint {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 3px;
+  transform: rotate(2deg);
+  border: 1px solid #c9c4b6;
+  border-radius: 13px;
+  background: #fffdf6;
+  box-shadow: 10px 12px 0 rgba(69, 84, 64, 0.08);
+  padding: 20px;
+}
+
+.house-hero-blueprint > span {
+  aspect-ratio: 1;
+  border: 1px solid #d9ded5;
+  border-radius: 2px;
+}
+
+.house-hero-blueprint .is-wall { background: #62745f; }
+.house-hero-blueprint .is-floor { background: #e4c491; }
+.house-hero-blueprint .is-door { background: #a96535; }
+
+.house-hero-blueprint p {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 0 0;
+  color: #606b61;
+  font-size: 0.72rem;
+}
+
+.house-hero-blueprint strong { color: #273229; }
+
+.house-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.house-primary-button,
+.house-secondary-button,
+.house-blueprint-cta > a,
+.blueprint-download {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #3d7042;
+  border-radius: 8px;
+  background: #4d7f47;
+  color: white;
+  box-shadow: 3px 3px 0 rgba(52, 75, 48, 0.15);
+  padding: 10px 17px;
+  font-size: 0.86rem;
+  font-weight: 780;
+  text-decoration: none;
+}
+
+.house-primary-button:hover,
+.house-blueprint-cta > a:hover,
+.blueprint-download:hover { background: #396c3e; }
+
+.house-secondary-button {
+  border-color: #b8c2b4;
+  background: #fffdf6;
+  color: #335f36;
+  box-shadow: none;
+}
+
+.house-secondary-button:hover { background: #edf3e9; }
+
+.house-page-body { padding: 80px 0 105px; }
+
+.house-section + .house-section,
+.house-blueprint-cta + .house-section,
+.house-section + .house-blueprint-cta { margin-top: 92px; }
+
+.house-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 470px);
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 32px;
+}
+
+.house-section h2,
+.house-blueprint-cta h2 {
+  margin: 0;
+  color: #273229;
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.house-section-heading > p,
+.house-reading-section > p,
+.house-blueprint-cta p,
+.house-section > p {
+  margin: 0;
+  color: #566158;
+  line-height: 1.75;
+}
+
+.house-section-heading > p { font-size: 0.92rem; }
+
+.house-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.house-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #d3d0c4;
+  border-radius: 13px;
+  background: #fffdf7;
+  box-shadow: 4px 5px 0 rgba(63, 77, 59, 0.07);
+}
+
+.house-card-image {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid #dad7cc;
+  background: #e7e1d3;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+}
+
+.house-card-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 220ms ease;
+}
+
+.house-card:hover .house-card-image img { transform: scale(1.025); }
+
+.house-card-image > figcaption {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(30, 48, 36, 0.82);
+  color: white;
+  padding: 4px 8px;
+  font-size: 0.61rem;
+  font-weight: 700;
+}
+
+.house-card-body { padding: 16px; }
+
+.house-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.house-card-heading p {
+  overflow: hidden;
+  margin: 0 0 3px;
+  color: #4d7f47;
+  font-size: 0.61rem;
+  font-weight: 820;
+  letter-spacing: 0.1em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.house-card-heading h3 {
+  margin: 0;
+  color: #273229;
+  font-size: 1.08rem;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.house-card-heading h3 a { text-decoration: none; }
+.house-card-heading h3 a:hover { color: #356b3c; }
+
+.difficulty-badge {
+  flex: 0 0 auto;
+  border: 1px solid #aec0a9;
+  border-radius: 999px;
+  background: #e7f1e4;
+  color: #315e34;
+  padding: 3px 8px;
+  font-size: 0.61rem;
+  font-weight: 800;
+}
+
+.difficulty-medium { border-color: #d8b985; background: #fff2d9; color: #7a5421; }
+
+.house-card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 0;
+  margin: 10px 0 13px;
+  color: #5a645b;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.house-card-metadata {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 0.9fr;
+  gap: 8px;
+  margin: 0;
+}
+
+.house-card-metadata div {
+  min-width: 0;
+  border-top: 1px solid #e2dfd5;
+  padding-top: 7px;
+}
+
+.house-card-metadata dt {
+  color: #818980;
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.house-card-metadata dd {
+  overflow: hidden;
+  margin: 1px 0 0;
+  color: #374139;
+  font-size: 0.68rem;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.house-card-materials {
+  overflow: hidden;
+  margin: 12px 0 0;
+  color: #677168;
+  font-size: 0.64rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.house-card-materials strong { color: #465148; }
+
+.house-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px -16px -16px;
+  border-top: 1px solid #ddd9ce;
+  background: #f3f5ed;
+  color: #315e34;
+  padding: 10px 16px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.house-card-cta:hover { background: #e6eee1; }
+
+.house-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.house-category-grid a {
+  position: relative;
+  min-height: 190px;
+  border: 1px solid #d1cdbf;
+  border-radius: 11px;
+  background: #fffdf6;
+  box-shadow: 4px 4px 0 rgba(58, 74, 55, 0.06);
+  padding: 20px 50px 20px 20px;
+  text-decoration: none;
+}
+
+.house-category-grid a:hover { border-color: #8fa58a; background: #f1f5ec; }
+
+.house-category-grid span {
+  display: inline-flex;
+  border-radius: 6px;
+  background: #e4ede0;
+  color: #38623a;
+  padding: 4px 7px;
+  font-family: var(--pixel-font);
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.house-category-grid h3 {
+  margin: 17px 0 6px;
+  color: #29332b;
+  font-size: 1.05rem;
+  letter-spacing: -0.025em;
+}
+
+.house-category-grid p {
+  margin: 0;
+  color: #626c63;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.house-category-grid i {
+  position: absolute;
+  right: 19px;
+  bottom: 18px;
+  color: #4d7f47;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.house-blueprint-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 45px;
+  border: 1px solid #335b38;
+  border-radius: 14px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    #263d2c;
+  background-size: 24px 24px;
+  color: white;
+  padding: clamp(26px, 5vw, 48px);
+}
+
+.house-blueprint-cta .section-label { color: #aed2ad; }
+.house-blueprint-cta h2 { color: white; }
+.house-blueprint-cta p { max-width: 760px; margin-top: 13px; color: #c3cec4; }
+.house-blueprint-cta > a { white-space: nowrap; }
+
+.house-reading-section { max-width: 980px; }
+.house-reading-section > h2 { margin-bottom: 22px; }
+.house-reading-section > p + p { margin-top: 16px; }
+
+.house-tip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.house-tip-grid article {
+  border: 1px solid #d5d1c4;
+  border-left: 3px solid #4d7f47;
+  border-radius: 0 8px 8px 0;
+  background: #fffaf0;
+  padding: 17px;
+}
+
+.house-tip-grid h3 {
+  margin: 0 0 5px;
+  color: #303b32;
+  font-size: 0.93rem;
+}
+
+.house-tip-grid p { margin: 0; color: #626c63; font-size: 0.78rem; line-height: 1.62; }
+
+.house-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 24px;
+  border: 1px solid #d2cec1;
+  border-radius: 9px;
+  background: #fffdf6;
+}
+
+.house-table-wrap table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.house-table-wrap th,
+.house-table-wrap td { border-bottom: 1px solid #e1ddd2; padding: 12px 15px; text-align: left; }
+.house-table-wrap thead { background: #e8eee3; color: #344c36; }
+.house-table-wrap tbody th { color: #38433a; }
+.house-table-wrap td { color: #5d675f; }
+.house-table-wrap tfoot { background: #f1eee4; color: #273229; font-weight: 800; }
+.house-table-wrap tr:last-child th,
+.house-table-wrap tr:last-child td { border-bottom: 0; }
+
+.related-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 27px;
+}
+
+.related-tools-grid a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d2cec1;
+  border-radius: 9px;
+  background: #fffdf6;
+  padding: 18px 50px 18px 18px;
+  text-decoration: none;
+}
+
+.related-tools-grid a:hover { border-color: #8fa48b; background: #f0f4ea; }
+.related-tools-grid strong { color: #2e3a31; font-size: 0.91rem; }
+.related-tools-grid span { margin-top: 4px; color: #687269; font-size: 0.73rem; line-height: 1.55; }
+.related-tools-grid i { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: #4d7f47; font-style: normal; }
+
+.house-content-page .faq-list { margin-top: 26px; }
+.house-content-page .faq-list summary { color: #29332b; }
+.house-content-page .faq-list p { max-width: 880px; margin: -3px 0 20px; color: #5c665d; font-size: 0.86rem; line-height: 1.7; }
+
+.house-numbered-steps {
+  display: grid;
+  gap: 0;
+  margin: 28px 0 0;
+  padding: 0;
+  counter-reset: house-steps;
+  list-style: none;
+}
+
+.house-numbered-steps li {
+  display: grid;
+  grid-template-columns: 34px 190px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px solid #dad6ca;
+  padding: 15px 0;
+  color: #5b655c;
+  counter-increment: house-steps;
+}
+
+.house-numbered-steps li::before {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: #e2ecdf;
+  color: #315e34;
+  font-size: 0.74rem;
+  font-weight: 800;
+  content: counter(house-steps);
+}
+
+.house-numbered-steps strong { color: #303b32; }
+
+/* Blueprint detail */
+.house-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1.15fr);
+  align-items: center;
+  gap: clamp(36px, 6vw, 74px);
+}
+
+.house-detail-image {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid #c9c5b8;
+  border-radius: 13px;
+  background: #e9e2d4;
+  box-shadow: 9px 10px 0 rgba(62, 77, 58, 0.08);
+}
+
+.house-detail-image img { width: 100%; height: auto; display: block; }
+.house-detail-image figcaption { border-top: 1px solid #d5d0c3; background: #fffdf6; color: #697169; padding: 8px 12px; font-size: 0.65rem; }
+.house-use-case { border-left: 3px solid #4d7f47; padding-left: 13px; font-size: 0.87rem !important; }
+
+.house-detail-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px; }
+.house-detail-badges > span { border: 1px solid #c4cabc; border-radius: 999px; background: #fffdf6; color: #4f5b51; padding: 4px 9px; font-size: 0.68rem; font-weight: 750; }
+
+.house-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  overflow: hidden;
+  margin: 42px 0 0;
+  border: 1px solid #ccc8ba;
+  border-radius: 10px;
+  background: #fffdf6;
+}
+
+.house-detail-stats div { border-right: 1px solid #dedacf; padding: 14px 16px; }
+.house-detail-stats div:last-child { border-right: 0; }
+.house-detail-stats dt { color: #7b847c; font-size: 0.62rem; font-weight: 750; text-transform: uppercase; }
+.house-detail-stats dd { margin: 2px 0 0; color: #303a31; font-size: 0.86rem; font-weight: 800; }
+
+.blueprint-detail-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 54px;
+}
+
+.blueprint-detail-intro .house-section + .house-section { margin-top: 0; }
+.house-check-list { display: grid; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+.house-check-list li { position: relative; color: #59635a; padding-left: 28px; font-size: 0.86rem; line-height: 1.6; }
+.house-check-list li::before { position: absolute; left: 0; top: 2px; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; background: #dfeadd; color: #315e34; content: "✓"; font-size: 0.68rem; font-weight: 900; }
+
+.blueprint-viewer {
+  overflow: hidden;
+  border: 1px solid #c9cfc5;
+  border-radius: 14px;
+  background: #edf1eb;
+  box-shadow: 0 18px 45px rgba(43, 60, 47, 0.08);
+}
+
+.blueprint-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #d5ddd4;
+  background: #fffdf6;
+  padding: 14px 16px;
+}
+
+.blueprint-toolbar > div:first-child { display: grid; }
+.blueprint-toolbar span { color: #718074; font-family: var(--pixel-font); font-size: 0.66rem; font-weight: 800; text-transform: uppercase; }
+.blueprint-toolbar strong { color: #2c372e; font-size: 0.94rem; }
+.blueprint-actions { display: flex; gap: 7px; }
+.blueprint-actions button { min-height: 38px; border: 1px solid #bdc8ba; border-radius: 7px; background: #f3f6f0; color: #345d36; padding: 7px 11px; font-size: 0.72rem; font-weight: 750; cursor: pointer; }
+.blueprint-actions button:hover:not(:disabled) { background: #e3eddf; }
+.blueprint-actions button:disabled { cursor: not-allowed; opacity: 0.44; }
+.blueprint-layer-description { margin: 0; border-bottom: 1px solid #d5ddd4; background: #e9efe5; color: #5c685e; padding: 10px 16px; font-size: 0.75rem; }
+
+.blueprint-scroll {
+  max-width: 100%;
+  overflow: auto;
+  padding: clamp(18px, 5vw, 45px);
+  overscroll-behavior-inline: contain;
+}
+
+.blueprint-grid {
+  --blueprint-cell: clamp(24px, 4.5vw, 44px);
+  width: max-content;
+  display: grid;
+  grid-template-columns: repeat(var(--blueprint-columns), var(--blueprint-cell));
+  margin-inline: auto;
+  border-top: 1px solid #c9d0c7;
+  border-left: 1px solid #c9d0c7;
+  background: #f8faf6;
+  box-shadow: 7px 8px 0 rgba(58, 72, 56, 0.07);
+}
+
+.blueprint-grid > span {
+  width: var(--blueprint-cell);
+  aspect-ratio: 1;
+  display: block;
+  border-right: 1px solid rgba(210, 218, 209, 0.92);
+  border-bottom: 1px solid rgba(210, 218, 209, 0.92);
+}
+
+.blueprint-grid > span:not(.is-empty) { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12); }
+.blueprint-grid .is-empty { background: #f8faf6; }
+
+.blueprint-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  border-top: 1px solid #d3dbd2;
+  background: #fffdf6;
+  padding: 13px 16px;
+}
+
+.blueprint-legend span { display: inline-flex; align-items: center; gap: 5px; color: #5d685f; font-size: 0.65rem; }
+.blueprint-legend i { width: 13px; height: 13px; display: inline-block; border: 1px solid #bdc5bb; border-radius: 2px; }
+.blueprint-legend i.is-empty { background: #f8faf6; }
+.blueprint-download { margin: 0 16px 16px; cursor: pointer; }
+.house-back-link { margin-top: 24px !important; }
+.house-back-link a { color: #386a3d; font-weight: 750; }
+
+/* Staircase collection */
+.staircase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.staircase-card { display: grid; grid-template-columns: minmax(150px, 0.72fr) minmax(0, 1.28fr); overflow: hidden; border: 1px solid #d1cdc0; border-radius: 11px; background: #fffdf6; box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); }
+.staircase-preview { display: grid; grid-template-columns: repeat(var(--stair-columns), minmax(18px, 1fr)); align-content: center; gap: 3px; background: #e8ede4; padding: 18px; }
+.staircase-preview span { aspect-ratio: 1; display: grid; place-items: center; border: 1px solid #cad3c8; border-radius: 2px; background: #f8faf6; color: white; font-family: var(--pixel-font); font-size: 0.57rem; font-weight: 800; }
+.staircase-preview .is-step { background: #9b6a39; }
+.staircase-preview .is-wall { background: #586359; }
+.staircase-preview .is-column { background: #355d37; }
+.staircase-card-copy { padding: 19px; }
+.staircase-footprint { color: #4d7f47; font-size: 0.63rem; font-weight: 820; letter-spacing: 0.08em; text-transform: uppercase; }
+.staircase-card h3 { margin: 5px 0 12px; color: #2d382f; font-size: 1.03rem; }
+.staircase-card dl { display: grid; gap: 7px; margin: 0; }
+.staircase-card dl div { border-top: 1px solid #e2ded3; padding-top: 7px; }
+.staircase-card dt { color: #818a82; font-size: 0.59rem; font-weight: 750; text-transform: uppercase; }
+.staircase-card dd { margin: 1px 0 0; color: #465148; font-size: 0.72rem; font-weight: 700; }
+.staircase-card p { margin: 13px 0 0; color: #616b62; font-size: 0.75rem; line-height: 1.62; }
+.staircase-planning aside { display: grid; gap: 3px; margin-top: 28px; border: 1px solid #bdcdb9; border-left: 4px solid #4d7f47; border-radius: 0 8px 8px 0; background: #eaf1e6; padding: 17px; color: #526054; }
+.staircase-planning aside strong { color: #2f4632; }
+.staircase-planning aside a { color: #2e6536; font-weight: 800; }
+
+@media (max-width: 1050px) {
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .house-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .house-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .house-hero-layout { grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr); }
+  .house-detail-layout { grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr); }
+  .house-detail-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .house-detail-stats div:nth-child(3) { border-right: 0; }
+  .house-detail-stats div:nth-child(n + 4) { border-top: 1px solid #dedacf; }
+  .staircase-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .house-hero,
+  .house-detail-hero { padding: 26px 0 38px; }
+  .house-hero .page-breadcrumb,
+  .house-detail-hero .page-breadcrumb { margin-bottom: 26px; }
+  .house-hero h1,
+  .house-detail-hero h1 { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+  .house-hero-layout,
+  .house-detail-layout,
+  .home-house-resource { grid-template-columns: 1fr; gap: 32px; }
+  .house-hero-blueprint { width: min(100%, 390px); transform: none; }
+  .house-page-body { padding: 58px 0 76px; }
+  .house-section + .house-section,
+  .house-blueprint-cta + .house-section,
+  .house-section + .house-blueprint-cta { margin-top: 68px; }
+  .house-section-heading { grid-template-columns: 1fr; align-items: start; gap: 12px; margin-bottom: 24px; }
+  .house-grid,
+  .house-category-grid,
+  .house-tip-grid,
+  .related-tools-grid,
+  .blueprint-detail-intro { grid-template-columns: 1fr; }
+  .house-blueprint-cta { grid-template-columns: 1fr; align-items: start; gap: 22px; }
+  .house-blueprint-cta > a { justify-self: start; white-space: normal; }
+  .house-numbered-steps li { grid-template-columns: 34px 1fr; }
+  .house-numbered-steps li span { grid-column: 2; }
+  .house-detail-image { grid-row: 1; }
+  .house-detail-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .house-detail-stats div { border-top: 1px solid #dedacf; }
+  .house-detail-stats div:nth-child(1),
+  .house-detail-stats div:nth-child(2) { border-top: 0; }
+  .house-detail-stats div:nth-child(2n) { border-right: 0; }
+  .house-detail-stats div:nth-child(3) { border-right: 1px solid #dedacf; }
+  .blueprint-toolbar { align-items: flex-start; flex-direction: column; }
+  .blueprint-actions { width: 100%; }
+  .blueprint-actions button { flex: 1; }
+  .blueprint-scroll { padding: 18px 12px; }
+  .blueprint-grid { --blueprint-cell: clamp(23px, 7.2vw, 34px); margin-inline: auto; }
+  .blueprint-download { width: calc(100% - 32px); }
+  .staircase-card { grid-template-columns: minmax(120px, 0.7fr) minmax(0, 1.3fr); }
+  .staircase-preview { padding: 12px; }
+}
+
+@media (max-width: 470px) {
+  .house-detail-stats { grid-template-columns: 1fr; }
+  .house-detail-stats div,
+  .house-detail-stats div:nth-child(2n),
+  .house-detail-stats div:nth-child(3) { border-top: 1px solid #dedacf; border-right: 0; }
+  .house-detail-stats div:first-child { border-top: 0; }
+  .staircase-card { grid-template-columns: 1fr; }
+  .staircase-preview { min-height: 210px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .house-card-image img { transition: none; }
 }

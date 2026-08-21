@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { HOUSE_BLUEPRINT_SLUGS } from "@/content/houses/blueprints";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://minecraftcirclegen.com";
@@ -27,6 +28,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/${path}`,
       changeFrequency: "weekly" as const,
       priority: 0.9,
+    })),
+    ...[
+      "house-designs",
+      "house-designs/starter",
+      "house-designs/small",
+      "house-designs/staircases",
+      "house-designs/modern",
+      "house-designs/survival",
+      "house-blueprints",
+    ].map((path) => ({
+      url: `${baseUrl}/${path}`,
+      changeFrequency: "weekly" as const,
+      priority: path === "house-designs" || path === "house-blueprints" ? 0.9 : 0.8,
+    })),
+    ...HOUSE_BLUEPRINT_SLUGS.map((slug) => ({
+      url: `${baseUrl}/house-blueprints/${slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
     })),
     {
       url: `${baseUrl}/privacy`,

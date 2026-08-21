@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function GradientGeneratorPage() {
   return (
-    <main>
+      <main id="main-content">
       <section className="hero gradient-hero">
         <div className="page-container">
           <PageBreadcrumb toolKey="gradient" />
