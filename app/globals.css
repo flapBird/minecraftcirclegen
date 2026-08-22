@@ -4857,15 +4857,34 @@ a {
 .house-numbered-steps strong { color: #303b32; }
 
 /* Blueprint detail */
+.blueprint-detail-page .page-container {
+  width: min(1120px, calc(100% - 48px));
+}
+
 .house-detail-layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1.15fr);
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.98fr);
   align-items: center;
-  gap: clamp(36px, 6vw, 74px);
+  gap: clamp(34px, 4.5vw, 54px);
+}
+
+.blueprint-detail-page .house-detail-hero h1 {
+  max-width: 620px;
+  font-size: clamp(2.7rem, 4.6vw, 3.75rem);
+  line-height: 1.04;
+}
+
+.blueprint-detail-page .house-detail-copy > p {
+  max-width: 590px;
+  font-size: clamp(0.94rem, 1.35vw, 1.05rem);
+  line-height: 1.66;
 }
 
 .house-detail-image {
+  width: 100%;
+  max-width: 550px;
   overflow: hidden;
+  justify-self: end;
   margin: 0;
   border: 1px solid #c9c5b8;
   border-radius: 13px;
@@ -4896,17 +4915,59 @@ a {
 .house-detail-stats dd { margin: 2px 0 0; color: #303a31; font-size: 0.86rem; font-weight: 800; }
 
 .blueprint-detail-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-  gap: 54px;
+  max-width: none;
 }
 
-.blueprint-detail-intro .house-section + .house-section { margin-top: 0; }
+.blueprint-detail-page .house-section h2 {
+  font-size: clamp(1.75rem, 2.9vw, 2.35rem);
+}
+
+.blueprint-detail-intro > p:not(.section-label) {
+  max-width: 780px;
+  margin-top: 10px;
+}
+
+.blueprint-prep-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  align-items: start;
+  gap: 28px;
+  margin-top: 26px;
+}
+
+.blueprint-prep-grid .house-table-wrap { margin-top: 0; }
+.blueprint-prep-grid .house-table-wrap table { min-width: 0; }
+.blueprint-prep-grid .house-table-wrap th,
+.blueprint-prep-grid .house-table-wrap td { padding: 10px 14px; }
+
+.house-layout-notes {
+  border: 1px solid #cbd2c5;
+  border-radius: 11px;
+  background: #eef3e9;
+  padding: 22px;
+}
+
+.house-layout-notes h3 {
+  margin: 5px 0 0;
+  color: #2c382e;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
 .house-check-list { display: grid; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
 .house-check-list li { position: relative; color: #59635a; padding-left: 28px; font-size: 0.86rem; line-height: 1.6; }
 .house-check-list li::before { position: absolute; left: 0; top: 2px; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; background: #dfeadd; color: #315e34; content: "✓"; font-size: 0.68rem; font-weight: 900; }
 
 .blueprint-viewer {
+  display: grid;
+  grid-template-columns: minmax(270px, 0.34fr) minmax(0, 0.66fr);
+  grid-template-areas:
+    "toolbar canvas"
+    "description canvas"
+    "legend canvas"
+    "download canvas";
+  grid-template-rows: auto auto 1fr auto;
   overflow: hidden;
   border: 1px solid #c9cfc5;
   border-radius: 14px;
@@ -4915,33 +4976,41 @@ a {
 }
 
 .blueprint-toolbar {
+  grid-area: toolbar;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
-  border-bottom: 1px solid #d5ddd4;
+  border-right: 1px solid #d5ddd4;
+  border-bottom: 0;
   background: #fffdf6;
-  padding: 14px 16px;
+  padding: 18px;
 }
 
 .blueprint-toolbar > div:first-child { display: grid; }
 .blueprint-toolbar span { color: #718074; font-family: var(--pixel-font); font-size: 0.66rem; font-weight: 800; text-transform: uppercase; }
 .blueprint-toolbar strong { color: #2c372e; font-size: 0.94rem; }
 .blueprint-actions { display: flex; gap: 7px; }
-.blueprint-actions button { min-height: 38px; border: 1px solid #bdc8ba; border-radius: 7px; background: #f3f6f0; color: #345d36; padding: 7px 11px; font-size: 0.72rem; font-weight: 750; cursor: pointer; }
+.blueprint-actions button { min-height: 38px; flex: 1; border: 1px solid #bdc8ba; border-radius: 7px; background: #f3f6f0; color: #345d36; padding: 7px 11px; font-size: 0.72rem; font-weight: 750; cursor: pointer; }
 .blueprint-actions button:hover:not(:disabled) { background: #e3eddf; }
 .blueprint-actions button:disabled { cursor: not-allowed; opacity: 0.44; }
-.blueprint-layer-description { margin: 0; border-bottom: 1px solid #d5ddd4; background: #e9efe5; color: #5c685e; padding: 10px 16px; font-size: 0.75rem; }
+.blueprint-layer-description { grid-area: description; margin: 0; border-right: 1px solid #d5ddd4; border-bottom: 1px solid #d5ddd4; background: #e9efe5; color: #5c685e; padding: 12px 18px; font-size: 0.75rem; line-height: 1.55; }
 
 .blueprint-scroll {
+  grid-area: canvas;
+  min-height: 430px;
+  display: grid;
+  place-items: center;
   max-width: 100%;
   overflow: auto;
-  padding: clamp(18px, 5vw, 45px);
+  border-left: 0;
+  padding: clamp(22px, 3vw, 34px);
   overscroll-behavior-inline: contain;
 }
 
 .blueprint-grid {
-  --blueprint-cell: clamp(24px, 4.5vw, 44px);
+  --blueprint-cell: clamp(25px, 3vw, 38px);
   width: max-content;
   display: grid;
   grid-template-columns: repeat(var(--blueprint-columns), var(--blueprint-cell));
@@ -4964,18 +5033,21 @@ a {
 .blueprint-grid .is-empty { background: #f8faf6; }
 
 .blueprint-legend {
+  grid-area: legend;
   display: flex;
   flex-wrap: wrap;
   gap: 7px 12px;
-  border-top: 1px solid #d3dbd2;
+  align-content: start;
+  border-top: 0;
+  border-right: 1px solid #d3dbd2;
   background: #fffdf6;
-  padding: 13px 16px;
+  padding: 16px 18px;
 }
 
 .blueprint-legend span { display: inline-flex; align-items: center; gap: 5px; color: #5d685f; font-size: 0.65rem; }
 .blueprint-legend i { width: 13px; height: 13px; display: inline-block; border: 1px solid #bdc5bb; border-radius: 2px; }
 .blueprint-legend i.is-empty { background: #f8faf6; }
-.blueprint-download { margin: 0 16px 16px; cursor: pointer; }
+.blueprint-download { grid-area: download; margin: 0 18px 18px; cursor: pointer; }
 .house-back-link { margin-top: 24px !important; }
 .house-back-link a { color: #386a3d; font-weight: 750; }
 
@@ -5019,6 +5091,7 @@ a {
   .house-detail-hero .page-breadcrumb { margin-bottom: 26px; }
   .house-hero h1,
   .house-detail-hero h1 { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+  .blueprint-detail-page .house-detail-hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); }
   .house-hero-layout,
   .house-detail-layout,
   .home-house-resource { grid-template-columns: 1fr; gap: 32px; }
@@ -5032,7 +5105,7 @@ a {
   .house-category-grid,
   .house-tip-grid,
   .related-tools-grid,
-  .blueprint-detail-intro { grid-template-columns: 1fr; }
+  .blueprint-prep-grid { grid-template-columns: 1fr; }
   .house-blueprint-cta { grid-template-columns: 1fr; align-items: start; gap: 22px; }
   .house-blueprint-cta > a { justify-self: start; white-space: normal; }
   .house-numbered-steps li { grid-template-columns: 34px 1fr; }
@@ -5044,12 +5117,26 @@ a {
   .house-detail-stats div:nth-child(2) { border-top: 0; }
   .house-detail-stats div:nth-child(2n) { border-right: 0; }
   .house-detail-stats div:nth-child(3) { border-right: 1px solid #dedacf; }
-  .blueprint-toolbar { align-items: flex-start; flex-direction: column; }
+  .blueprint-detail-page .page-container { width: min(100% - 32px, 1120px); }
+  .house-detail-image { max-width: none; }
+  .blueprint-viewer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "toolbar"
+      "description"
+      "canvas"
+      "legend"
+      "download";
+    grid-template-rows: auto;
+  }
+  .blueprint-toolbar { align-items: flex-start; flex-direction: column; border-right: 0; border-bottom: 1px solid #d5ddd4; }
   .blueprint-actions { width: 100%; }
   .blueprint-actions button { flex: 1; }
-  .blueprint-scroll { padding: 18px 12px; }
+  .blueprint-layer-description { border-right: 0; }
+  .blueprint-scroll { min-height: 0; padding: 22px 12px; }
   .blueprint-grid { --blueprint-cell: clamp(23px, 7.2vw, 34px); margin-inline: auto; }
-  .blueprint-download { width: calc(100% - 32px); }
+  .blueprint-legend { border-top: 1px solid #d3dbd2; border-right: 0; }
+  .blueprint-download { width: calc(100% - 32px); margin: 0 16px 16px; }
   .staircase-card { grid-template-columns: minmax(120px, 0.7fr) minmax(0, 1.3fr); }
   .staircase-preview { padding: 12px; }
 }

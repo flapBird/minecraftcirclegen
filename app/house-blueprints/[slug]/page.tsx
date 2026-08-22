@@ -78,24 +78,24 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
         </div>
       </section>
       <div className="page-container house-page-body">
-        <div className="blueprint-detail-intro">
-          <section className="house-section">
-            <p className="section-label">MATERIAL CHECKLIST</p>
-            <h2>Blocks to collect</h2>
-            <p>Counts cover the structural plan and listed details. Bring a small reserve for temporary scaffolding or substitutions.</p>
+        <section className="house-section blueprint-detail-intro">
+          <p className="section-label">MATERIAL CHECKLIST</p>
+          <h2>Blocks to collect</h2>
+          <p>Counts cover the structural plan and listed details. Bring a small reserve for temporary scaffolding or substitutions.</p>
+          <div className="blueprint-prep-grid">
             <MaterialTable blueprint={blueprint} />
-          </section>
-          <section className="house-section house-reading-section">
-            <p className="section-label">BEFORE YOU START</p>
-            <h2>Layout notes</h2>
-            <ul className="house-check-list">
-              <li>The bottom edge of every grid is the front-door side.</li>
-              <li>Each colored square represents one block at the active height.</li>
-              <li>Empty squares stay open; do not fill the inside of wall layers.</li>
-              <li>Equal-count material swaps work in both Java and Bedrock.</li>
-            </ul>
-          </section>
-        </div>
+            <aside className="house-layout-notes">
+              <p className="section-label">BEFORE YOU START</p>
+              <h3>Layout notes</h3>
+              <ul className="house-check-list">
+                <li>The bottom edge of every grid is the front-door side.</li>
+                <li>Each colored square represents one block at the active height.</li>
+                <li>Empty squares stay open; do not fill the inside of wall layers.</li>
+                <li>Equal-count material swaps work in both Java and Bedrock.</li>
+              </ul>
+            </aside>
+          </div>
+        </section>
         <section className="house-section blueprint-layer-section">
           <div className="house-section-heading"><div><p className="section-label">INTERACTIVE BLUEPRINT</p><h2>Build the layers in order</h2></div><p>Finish one grid before moving upward. Use the buttons or keyboard focus controls, then download any active layer as SVG.</p></div>
           <BlueprintLayerViewer name={blueprint.name} slug={blueprint.slug} width={blueprint.width} length={blueprint.length} layers={blueprint.layers} palette={blueprint.palette} />
