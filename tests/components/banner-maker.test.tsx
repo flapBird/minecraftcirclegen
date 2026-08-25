@@ -1,8 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { BannerMaker } from "@/components/banner-maker/banner-maker";
 
 describe("BannerMaker", () => {
+  beforeEach(() => window.localStorage.clear());
+
   it("adds visual pattern layers directly after choosing a color", () => {
     const { container } = render(<BannerMaker />);
 
@@ -23,6 +25,26 @@ describe("BannerMaker", () => {
     expect(screen.getByRole("button", { name: "Clear All" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("tab", { name: "SetBlock" }));
     expect(screen.getByText(/\/setblock ~ ~ ~/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Share design" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Share design" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Saved Banners" })).toBeInTheDocument();
+  });
+
+  it("saves, restores, and removes banners on the current device", () => {
+    render(<BannerMaker />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Add Circle layer" }));
+    fireEvent.click(screen.getByRole("button", { name: "+ Save current" }));
+
+    expect(screen.getByRole("button", { name: "Load saved banner 1" })).toBeInTheDocument();
+    expect(window.localStorage.getItem("minecraftcirclegen.saved-banners.v1")).toContain("circle,black");
+
+    fireEvent.click(screen.getByRole("button", { name: "Clear All" }));
+    expect(screen.getByText("0 / 6 layers")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Load saved banner 1" }));
+    expect(screen.getByText("Circle · Black")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Remove saved banner 1" }));
+    expect(screen.queryByRole("button", { name: "Load saved banner 1" })).not.toBeInTheDocument();
+    expect(window.localStorage.getItem("minecraftcirclegen.saved-banners.v1")).toBe("[]");
   });
 });

@@ -45,22 +45,26 @@ export function BannerPreview({
   baseColorId,
   layers,
   svgRef,
+  idPrefix = "banner",
 }: {
   baseColorId: string;
   layers: BannerLayer[];
   svgRef?: React.Ref<SVGSVGElement>;
+  idPrefix?: string;
 }) {
+  const clipId = `${idPrefix}-clip`;
+  const lightId = `${idPrefix}-cloth-light`;
   return (
     <svg ref={svgRef} className="banner-svg" viewBox="0 0 120 180" role="img" aria-label={`Banner with ${layers.length} pattern layers`}>
       <defs>
         {layers.map((layer, index) => (
-          <linearGradient id={`banner-gradient-${index}`} key={layer.uid} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={`${idPrefix}-gradient-${index}`} key={layer.uid} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor={getDye(layer.colorId).hex} stopOpacity="1" />
             <stop offset="1" stopColor={getDye(layer.colorId).hex} stopOpacity="0" />
           </linearGradient>
         ))}
-        <clipPath id="banner-clip"><rect x="12" y="8" width="96" height="144" rx="1" /></clipPath>
-        <linearGradient id="banner-cloth-light" x1="0" y1="0" x2="1" y2="0">
+        <clipPath id={clipId}><rect x="12" y="8" width="96" height="144" rx="1" /></clipPath>
+        <linearGradient id={lightId} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stopColor="#fff" stopOpacity=".16" />
           <stop offset=".28" stopColor="#fff" stopOpacity="0" />
           <stop offset=".52" stopColor="#000" stopOpacity=".12" />
@@ -71,10 +75,10 @@ export function BannerPreview({
       <rect x="56" y="0" width="8" height="174" rx="2" fill="#725033" />
       <rect x="8" y="5" width="104" height="7" rx="2" fill="#8a603a" />
       <g className="banner-cloth">
-        <g clipPath="url(#banner-clip)">
+        <g clipPath={`url(#${clipId})`}>
           <rect x="12" y="8" width="96" height="144" fill={getDye(baseColorId).hex} />
-          {layers.map((layer, index) => <PatternShape key={layer.uid} layer={layer} index={index} />)}
-          <rect className="banner-cloth-shine" x="12" y="8" width="96" height="144" fill="url(#banner-cloth-light)" />
+          {layers.map((layer, index) => <PatternShape key={layer.uid} layer={layer} index={index} gradientId={`${idPrefix}-gradient-${index}`} />)}
+          <rect className="banner-cloth-shine" x="12" y="8" width="96" height="144" fill={`url(#${lightId})`} />
         </g>
         <rect x="12" y="8" width="96" height="144" rx="1" fill="none" stroke="rgba(0,0,0,.24)" strokeWidth="2" />
       </g>

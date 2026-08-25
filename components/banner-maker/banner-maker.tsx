@@ -14,12 +14,21 @@ import {
 } from "@/lib/banner/banner-data";
 import { BannerPatternIcon, BannerPreview } from "./banner-preview";
 
+const SAVED_BANNERS_KEY = "minecraftcirclegen.saved-banners.v1";
+
+interface SavedBanner {
+  id: string;
+  design: string;
+  savedAt: number;
+}
+
 export function BannerMaker() {
   const [baseColorId, setBaseColorId] = useState("green");
   const [layers, setLayers] = useState<BannerLayer[]>([]);
   const [activeColorId, setActiveColorId] = useState("black");
   const [editingLayerUid, setEditingLayerUid] = useState<number | null>(null);
   const [commandMode, setCommandMode] = useState<"give" | "setblock">("give");
+  const [savedBanners, setSavedBanners] = useState<SavedBanner[]>([]);
   const [toast, setToast] = useState("");
   const nextUid = useRef(1);
   const toastTimer = useRef<number | null>(null);
@@ -45,6 +54,25 @@ export function BannerMaker() {
       nextUid.current = shared.layers.length + 1;
     }, 0);
     return () => window.clearTimeout(restore);
+  }, []);
+
+  useEffect(() => {
+    let restore: number | null = null;
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(SAVED_BANNERS_KEY) ?? "[]") as unknown;
+      if (Array.isArray(parsed)) {
+        const valid = parsed.flatMap((item) => {
+          if (!item || typeof item !== "object") return [];
+          const candidate = item as Partial<SavedBanner>;
+          if (typeof candidate.id !== "string" || typeof candidate.design !== "string" || typeof candidate.savedAt !== "number") return [];
+          return decodeBannerDesign(candidate.design) ? [candidate as SavedBanner] : [];
+        }).slice(0, 12);
+        restore = window.setTimeout(() => setSavedBanners((current) => current.length ? current : valid), 0);
+      }
+    } catch {
+      window.localStorage.removeItem(SAVED_BANNERS_KEY);
+    }
+    return () => { if (restore !== null) window.clearTimeout(restore); };
   }, []);
 
   useEffect(() => () => {
@@ -78,19 +106,6 @@ export function BannerMaker() {
   const copyCommand = async () => {
     try { await navigator.clipboard.writeText(command); showStatus("Java command copied"); }
     catch { showStatus("Copy failed — select the command manually"); }
-  };
-
-  const share = async () => {
-    const url = new URL(sharePath, window.location.origin);
-    window.history.replaceState(null, "", url);
-    const canShare = typeof navigator.share === "function";
-    try {
-      if (canShare) await navigator.share({ title: "Minecraft banner design", url: url.toString() });
-      else await navigator.clipboard.writeText(url.toString());
-      showStatus(canShare ? "Share sheet opened" : "Share link copied");
-    } catch (error) {
-      if ((error as DOMException).name !== "AbortError") showStatus("Share link could not be copied");
-    }
   };
 
   const copyShareLink = async () => {
@@ -146,6 +161,39 @@ export function BannerMaker() {
     setEditingLayerUid(null);
     nextUid.current = 1;
     showStatus("Banner cleared");
+  };
+
+  const persistSavedBanners = (next: SavedBanner[]) => {
+    setSavedBanners(next);
+    window.localStorage.setItem(SAVED_BANNERS_KEY, JSON.stringify(next));
+  };
+
+  const saveCurrentBanner = () => {
+    const design = encodeBannerDesign(baseColorId, layers);
+    const existing = savedBanners.find((item) => item.design === design);
+    const next = [{
+      id: existing?.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      design,
+      savedAt: Date.now(),
+    }, ...savedBanners.filter((item) => item.design !== design)].slice(0, 12);
+    persistSavedBanners(next);
+    showStatus(existing ? "Saved banner updated" : "Banner saved on this device");
+  };
+
+  const loadSavedBanner = (saved: SavedBanner) => {
+    const restored = decodeBannerDesign(saved.design);
+    if (!restored) return;
+    setBaseColorId(restored.baseColorId);
+    setLayers(restored.layers);
+    setActiveColorId("black");
+    setEditingLayerUid(null);
+    nextUid.current = restored.layers.length + 1;
+    showStatus("Saved banner loaded");
+  };
+
+  const removeSavedBanner = (id: string) => {
+    persistSavedBanners(savedBanners.filter((item) => item.id !== id));
+    showStatus("Saved banner removed");
   };
 
   return (
@@ -213,7 +261,6 @@ export function BannerMaker() {
           <section className="banner-share-panel" aria-labelledby="banner-share-title">
             <div className="banner-inline-heading"><h3 id="banner-share-title">Share link</h3><button type="button" onClick={copyShareLink}>Copy</button></div>
             <button type="button" className="banner-share-url" aria-label="Copy share link" title="Click to copy" onClick={copyShareLink}>{sharePath}</button>
-            <button type="button" className="secondary-button banner-native-share" onClick={share}>Share design</button>
           </section>
 
           <section className="banner-command" aria-labelledby="banner-command-title">
@@ -225,6 +272,30 @@ export function BannerMaker() {
             <pre tabIndex={0}><code>{command}</code></pre>
             <button type="button" className="primary-button" onClick={copyCommand}>Copy command</button>
             <p>Bedrock Edition uses different command behavior.</p>
+          </section>
+
+          <section className="banner-saved-panel" aria-labelledby="banner-saved-title">
+            <div className="banner-inline-heading">
+              <h3 id="banner-saved-title">Saved Banners</h3>
+              <button type="button" onClick={saveCurrentBanner}>+ Save current</button>
+            </div>
+            {savedBanners.length ? (
+              <div className="banner-saved-grid">
+                {savedBanners.map((saved, index) => {
+                  const design = decodeBannerDesign(saved.design);
+                  if (!design) return null;
+                  return (
+                    <article key={saved.id}>
+                      <button type="button" className="banner-saved-load" aria-label={`Load saved banner ${index + 1}`} onClick={() => loadSavedBanner(saved)}>
+                        <BannerPreview baseColorId={design.baseColorId} layers={design.layers} idPrefix={`saved-banner-${saved.id}`} />
+                        <span>{getDye(design.baseColorId).name} · {design.layers.length} layers</span>
+                      </button>
+                      <button type="button" className="banner-saved-remove" aria-label={`Remove saved banner ${index + 1}`} onClick={() => removeSavedBanner(saved.id)}>×</button>
+                    </article>
+                  );
+                })}
+              </div>
+            ) : <p className="banner-saved-empty">Save the current design to reopen it later on this device.</p>}
           </section>
         </aside>
       </div>
