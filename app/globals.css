@@ -3718,9 +3718,21 @@ a {
   padding: 54px 0 24px;
 }
 
+.footer-layout {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(250px, .9fr) minmax(0, 2.1fr);
+  align-items: start;
+  gap: clamp(48px, 7vw, 110px);
+}
+
+.footer-brand-block {
+  min-width: 0;
+}
+
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(260px, 1.25fr) repeat(3, minmax(150px, 0.6fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 58px;
 }
 
@@ -3729,11 +3741,12 @@ a {
   font-size: 1.05rem;
 }
 
-.footer-grid p {
+.footer-brand-block p {
   max-width: 450px;
   margin: 10px 0 0;
   color: #acbaaf;
   font-size: 0.8rem;
+  text-align: left;
 }
 
 .footer-column h2 {
@@ -5175,8 +5188,8 @@ a {
 .desktop-tools-panel strong { font-size: .87rem; }
 
 .footer-grid {
-  grid-template-columns: minmax(240px, 1.25fr) repeat(3, minmax(145px, .7fr));
-  gap: 38px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(34px, 8vw, 110px);
 }
 
 .home-tool-directory {
@@ -5267,7 +5280,7 @@ a {
 .color-tool-intro,
 .color-reference,
 .format-reference,
-.banner-guide,
+.banner-recipe-card,
 .text-gradient-preview,
 .text-gradient-settings {
   min-width: 0;
@@ -5582,19 +5595,20 @@ a {
   .banner-cloth,
   .banner-cloth-shine { animation: none; }
 }
-.banner-guide { margin-top: 14px; }
-.banner-guide h2 { margin: 3px 0 0; font-size: 1.22rem; }
-.banner-guide ol { margin: 0; padding: 0; list-style: none; }
-.banner-use-steps,
-.current-loom-recipe ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-top: 14px !important; }
-.banner-guide li { min-width: 0; display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 9px; align-items: start; border: 1px solid #d7dbd2; border-radius: 8px; background: #f8faf5; padding: 10px; }
-.banner-guide li > span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; background: #dfeadd; color: #315f35; font-size: .67rem; font-weight: 850; }
-.banner-guide strong { font-size: .68rem; }
-.banner-guide p { margin: 2px 0 0; color: #6b756d; font-size: .58rem; line-height: 1.4; }
-.current-loom-recipe { margin-top: 16px; border-top: 1px solid #dde1da; padding-top: 14px; }
+.banner-recipe-card { margin-top: 14px; }
+.current-loom-recipe ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.current-loom-recipe li { min-width: 0; display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 9px; align-items: start; border: 1px solid #d7dbd2; border-radius: 8px; background: #f8faf5; padding: 10px; }
+.current-loom-recipe li > span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; background: #dfeadd; color: #315f35; font-size: .67rem; font-weight: 850; }
+.current-loom-recipe strong { font-size: .68rem; }
+.current-loom-recipe p { margin: 2px 0 0; color: #6b756d; font-size: .58rem; line-height: 1.4; }
 .current-loom-recipe > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.current-loom-recipe h3 { margin: 0; color: #334038; font-size: .8rem; }
+.current-loom-recipe h2 { margin: 2px 0 0; color: #334038; font-size: 1.05rem; }
 .current-loom-recipe > div > span { border-radius: 999px; background: #edf1e8; color: #677169; padding: 4px 7px; font-size: .55rem; font-weight: 760; }
+.banner-how-to-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; counter-reset: banner-how-to; }
+.banner-how-to-list li { min-width: 0; position: relative; border: 1px solid #d8ddd5; border-radius: 8px; background: #f8faf5; padding: 15px 14px 14px 48px; counter-increment: banner-how-to; }
+.banner-how-to-list li::before { position: absolute; top: 13px; left: 13px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 6px; background: #dfeadd; color: #315f35; font-size: .68rem; font-weight: 850; content: counter(banner-how-to); }
+.banner-how-to-list strong { display: block; color: #344137; font-size: .74rem; }
+.banner-how-to-list span { display: block; margin-top: 4px; color: #69746b; font-size: .65rem; line-height: 1.5; }
 
 /* Universal shape generator */
 .shape-workbench { grid-template-columns: minmax(0, 1.45fr) minmax(330px, .55fr); }
@@ -5658,7 +5672,6 @@ a {
 
 @media (max-width: 1080px) {
   .home-tool-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .banner-use-steps,
   .current-loom-recipe ol { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .compact-color-toolbar { grid-template-columns: 48px minmax(0, 1fr) 84px; }
   .compact-palette-strip { grid-column: 2; }
@@ -5681,6 +5694,7 @@ a {
   .shape-workbench,
   .text-gradient-workbench { grid-template-columns: 1fr; }
   .shape-canvas-shell { height: min(80vw, 560px); }
+  .footer-layout { grid-template-columns: 1fr; gap: 34px; }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .banner-studio { grid-template-columns: 1fr; }
   .banner-preview-card,
@@ -5704,7 +5718,7 @@ a {
   .shape-settings-card,
   .color-reference,
   .format-reference,
-  .banner-guide,
+  .banner-recipe-card,
   .text-gradient-preview,
   .text-gradient-settings { border-radius: 10px; padding: 16px; }
   .compact-color-toolbar { grid-template-columns: 44px minmax(0, 1fr) 76px; gap: 9px; margin: -16px -16px 20px; padding: 10px 16px; }
@@ -5741,8 +5755,8 @@ a {
 
 @media (max-width: 480px) {
   .home-tool-card-grid,
-  .banner-use-steps,
   .current-loom-recipe ol,
+  .banner-how-to-list,
   .footer-grid { grid-template-columns: 1fr; }
   .home-tool-card-grid a { min-height: 120px; }
   .server-card-heading { flex-direction: column; gap: 7px; }

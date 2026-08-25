@@ -10,7 +10,6 @@ describe("BannerMaker", () => {
 
     expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.getByText("0 / 6 layers")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Design a banner in three steps" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Current loom recipe" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Set pattern color to Black" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "Set pattern color to Red" }));

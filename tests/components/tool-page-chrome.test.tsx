@@ -37,11 +37,13 @@ describe("shared tool page navigation", () => {
   it("keeps tools and site information in separate footer columns", () => {
     render(<SiteFooter />);
 
+    const tools = screen.getByRole("navigation", { name: "Footer tools" });
+    const resources = screen.getByRole("navigation", { name: "Minecraft building resources" });
     const site = screen.getByRole("navigation", { name: "Site information" });
-    for (const category of TOOL_CATEGORIES) {
-      const navigation = screen.getByRole("navigation", { name: `Footer ${category.title.toLowerCase()}` });
-      expect(within(navigation).getAllByRole("link")).toHaveLength(category.toolKeys.length);
-    }
+    expect(within(tools).getAllByRole("link")).toHaveLength(
+      TOOL_CATEGORIES.reduce((total, category) => total + category.toolKeys.length, 0),
+    );
+    expect(within(resources).getAllByRole("link")).toHaveLength(4);
     expect(within(site).getAllByRole("link").map((link) => link.textContent)).toEqual([
       "About",
       "Contact",

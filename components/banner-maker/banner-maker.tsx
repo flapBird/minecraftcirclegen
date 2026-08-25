@@ -300,24 +300,15 @@ export function BannerMaker() {
         </aside>
       </div>
 
-      <section className="banner-guide" aria-labelledby="banner-guide-title">
-        <p className="section-label">HOW TO USE</p>
-        <h2 id="banner-guide-title">Design a banner in three steps</h2>
-        <ol className="banner-use-steps">
-          <li><span>1</span><div><strong>Choose the base color</strong><p>This is the starting banner color.</p></div></li>
-          <li><span>2</span><div><strong>Pick a layer color</strong><p>New patterns use the selected dye color.</p></div></li>
-          <li><span>3</span><div><strong>Click a pattern</strong><p>Add, reorder, or remove up to six layers.</p></div></li>
-        </ol>
-        {layers.length > 0 && (
-          <div className="current-loom-recipe">
-            <div><h3>Current loom recipe</h3><span>{layers.length + 1} steps</span></div>
-            <ol>
-              <li><span>1</span><div><strong>Start with a {getDye(baseColorId).name} Banner</strong><p>Place the base banner in the loom.</p></div></li>
-              {layers.map((layer, index) => <li key={layer.uid}><span>{index + 2}</span><div><strong>{getPattern(layer.patternId).loomName} + {getDye(layer.colorId).name} Dye</strong><p>Select the {getPattern(layer.patternId).name} pattern.</p></div></li>)}
-            </ol>
-          </div>
-        )}
-      </section>
+      {layers.length > 0 && (
+        <section className="banner-recipe-card current-loom-recipe" aria-labelledby="current-loom-recipe-title">
+          <div><div><p className="section-label">LOOM RECIPE</p><h2 id="current-loom-recipe-title">Current loom recipe</h2></div><span>{layers.length + 1} steps</span></div>
+          <ol>
+            <li><span>1</span><div><strong>Start with a {getDye(baseColorId).name} Banner</strong><p>Place the base banner in the loom.</p></div></li>
+            {layers.map((layer, index) => <li key={layer.uid}><span>{index + 2}</span><div><strong>{getPattern(layer.patternId).loomName} + {getDye(layer.colorId).name} Dye</strong><p>Select the {getPattern(layer.patternId).name} pattern.</p></div></li>)}
+          </ol>
+        </section>
+      )}
       {toast && <div className="toast" role="status" aria-live="polite">{toast}</div>}
     </div>
   );
