@@ -5267,7 +5267,7 @@ a {
 .color-tool-intro,
 .color-reference,
 .format-reference,
-.loom-instructions,
+.banner-guide,
 .text-gradient-preview,
 .text-gradient-settings {
   min-width: 0;
@@ -5582,13 +5582,19 @@ a {
   .banner-cloth,
   .banner-cloth-shine { animation: none; }
 }
-.loom-instructions { margin-top: 14px; }
-.loom-instructions h2 { margin: 3px 0 0; font-size: 1.4rem; }
-.loom-instructions ol { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; margin: 21px 0 0; padding: 0; list-style: none; }
-.loom-instructions li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; border: 1px solid #d7dbd2; border-radius: 8px; background: #f8faf5; padding: 12px; }
-.loom-instructions li > span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 6px; background: #dfeadd; color: #315f35; font-size: .72rem; font-weight: 850; }
-.loom-instructions strong { font-size: .72rem; }
-.loom-instructions p { margin: 3px 0 0; color: #6b756d; font-size: .64rem; line-height: 1.45; }
+.banner-guide { margin-top: 14px; }
+.banner-guide h2 { margin: 3px 0 0; font-size: 1.22rem; }
+.banner-guide ol { margin: 0; padding: 0; list-style: none; }
+.banner-use-steps,
+.current-loom-recipe ol { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-top: 14px !important; }
+.banner-guide li { min-width: 0; display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 9px; align-items: start; border: 1px solid #d7dbd2; border-radius: 8px; background: #f8faf5; padding: 10px; }
+.banner-guide li > span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 6px; background: #dfeadd; color: #315f35; font-size: .67rem; font-weight: 850; }
+.banner-guide strong { font-size: .68rem; }
+.banner-guide p { margin: 2px 0 0; color: #6b756d; font-size: .58rem; line-height: 1.4; }
+.current-loom-recipe { margin-top: 16px; border-top: 1px solid #dde1da; padding-top: 14px; }
+.current-loom-recipe > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.current-loom-recipe h3 { margin: 0; color: #334038; font-size: .8rem; }
+.current-loom-recipe > div > span { border-radius: 999px; background: #edf1e8; color: #677169; padding: 4px 7px; font-size: .55rem; font-weight: 760; }
 
 /* Universal shape generator */
 .shape-workbench { grid-template-columns: minmax(0, 1.45fr) minmax(330px, .55fr); }
@@ -5652,7 +5658,8 @@ a {
 
 @media (max-width: 1080px) {
   .home-tool-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .loom-instructions ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .banner-use-steps,
+  .current-loom-recipe ol { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .compact-color-toolbar { grid-template-columns: 48px minmax(0, 1fr) 84px; }
   .compact-palette-strip { grid-column: 2; }
   .compact-palette-actions { grid-column: 3; grid-row: 1 / 3; }
@@ -5697,7 +5704,7 @@ a {
   .shape-settings-card,
   .color-reference,
   .format-reference,
-  .loom-instructions,
+  .banner-guide,
   .text-gradient-preview,
   .text-gradient-settings { border-radius: 10px; padding: 16px; }
   .compact-color-toolbar { grid-template-columns: 44px minmax(0, 1fr) 76px; gap: 9px; margin: -16px -16px 20px; padding: 10px 16px; }
@@ -5734,7 +5741,8 @@ a {
 
 @media (max-width: 480px) {
   .home-tool-card-grid,
-  .loom-instructions ol,
+  .banner-use-steps,
+  .current-loom-recipe ol,
   .footer-grid { grid-template-columns: 1fr; }
   .home-tool-card-grid a { min-height: 120px; }
   .server-card-heading { flex-direction: column; gap: 7px; }

@@ -97,7 +97,7 @@ export const TOOL_PAGES: ToolPage[] = [
     href: "/minecraft-banner-maker",
     navLabel: "Banner",
     title: "Banner Maker",
-    description: "Design and share layered banners with loom steps and Java commands.",
+    description: "Design, save, and share layered banners with clear loom steps and Java commands.",
   },
   {
     key: "text",

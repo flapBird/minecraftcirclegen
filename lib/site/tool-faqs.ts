@@ -111,7 +111,7 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
     },
     {
       question: "Can I make the banner in a loom instead of using a command?",
-      answer: "Yes. The loom instruction list translates the base color and every visible layer into a step-by-step pattern and dye plan.",
+      answer: "Yes. After you add the first pattern, the compact loom recipe translates the base color and every visible layer into a step-by-step pattern and dye plan.",
     },
     {
       question: "Can I download my banner?",

@@ -10,11 +10,15 @@ describe("BannerMaker", () => {
 
     expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.getByText("0 / 6 layers")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Design a banner in three steps" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Current loom recipe" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Set pattern color to Black" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "Set pattern color to Red" }));
     fireEvent.click(screen.getByRole("button", { name: "Add Circle layer" }));
     expect(screen.getByText("1 / 6 layers")).toBeInTheDocument();
     expect(screen.getByText("Circle · Red")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Current loom recipe" })).toBeInTheDocument();
+    expect(screen.getByText("Roundel + Red Dye")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Banner with 1 pattern layers" })).toBeInTheDocument();
     expect(container.querySelector(".banner-cloth")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Layers" })).toBeInTheDocument();
@@ -40,6 +44,7 @@ describe("BannerMaker", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Clear All" }));
     expect(screen.getByText("0 / 6 layers")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Current loom recipe" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Load saved banner 1" }));
     expect(screen.getByText("Circle · Black")).toBeInTheDocument();
 
