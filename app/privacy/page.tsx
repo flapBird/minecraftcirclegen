@@ -20,17 +20,18 @@ export default function PrivacyPage() {
       <section>
         <h2>Information used by the tool</h2>
         <p>
-          Circle calculations happen in your browser. You do not need to create
-          an account, and the site does not operate an application database for
-          your generated blueprints.
+          Generator calculations happen in your browser. Images selected for the
+          Pixel Art or Map Art tools are processed locally in the page rather than
+          uploaded to an application database. You do not need to create an
+          account, and the site does not store your generated blueprints.
         </p>
       </section>
       <section>
         <h2>Share links</h2>
         <p>
-          The selected dimensions, fill mode, and layer are included in the
-          page URL when you use Copy Link. Anyone who receives that URL can see
-          those tool settings.
+          Some tools include selected dimensions, modes, layers, colors, or design
+          data in the page URL when you copy or share a link. Anyone who receives
+          that URL can see the encoded tool settings.
         </p>
       </section>
       <section>
@@ -44,8 +45,8 @@ export default function PrivacyPage() {
         </p>
         <p>
           Analytics is used to improve the site&apos;s usability and
-          performance. It does not store your generated circle grid or tool
-          settings. You can limit analytics through your browser&apos;s privacy
+          performance. It does not store your generated grid, artwork, banner, or
+          tool settings. You can limit analytics through your browser&apos;s privacy
           settings or a content blocker.
         </p>
       </section>

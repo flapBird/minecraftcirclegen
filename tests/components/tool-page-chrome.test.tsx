@@ -4,7 +4,7 @@ import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 import { TOOL_FAQS } from "@/lib/site/tool-faqs";
-import { TOOL_PAGES } from "@/lib/site/tools";
+import { RELATED_TOOLS, TOOL_CATEGORIES, getToolPage } from "@/lib/site/tools";
 
 describe("shared tool page navigation", () => {
   it("shows a breadcrumb for the current generator", () => {
@@ -18,7 +18,7 @@ describe("shared tool page navigation", () => {
     );
   });
 
-  it("provides FAQs and the complete tool directory", () => {
+  it("provides FAQs and a focused internal-link cluster", () => {
     render(<ToolPageEnd toolKey="sphere" />);
 
     expect(screen.getByRole("heading", { name: "Frequently Asked Questions" })).toBeInTheDocument();
@@ -26,23 +26,22 @@ describe("shared tool page navigation", () => {
 
     const directory = screen.getByRole("region", { name: "Explore more Minecraft tools" });
     const links = within(directory).getAllByRole("link");
-    expect(links).toHaveLength(TOOL_PAGES.length);
+    const related = RELATED_TOOLS.sphere.map(getToolPage);
+    expect(links).toHaveLength(related.length);
     expect(links.map((link) => link.textContent)).toEqual(
-      TOOL_PAGES.map((tool) => `${tool.title}${tool.description}→`),
+      related.map((tool) => `${tool.title}${tool.description}→`),
     );
-    expect(within(directory).getByRole("link", { name: /Sphere Generator/ })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    expect(within(directory).getByRole("link", { name: /Shape Generator/ })).toHaveAttribute("href", "/minecraft-shape-generator");
   });
 
   it("keeps tools and site information in separate footer columns", () => {
     render(<SiteFooter />);
 
-    const tools = screen.getByRole("navigation", { name: "Footer tools" });
     const site = screen.getByRole("navigation", { name: "Site information" });
-    expect(within(tools).getAllByRole("link")).toHaveLength(TOOL_PAGES.length);
-    expect(within(tools).getAllByRole("link").at(-1)).toHaveTextContent("Font Generator");
+    for (const category of TOOL_CATEGORIES) {
+      const navigation = screen.getByRole("navigation", { name: `Footer ${category.title.toLowerCase()}` });
+      expect(within(navigation).getAllByRole("link")).toHaveLength(category.toolKeys.length);
+    }
     expect(within(site).getAllByRole("link").map((link) => link.textContent)).toEqual([
       "About",
       "Contact",

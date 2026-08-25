@@ -449,10 +449,7 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
       <div className="gradient-workbench">
         <section className="gradient-preview" aria-labelledby="gradient-preview-title">
           <div className="gradient-preview-heading">
-            <div>
-              <p className="section-label">LIVE BLOCK PALETTE</p>
-              <h2 id="gradient-preview-title">Your gradient</h2>
-            </div>
+            <h2 id="gradient-preview-title" className="preview-heading">PREVIEW</h2>
             <span>{steps.length} blocks · build in order</span>
           </div>
 

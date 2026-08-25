@@ -99,6 +99,7 @@ describe("creative generators", () => {
 
   it("shows local upload controls for pixel art", () => {
     render(<ImageArtGenerator mode="pixel" />);
+    expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.getByText("Drop an image here")).toBeInTheDocument();
     expect(screen.getByRole("slider", { name: "Longest side" })).toBeInTheDocument();
     expect(screen.getByRole("combobox", { name: "Block palette" })).toBeInTheDocument();
@@ -106,6 +107,7 @@ describe("creative generators", () => {
 
   it("uses fixed map layouts and states the first-phase export boundary", () => {
     render(<ImageArtGenerator mode="map" />);
+    expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.getByRole("combobox", { name: "Map layout" })).toHaveValue("1x1");
     expect(screen.getByText(/No world file, schematic, or map.dat/)).toBeInTheDocument();
   });

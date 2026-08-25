@@ -17,7 +17,7 @@ describe("SiteHeader", () => {
     window.scrollTo = vi.fn();
   });
 
-  it("keeps four primary desktop choices and groups the remaining generators", async () => {
+  it("keeps the primary desktop choices and groups generators into scalable categories", async () => {
     navigationState.pathname = "/sphere-generator";
     render(<SiteHeader />);
     const navigation = screen.getByRole("navigation", { name: "Main navigation" });
@@ -39,8 +39,9 @@ describe("SiteHeader", () => {
     expect(tools).toHaveAttribute("aria-current", "page");
     await userEvent.click(tools!);
 
-    expect(within(navigation).getByRole("heading", { name: "Shape Tools" })).toBeInTheDocument();
-    expect(within(navigation).getByRole("heading", { name: "Creative Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("heading", { name: "Build & Shape Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("heading", { name: "Art & Design Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("heading", { name: "Text & Server Tools" })).toBeInTheDocument();
     expect(within(navigation).getByRole("link", { name: /Oval/ })).toHaveAttribute("href", "/oval-generator");
     expect(within(navigation).getByRole("link", { name: /Font/ })).toHaveAttribute("href", "/minecraft-font-generator");
   });
@@ -101,10 +102,14 @@ describe("SiteHeader", () => {
       "Oval",
       "Sphere",
       "Dome",
-      "Gradient",
+      "Shape",
       "Pixel Art",
       "Map Art",
       "Font",
+      "Banner",
+      "Text",
+      "Gradient",
+      "Color Codes",
       "House Designs",
       "Blueprints",
     ]);

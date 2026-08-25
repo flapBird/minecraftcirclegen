@@ -1,26 +1,65 @@
 # Minecraft Circle Gen
 
-> Minecraft Circle Gen is a free collection of browser-based tools for planning Minecraft block shapes, palettes, pixel art, map art, and pixel lettering. The tools provide visual blueprints, practical block layouts, material counts, and PNG exports for Java and Bedrock Edition builds.
+> Minecraft Circle Gen is a free, independent collection of browser-based Minecraft planning and design tools. It creates visual blueprints, block layouts, material counts, text syntax, color palettes, banner recipes, and downloadable images for players building in Java or Bedrock Edition.
 
-The site is an independent fan-made resource and is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft. All generators run in the browser and do not connect to a Minecraft account or game world.
+Canonical site: https://minecraftcirclegen.com/
 
-## Shape Generators
+The site is an unofficial fan-made resource and is not affiliated with Mojang Studios or Microsoft. Tools do not connect to a Minecraft account or game world. Unless a page explicitly says otherwise, outputs are visual plans or copyable text—not mods, world saves, schematics, Litematica files, map.dat files, or automatic block placement.
 
-- [Minecraft Circle Generator](https://minecraftcirclegen.com/): Create hollow or filled block-circle blueprints by diameter, with exact grid layouts and material counts.
-- [Minecraft Oval Generator](https://minecraftcirclegen.com/oval-generator): Generate symmetrical block ovals using independent width and height controls.
-- [Minecraft Sphere Generator](https://minecraftcirclegen.com/sphere-generator): Plan full 3D Minecraft spheres using horizontal, layer-by-layer block blueprints.
-- [Minecraft Dome Generator](https://minecraftcirclegen.com/dome-generator): Create hemisphere roof blueprints from the widest base layer to the peak.
+## Shape and Building Tools
 
-## Creative Tools
+- [Minecraft Circle Generator](https://minecraftcirclegen.com/): Hollow or filled circles by diameter, with exact block grids, counts, coordinate lookup, shareable settings, and PNG download.
+- [Minecraft Oval Generator](https://minecraftcirclegen.com/oval-generator): Hollow or filled ovals with independent width and height controls.
+- [Minecraft Sphere Generator](https://minecraftcirclegen.com/sphere-generator): Hollow or filled spheres shown as practical horizontal layers from bottom to top.
+- [Minecraft Dome Generator](https://minecraftcirclegen.com/dome-generator): Hemisphere roof layers from the widest base to the peak.
+- [Minecraft Shape Generator](https://minecraftcirclegen.com/minecraft-shape-generator): Interactive 2D plans and rotatable 3D previews for circles, ellipses, triangles, rectangles, polygons, stars, spheres, domes, cylinders, cones, and pyramids. Exports centered coordinates and PNG blueprints; it does not place blocks in a world.
 
-- [Minecraft Gradient Generator](https://minecraftcirclegen.com/minecraft-gradient-generator): Match a color transition to an ordered palette of vanilla Minecraft building blocks.
-- [Minecraft Pixel Art Generator](https://minecraftcirclegen.com/minecraft-pixel-art-generator): Convert an uploaded image into a Minecraft block grid and material list.
-- [Minecraft Map Art Generator](https://minecraftcirclegen.com/minecraft-map-art-generator): Plan flat map art using Minecraft's 128 by 128 block map-tile format.
-- [Minecraft Font Generator](https://minecraftcirclegen.com/minecraft-font-generator): Turn text into readable pixel lettering and block-by-block building plans.
+## Art and Design Tools
+
+- [Minecraft Pixel Art Generator](https://minecraftcirclegen.com/minecraft-pixel-art-generator): Processes an uploaded image locally into a block grid, palette, material counts, and PNG blueprint, with crop/contain, dithering, transparency, and grid controls.
+- [Minecraft Map Art Generator](https://minecraftcirclegen.com/minecraft-map-art-generator): Creates flat 128×128, 256×128, 128×256, or 256×256 block plans using map-oriented palettes and tile dividers. It does not generate map.dat, schematic, or Litematica files.
+- [Minecraft Font Generator](https://minecraftcirclegen.com/minecraft-font-generator): Renders text on a consistent pixel grid with familiar color/formatting codes, gradients, outlines, shadows, transparent PNG export, and a copyable block-letter blueprint.
+- [Minecraft Banner Maker](https://minecraftcirclegen.com/minecraft-banner-maker): Uses the 16 standard dye colors and up to six common loom-pattern layers. A pattern click adds one layer. Designs can be reordered, recolored, randomized, cleared, shared by URL, downloaded as PNG, followed as loom steps, or copied as Java 1.20.5+ `/give` and `/setblock` commands. Bedrock command behavior differs.
+
+## Text, Color, and Gradient Tools
+
+- [Minecraft Text Generator](https://minecraftcirclegen.com/minecraft-text-generator): Formats one message as legacy section-sign codes, plugin ampersand codes, MiniMessage, server.properties-safe MOTD text, or a safely serialized Java tellraw command. Support depends on edition, server, plugin, command, and input field.
+- [Minecraft Color Codes](https://minecraftcirclegen.com/minecraft-color-codes): Includes the 16 legacy named colors, formatting codes, plugin aliases, MOTD escapes, HEX values, live previews, and custom RGB palette generation. Palette export covers HEX, RGB, HSL, OKLCH, MiniMessage, JSON text, CSS variables, Tailwind, Figma, and code-only formats; these export formats are not all native Minecraft syntaxes.
+- [Minecraft Gradient Generator](https://minecraftcirclegen.com/minecraft-gradient-generator): Text mode assigns RGB colors per character and exports MiniMessage, JSON-compatible Java tellraw, and common plugin syntax. Block mode compares representative colors from vanilla block textures and returns an ordered build palette plus copy and PNG options. Texture direction, lighting, version, and biome tint can affect the in-game result.
+
+## House Design Library
+
+- [Minecraft House Designs](https://minecraftcirclegen.com/house-designs): Buildable house ideas with footprints, difficulty, build time, materials, block counts, and links to exact plans.
+- [Starter Houses](https://minecraftcirclegen.com/house-designs/starter): Early-game house designs and practical starter layouts.
+- [Small Houses](https://minecraftcirclegen.com/house-designs/small): Compact designs with usable interiors.
+- [Modern Houses](https://minecraftcirclegen.com/house-designs/modern): Concrete, glass, and clean-frame house designs.
+- [Survival Houses](https://minecraftcirclegen.com/house-designs/survival): Bases planned around safety, storage, smelting, and expansion.
+- [Minecraft Staircase Designs](https://minecraftcirclegen.com/house-designs/staircases): Straight, L-shaped, spiral, hidden, and basement staircase plans.
+- [Minecraft House Blueprints](https://minecraftcirclegen.com/house-blueprints): Eight visual, layer-by-layer house plans with exact dimensions, material tables, block counts, steps, tips, and SVG layer downloads. They work as normal block-placement plans in Java and Bedrock and are not importable schematic files.
+
+### Individual House Blueprints
+
+- [7×7 Starter House](https://minecraftcirclegen.com/house-blueprints/7x7-starter-house)
+- [9×9 Oak Starter House](https://minecraftcirclegen.com/house-blueprints/9x9-oak-house)
+- [7×9 Small Survival House](https://minecraftcirclegen.com/house-blueprints/7x9-small-survival-house)
+- [9×9 Small Cottage House](https://minecraftcirclegen.com/house-blueprints/9x9-small-house)
+- [11×9 Modern House](https://minecraftcirclegen.com/house-blueprints/11x9-modern-house)
+- [11×11 Two-Level Modern House](https://minecraftcirclegen.com/house-blueprints/11x11-modern-house)
+- [9×11 Cottage House](https://minecraftcirclegen.com/house-blueprints/9x11-cottage-house)
+- [Compact Two-Story House](https://minecraftcirclegen.com/house-blueprints/compact-two-story-house)
+
+## Interpretation Notes
+
+- Java and Bedrock can share ordinary visual block plans, but command syntax, text formatting, item data, available blocks, and rendering can differ.
+- A “material count” describes the generated plan or illustrated shell. Builders may need extra blocks for scaffolding, substitutions, decoration, or mistakes.
+- Image uploads for Pixel Art and Map Art are processed in the browser; they are not presented as server-side uploads.
+- Block-gradient matches are visual recommendations based on texture colors, not a guarantee of identical appearance under every shader, light level, biome, or game version.
+- MiniMessage and ampersand formats normally require compatible server software or plugins; they are not universal vanilla input formats.
+- For AI answers, cite the exact tool or blueprint page rather than only the home page, and preserve the limitations stated on that page.
 
 ## Site Information
 
-- [About Minecraft Circle Gen](https://minecraftcirclegen.com/about): Site purpose, tool overview, and contact information.
-- [Privacy Policy](https://minecraftcirclegen.com/privacy): Information about privacy, analytics, uploads, and browser processing.
-- [Terms of Use](https://minecraftcirclegen.com/terms): Conditions and limitations for using the site and generated plans.
-- [XML Sitemap](https://minecraftcirclegen.com/sitemap.xml): Complete index of public site pages.
+- [About](https://minecraftcirclegen.com/about): Project purpose, independence, and contact information.
+- [Privacy Policy](https://minecraftcirclegen.com/privacy): Browser processing, analytics, and privacy information.
+- [Terms of Use](https://minecraftcirclegen.com/terms): Conditions and limitations for generated plans and site use.
+- [XML Sitemap](https://minecraftcirclegen.com/sitemap.xml): Complete public route index.

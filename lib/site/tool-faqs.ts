@@ -82,6 +82,78 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
       answer: "The number depends on the diameter. The layer control displays the exact base-to-peak sequence for the selected size.",
     },
   ],
+  shape: [
+    {
+      question: "What shapes can this Minecraft shape generator make?",
+      answer: "It creates circles, ellipses, triangles, rectangles, polygons, stars, spheres, domes, cylinders, cones, and pyramids as block-grid blueprints.",
+    },
+    {
+      question: "How are 3D shapes displayed?",
+      answer: "Three-dimensional builds are divided into horizontal Y layers. Use Previous and Next to build each X/Z blueprint in order.",
+    },
+    {
+      question: "Can I copy the block coordinates?",
+      answer: "Yes. Copy coordinates exports every occupied cell in the current layer relative to the blueprint center.",
+    },
+    {
+      question: "Do the blueprints work in Java and Bedrock?",
+      answer: "Yes. Shape blueprints describe general block positions and do not depend on edition-specific commands.",
+    },
+  ],
+  banner: [
+    {
+      question: "Which Minecraft versions support the generated banner commands?",
+      answer: "The Give output uses Java Edition item components introduced in 1.20.5, and SetBlock uses banner block-entity pattern data. Both are labeled for Java 1.20.5 and later. Bedrock Edition uses different command capabilities.",
+    },
+    {
+      question: "How many patterns can I add?",
+      answer: "The maker allows up to six pattern layers, matching the normal vanilla banner pattern limit.",
+    },
+    {
+      question: "Can I make the banner in a loom instead of using a command?",
+      answer: "Yes. The loom instruction list translates the base color and every visible layer into a step-by-step pattern and dye plan.",
+    },
+    {
+      question: "Can I download my banner?",
+      answer: "Yes. Download PNG saves the current banner preview as a transparent image.",
+    },
+  ],
+  text: [
+    {
+      question: "How is this different from the Minecraft Font Generator?",
+      answer: "This tool creates copyable in-game formatting codes and commands. The Font Generator creates pixel-style image lettering and building blueprints.",
+    },
+    {
+      question: "Is the tellraw output valid JSON?",
+      answer: "Yes. The text component is created as a JavaScript object and serialized with JSON.stringify, so quotes and special characters are escaped correctly.",
+    },
+    {
+      question: "Where do ampersand color codes work?",
+      answer: "Ampersand codes are commonly translated by server plugins and configuration systems; vanilla Minecraft normally uses section-sign codes or structured text components instead.",
+    },
+    {
+      question: "Does MiniMessage work in vanilla Minecraft?",
+      answer: "No. MiniMessage is a server-plugin format, commonly used in the Paper ecosystem, and requires a compatible plugin or platform.",
+    },
+  ],
+  "color-codes": [
+    {
+      question: "What is the difference between § and & color codes?",
+      answer: "The section sign is Minecraft's legacy formatting marker. Ampersand is a convenient alias that many server plugins translate, but vanilla does not universally interpret it.",
+    },
+    {
+      question: "Do Minecraft color codes work in every text field?",
+      answer: "No. Support depends on the edition, version, text field, command, server software, and installed plugins. Structured text components are preferred for many modern Java commands.",
+    },
+    {
+      question: "Can I copy already formatted text?",
+      answer: "Yes. Pick a color and formatting options, then copy a §, &, or server.properties-safe version of the sample text.",
+    },
+    {
+      question: "Are Java and Bedrock colors identical?",
+      answer: "The familiar 16 named colors are closely related, but supported inputs and rendering contexts differ between editions. Always test the target field or server.",
+    },
+  ],
   gradient: [
     {
       question: "What is a Minecraft block gradient?",

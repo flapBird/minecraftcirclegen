@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TOOL_PAGES } from "@/lib/site/tools";
+import { TOOL_CATEGORIES, getToolsForCategory } from "@/lib/site/tools";
 
 export function SiteFooter() {
   return (
@@ -13,14 +13,16 @@ export function SiteFooter() {
             Practical Minecraft building tools for cleaner shapes, palettes, and block plans.
           </p>
         </div>
-        <section className="footer-column">
-          <h2>Tools</h2>
-          <nav aria-label="Footer tools">
-            {TOOL_PAGES.map((tool) => (
-              <Link key={tool.key} href={tool.href}>{tool.title}</Link>
-            ))}
-          </nav>
-        </section>
+        {TOOL_CATEGORIES.map((category) => (
+          <section className="footer-column" key={category.key}>
+            <h2>{category.title}</h2>
+            <nav aria-label={`Footer ${category.title.toLowerCase()}`}>
+              {getToolsForCategory(category).map((tool) => (
+                <Link key={tool.key} href={tool.href}>{tool.title}</Link>
+              ))}
+            </nav>
+          </section>
+        ))}
         <section className="footer-column">
           <h2>Build Resources</h2>
           <nav aria-label="Minecraft building resources">

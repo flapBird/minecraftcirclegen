@@ -5,7 +5,7 @@ import { GeometryGenerator } from "@/components/geometry-generator/geometry-gene
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
-import { ToolDirectory } from "@/components/layout/tool-page-end";
+import { HomeToolDirectory } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
 const description =
@@ -14,6 +14,7 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/" },
   openGraph: {
     title,
     description,
@@ -124,7 +125,6 @@ export default function Home() {
 
   return (
     <>
-      <link rel="canonical" href="https://minecraftcirclegen.com/" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
@@ -140,7 +140,7 @@ export default function Home() {
             <h1>Minecraft Circle Generator</h1>
             <p className="hero-subtitle">
               Create perfect Minecraft circles, calculate the blocks you need,
-              and copy the exact block layout.
+              and download or share the exact block layout.
             </p>
           </div>
         </section>
@@ -159,6 +159,8 @@ export default function Home() {
             </Suspense>
           </div>
         </section>
+
+        <HomeToolDirectory />
 
         <article className="seo-content">
           <div className="content-container">
@@ -429,7 +431,6 @@ export default function Home() {
                 ))}
               </div>
             </section>
-            <ToolDirectory toolKey="circle" />
           </div>
         </article>
       </main>

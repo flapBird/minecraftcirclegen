@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GradientGenerator } from "@/components/gradient-generator/gradient-generator";
-import { GradientGeneratorFromUrl } from "@/components/gradient-generator/gradient-generator-from-url";
+import { GradientModeSwitcher } from "@/components/gradient-generator/gradient-mode-switcher";
 import { DEFAULT_GRADIENT_OPTIONS } from "@/lib/gradient/gradient-url-state";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
+import { ToolStructuredData } from "@/components/layout/tool-structured-data";
+import Link from "next/link";
 
-const title = "Minecraft Gradient Generator – Create Block Palettes";
+const title = "Minecraft Gradient Generator – Text & Block Gradients";
 const description =
-  "Create smooth Minecraft block gradients from any two colors. Choose a vanilla block palette, control the number of steps, and download the result.";
+  "Create RGB Minecraft text gradients or match colors to smooth, buildable vanilla block palettes with copy-ready output and PNG export.";
 
 export const metadata: Metadata = {
   title,
@@ -30,12 +32,13 @@ export const metadata: Metadata = {
 export default function GradientGeneratorPage() {
   return (
       <main id="main-content">
+      <ToolStructuredData name="Minecraft Gradient Generator" description={description} path="/minecraft-gradient-generator" />
       <section className="hero gradient-hero">
         <div className="page-container">
           <PageBreadcrumb toolKey="gradient" />
           <h1>Minecraft Gradient Generator</h1>
           <p className="hero-subtitle">
-            Turn any two colors into a smooth, buildable sequence of Minecraft blocks.
+            Create copyable RGB text or turn colors into a smooth, buildable sequence of Minecraft blocks.
           </p>
         </div>
       </section>
@@ -45,13 +48,28 @@ export default function GradientGeneratorPage() {
           <Suspense
             fallback={<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />}
           >
-            <GradientGeneratorFromUrl />
+            <GradientModeSwitcher />
           </Suspense>
         </div>
       </section>
 
       <article className="seo-content gradient-content">
         <div className="content-container">
+          <section>
+            <p className="section-label">TWO GRADIENT MODES</p>
+            <h2>Text gradients and block gradients</h2>
+            <p>
+              Text Gradient assigns an RGB color to every character and exports MiniMessage,
+              a JSON-compatible Java tellraw component, and common plugin formats. Block Gradient preserves the original
+              tool: it matches a visual transition to real vanilla block textures and produces a
+              practical build order.
+            </p>
+            <p>
+              Vanilla legacy § formatting only provides 16 named colors, so it cannot express a true
+              RGB gradient. Use the <Link href="/minecraft-color-codes">Minecraft Color Codes</Link> reference
+              for legacy colors or the <Link href="/minecraft-text-generator">Minecraft Text Generator</Link> for whole-message formatting.
+            </p>
+          </section>
           <section>
             <p className="section-label">ABOUT THE TOOL</p>
             <h2>Plan smoother Minecraft block gradients</h2>

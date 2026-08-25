@@ -5,7 +5,7 @@ import { LegalPage } from "@/components/layout/legal-page";
 export const metadata: Metadata = {
   title: "About Minecraft Circle Gen",
   description:
-    "Learn why Minecraft Circle Gen was created and how its free block circle blueprints work.",
+    "Learn why Minecraft Circle Gen was created and how its free shape, art, text, banner, and house-planning tools work.",
   alternates: { canonical: "https://minecraftcirclegen.com/about" },
 };
 
@@ -13,24 +13,24 @@ export default function AboutPage() {
   return (
     <LegalPage
       eyebrow="ABOUT"
-      title="Built to make block circles easier"
-      description="Minecraft Circle Gen is a free, player-focused planning tool for turning a circle size into an exact blueprint you can actually build."
+      title="Built to make Minecraft planning easier"
+      description="Minecraft Circle Gen is a free, player-focused collection of shape, art, text, palette, banner, and house-planning tools."
     >
       <section>
         <h2>Why this tool exists</h2>
         <p>
           A smooth circle is easy to draw and surprisingly easy to miscount on
-          a block grid. This site provides a live block blueprint, relative
-          coordinate lookup, accurate material totals, and a downloadable
-          reference for building in game.
+          a block grid. The project began with an exact circle blueprint and now
+          also covers related shapes, block art, text, palettes, banners, and
+          buildable house plans.
         </p>
       </section>
       <section>
         <h2>Free and local</h2>
         <p>
-          The generator runs in your browser without an account. Your chosen
-          size and circle mode become a shareable link. The first version
-          focuses deliberately on fast, two-dimensional circle footprints.
+          The generators run in your browser without an account. Supported tools
+          keep uploads and processing in the browser, and many plans can be
+          downloaded or shared as a URL for later reference.
         </p>
       </section>
       <section>

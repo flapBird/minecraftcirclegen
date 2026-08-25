@@ -51,7 +51,7 @@ export default function MinecraftMapArtGeneratorPage() {
             <ol className="guide-steps">
               <li><strong>Upload an image.</strong><span>Square artwork fits one map most naturally, but other ratios can be cropped or contained.</span></li>
               <li><strong>Choose a layout.</strong><span>Use one 128×128 map or expand the design across two or four maps.</span></li>
-              <li><strong>Check the preview.</strong><span>Terracotta divider lines mark the edge of each individual map tile.</span></li>
+              <li><strong>Check the preview.</strong><span>Terracotta-colored divider lines mark the edge of each individual map tile.</span></li>
               <li><strong>Prepare materials.</strong><span>Copy the exact block counts and stack estimates.</span></li>
               <li><strong>Build and capture.</strong><span>Place the blueprint flat, create each map in the correct area, and lock the finished maps.</span></li>
             </ol>

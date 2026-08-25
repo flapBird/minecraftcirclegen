@@ -3,6 +3,10 @@ export type ToolKey =
   | "oval"
   | "sphere"
   | "dome"
+  | "shape"
+  | "banner"
+  | "text"
+  | "color-codes"
   | "gradient"
   | "pixel-art"
   | "map-art"
@@ -54,11 +58,18 @@ export const TOOL_PAGES: ToolPage[] = [
     description: "Plan hemisphere roofs with clear layers from the base to the peak.",
   },
   {
+    key: "shape",
+    href: "/minecraft-shape-generator",
+    navLabel: "Shape",
+    title: "Shape Generator",
+    description: "Create 2D shapes and layer-by-layer 3D building blueprints.",
+  },
+  {
     key: "gradient",
     href: "/minecraft-gradient-generator",
     navLabel: "Gradient",
     title: "Gradient Generator",
-    description: "Match colors to smooth, buildable vanilla block palettes.",
+    description: "Create RGB text and buildable vanilla block gradients.",
   },
   {
     key: "pixel-art",
@@ -81,7 +92,73 @@ export const TOOL_PAGES: ToolPage[] = [
     title: "Font Generator",
     description: "Turn words into readable pixel text and block-letter blueprints.",
   },
+  {
+    key: "banner",
+    href: "/minecraft-banner-maker",
+    navLabel: "Banner",
+    title: "Banner Maker",
+    description: "Design and share layered banners with loom steps and Java commands.",
+  },
+  {
+    key: "text",
+    href: "/minecraft-text-generator",
+    navLabel: "Text",
+    title: "Text Generator",
+    description: "Format chat, MOTD, MiniMessage, and safe tellraw text.",
+  },
+  {
+    key: "color-codes",
+    href: "/minecraft-color-codes",
+    navLabel: "Color Codes",
+    title: "Color Codes",
+    description: "Reference, preview, and copy Minecraft colors and formatting codes.",
+  },
 ];
+
+export type ToolCategoryKey = "build" | "art" | "text";
+
+export interface ToolCategory {
+  key: ToolCategoryKey;
+  title: string;
+  toolKeys: ToolKey[];
+}
+
+export const TOOL_CATEGORIES: ToolCategory[] = [
+  {
+    key: "build",
+    title: "Build & Shape Tools",
+    toolKeys: ["circle", "oval", "sphere", "dome", "shape"],
+  },
+  {
+    key: "art",
+    title: "Art & Design Tools",
+    toolKeys: ["pixel-art", "map-art", "font", "banner"],
+  },
+  {
+    key: "text",
+    title: "Text & Server Tools",
+    toolKeys: ["text", "gradient", "color-codes"],
+  },
+];
+
+export const RELATED_TOOLS: Record<ToolKey, ToolKey[]> = {
+  circle: ["shape", "oval", "sphere", "dome"],
+  oval: ["shape", "circle", "sphere", "dome"],
+  sphere: ["shape", "circle", "dome", "oval"],
+  dome: ["shape", "sphere", "circle", "oval"],
+  shape: ["circle", "oval", "sphere", "dome"],
+  banner: ["pixel-art", "color-codes", "font"],
+  text: ["color-codes", "gradient", "font"],
+  "color-codes": ["text", "gradient", "banner"],
+  gradient: ["color-codes", "text", "pixel-art"],
+  "pixel-art": ["map-art", "font", "banner", "gradient"],
+  "map-art": ["pixel-art", "gradient", "shape"],
+  font: ["text", "banner", "pixel-art", "color-codes"],
+};
+
+export function getToolsForCategory(category: ToolCategory) {
+  return category.toolKeys.map(getToolPage);
+}
 
 export const CONTENT_PAGES: ContentPage[] = [
   {

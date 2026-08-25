@@ -24,6 +24,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "minecraft-font-generator",
       "minecraft-pixel-art-generator",
       "minecraft-map-art-generator",
+      "minecraft-shape-generator",
+      "minecraft-banner-maker",
+      "minecraft-text-generator",
+      "minecraft-color-codes",
     ].map((path) => ({
       url: `${baseUrl}/${path}`,
       changeFrequency: "weekly" as const,

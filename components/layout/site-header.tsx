@@ -9,12 +9,16 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
 } from "react";
-import { CONTENT_PAGES, TOOL_PAGES, type ToolPage } from "@/lib/site/tools";
+import {
+  CONTENT_PAGES,
+  TOOL_CATEGORIES,
+  TOOL_PAGES,
+  getToolsForCategory,
+  type ToolPage,
+} from "@/lib/site/tools";
 
 const circleTool = TOOL_PAGES[0];
-const shapeTools = TOOL_PAGES.filter((tool) => ["oval", "sphere", "dome"].includes(tool.key));
-const creativeTools = TOOL_PAGES.filter((tool) => ["gradient", "pixel-art", "map-art", "font"].includes(tool.key));
-const groupedTools = [...shapeTools, ...creativeTools];
+const groupedTools = TOOL_PAGES.filter((tool) => tool.key !== "circle");
 const TOOLS_OPEN_DELAY_MS = 260;
 const TOOLS_CLOSE_DELAY_MS = 180;
 
@@ -134,8 +138,14 @@ export function SiteHeader() {
               Tools <span className="tools-chevron" aria-hidden="true" />
             </summary>
             <div className="desktop-tools-panel">
-              <ToolGroup title="Shape Tools" tools={shapeTools} onClick={openPage} />
-              <ToolGroup title="Creative Tools" tools={creativeTools} onClick={openPage} />
+              {TOOL_CATEGORIES.map((category) => (
+                <ToolGroup
+                  key={category.key}
+                  title={category.title}
+                  tools={getToolsForCategory(category).filter((tool) => tool.key !== "circle")}
+                  onClick={openPage}
+                />
+              ))}
             </div>
           </details>
           {CONTENT_PAGES.map((page) => {
@@ -166,8 +176,14 @@ export function SiteHeader() {
                 <span>Tools</span><i className="tools-chevron" aria-hidden="true" />
               </summary>
               <div>
-                <ToolGroup title="Shape Tools" tools={shapeTools} onClick={openPage} />
-                <ToolGroup title="Creative Tools" tools={creativeTools} onClick={openPage} />
+                {TOOL_CATEGORIES.map((category) => (
+                  <ToolGroup
+                    key={category.key}
+                    title={category.title}
+                    tools={getToolsForCategory(category).filter((tool) => tool.key !== "circle")}
+                    onClick={openPage}
+                  />
+                ))}
               </div>
             </details>
             {CONTENT_PAGES.map((page) => {

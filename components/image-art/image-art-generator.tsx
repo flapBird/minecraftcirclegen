@@ -145,16 +145,12 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
     }
   };
 
-  const title = mode === "map" ? "Map art preview" : "Pixel art preview";
   return (
     <div className="generator-shell creative-generator image-art-generator" id="generator">
       <div className="creative-workbench">
         <section className="creative-preview image-art-preview" aria-labelledby="image-art-preview-title">
           <div className="creative-preview-heading">
-            <div>
-              <p className="section-label">LOCAL IMAGE CONVERTER</p>
-              <h2 id="image-art-preview-title">{title}</h2>
-            </div>
+            <h2 id="image-art-preview-title" className="preview-heading">PREVIEW</h2>
             {result && <span>{result.width} × {result.height} blocks</span>}
           </div>
 

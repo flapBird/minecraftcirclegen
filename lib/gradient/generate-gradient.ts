@@ -16,11 +16,6 @@ interface LabColor {
   b: number;
 }
 
-interface BlockCandidate {
-  block: MinecraftBlockColor;
-  color: LabColor;
-}
-
 const HEX_PATTERN = /^#[0-9a-f]{6}$/i;
 
 export function normalizeHex(value: string, fallback = "#ffffff") {

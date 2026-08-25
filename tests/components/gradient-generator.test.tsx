@@ -23,7 +23,7 @@ describe("GradientGenerator", () => {
   it("updates the live block list from the draggable length control", () => {
     render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
 
-    expect(screen.getByRole("heading", { name: "Your gradient" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.queryByText("See the transition in context")).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Build plan" })).not.toBeInTheDocument();
     const ribbon = screen.getByLabelText(/Continuous gradient from/);
