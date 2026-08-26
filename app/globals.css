@@ -3500,7 +3500,7 @@ a {
 }
 
 .seo-content .content-container {
-  width: min(1240px, calc(100% - 64px));
+  width: min(1120px, calc(100% - 96px));
   border: 0;
   background: transparent;
   box-shadow: none;
@@ -3568,7 +3568,7 @@ a {
 
 .guide-steps li {
   display: grid;
-  grid-template-columns: 28px 170px 1fr;
+  grid-template-columns: 28px 240px 1fr;
   align-items: start;
   gap: 10px;
   border-bottom: 1px solid #e2ddd0;
@@ -4505,6 +4505,20 @@ a {
   line-height: 1.02;
 }
 
+.house-blueprints-page .house-hero h1 {
+  max-width: none;
+  font-size: clamp(2.35rem, 5vw, 4.45rem);
+  white-space: nowrap;
+}
+
+.house-blueprints-page .house-hero h1 + p {
+  max-width: 1100px;
+  margin: 26px 0 0;
+  color: #566158;
+  font-size: clamp(1rem, 1.6vw, 1.16rem);
+  line-height: 1.72;
+}
+
 .house-hero > .page-container > p:last-child,
 .house-hero-layout > div > p,
 .house-detail-copy > p {
@@ -4520,6 +4534,10 @@ a {
   grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
   align-items: center;
   gap: clamp(42px, 7vw, 90px);
+}
+
+.house-hub-hero .house-hero-layout {
+  align-items: start;
 }
 
 .house-hero-blueprint {
@@ -4628,6 +4646,30 @@ a {
 }
 
 .house-section-heading > p { font-size: 0.92rem; }
+
+.blueprint-group-heading {
+  display: block;
+  max-width: 820px;
+}
+
+.blueprint-group-heading > p {
+  margin-top: 10px;
+}
+
+.house-section-description {
+  max-width: 760px;
+  margin-top: 10px !important;
+}
+
+.house-designs-section-heading {
+  display: block;
+  max-width: 900px;
+}
+
+.house-designs-section-heading > p {
+  max-width: 820px;
+  margin-top: 10px;
+}
 
 .house-grid {
   display: grid;
@@ -4801,7 +4843,7 @@ a {
 
 .house-category-grid a {
   position: relative;
-  min-height: 190px;
+  min-height: 148px;
   border: 1px solid #d1cdbf;
   border-radius: 11px;
   background: #fffdf6;
@@ -4812,7 +4854,14 @@ a {
 
 .house-category-grid a:hover { border-color: #8fa58a; background: #f1f5ec; }
 
+.house-category-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
 .house-category-grid span {
+  flex: 0 0 auto;
   display: inline-flex;
   border-radius: 6px;
   background: #e4ede0;
@@ -4824,14 +4873,14 @@ a {
 }
 
 .house-category-grid h3 {
-  margin: 17px 0 6px;
+  margin: 0;
   color: #29332b;
   font-size: 1.05rem;
   letter-spacing: -0.025em;
 }
 
 .house-category-grid p {
-  margin: 0;
+  margin: 13px 0 0;
   color: #626c63;
   font-size: 0.76rem;
   line-height: 1.6;
@@ -5215,6 +5264,10 @@ a {
   .house-detail-hero .page-breadcrumb { margin-bottom: 26px; }
   .house-hero h1,
   .house-detail-hero h1 { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+  .house-blueprints-page .house-hero h1 {
+    font-size: clamp(2.2rem, 12vw, 3.5rem);
+    white-space: normal;
+  }
   .blueprint-detail-page .house-detail-hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); }
   .house-hero-layout,
   .house-detail-layout,

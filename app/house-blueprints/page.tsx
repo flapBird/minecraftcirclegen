@@ -22,15 +22,15 @@ const faqs: HouseFaq[] = [
 ];
 
 const groups = [
-  { id: "starter-blueprints", label: "STARTER BLUEPRINTS", title: "Starter house blueprints", copy: "Low-cost plans with simple footprints and early-game materials.", slugs: ["7x7-starter-house", "9x9-oak-house"] },
-  { id: "small-blueprints", label: "SMALL HOUSE BLUEPRINTS", title: "Small and cottage blueprints", copy: "Compact layouts that create usable rooms without a large building plot.", slugs: ["9x9-small-house", "9x11-cottage-house", "compact-two-story-house"] },
-  { id: "modern-blueprints", label: "MODERN HOUSE BLUEPRINTS", title: "Modern house blueprints", copy: "Concrete, glass, flat roofs, and clearer separation between structural frames and infill.", slugs: ["11x9-modern-house", "11x11-modern-house"] },
-  { id: "survival-blueprints", label: "SURVIVAL HOUSE BLUEPRINTS", title: "Survival house blueprints", copy: "Efficient bases that prioritize storage, safety, and future expansion.", slugs: ["7x9-small-survival-house"] },
+  { id: "starter-blueprints", title: "Starter house blueprints", copy: "Low-cost plans with simple footprints and early-game materials.", slugs: ["7x7-starter-house", "9x9-oak-house"] },
+  { id: "small-blueprints", title: "Small and cottage blueprints", copy: "Compact layouts that create usable rooms without a large building plot.", slugs: ["9x9-small-house", "9x11-cottage-house", "compact-two-story-house"] },
+  { id: "modern-blueprints", title: "Modern house blueprints", copy: "Concrete, glass, flat roofs, and clearer separation between structural frames and infill.", slugs: ["11x9-modern-house", "11x11-modern-house"] },
+  { id: "survival-blueprints", title: "Survival house blueprints", copy: "Efficient bases that prioritize storage, safety, and future expansion.", slugs: ["7x9-small-survival-house"] },
 ];
 
 export default function HouseBlueprintsPage() {
   return (
-    <main id="main-content" className="house-content-page">
+    <main id="main-content" className="house-content-page house-blueprints-page">
       <StructuredData data={schemaGraph([collectionSchema({ name: title, description, path }), breadcrumbSchema(breadcrumbs), faqSchema(faqs)])} />
       <section className="house-hero">
         <div className="page-container">
@@ -44,15 +44,14 @@ export default function HouseBlueprintsPage() {
       <div id="blueprint-gallery" className="page-container house-page-body">
         {groups.map((group) => (
           <section className="house-section" id={group.id} key={group.id}>
-            <div className="house-section-heading">
-              <div><p className="section-label">{group.label}</p><h2>{group.title}</h2></div>
+            <div className="house-section-heading blueprint-group-heading">
+              <h2>{group.title}</h2>
               <p>{group.copy}</p>
             </div>
             <HouseGrid blueprints={getHouseBlueprints(group.slugs)} />
           </section>
         ))}
         <section className="house-section house-reading-section">
-          <p className="section-label">FROM PLAN TO BLOCKS</p>
           <h2>How Minecraft house blueprints work</h2>
           <p>A blueprint is a sequence of horizontal slices. Layer 1 establishes the foundation and floor. The next layers mark the corner frame, walls, doors, and windows. Two-story plans include an upper deck with a stair opening; the last layers close the roof.</p>
           <ol className="house-numbered-steps">
@@ -63,13 +62,17 @@ export default function HouseBlueprintsPage() {
           </ol>
         </section>
         <section className="house-section house-reading-section">
-          <p className="section-label">READING THE GRID</p>
           <h2>How to read a house blueprint</h2>
           <p>Face the same direction for every layer: the front door appears along the bottom edge of the grid. The displayed width runs left to right, while length runs from the back wall at the top to the front wall at the bottom. Empty cells stay unoccupied.</p>
           <p>Use Previous and Next to compare adjoining layers. The active layer can be downloaded as a scalable SVG, which stays sharp on a phone, tablet, or printed reference sheet. Material totals include the illustrated shell and specified details; bring a small reserve for scaffolding and accidental placements.</p>
         </section>
-        <RelatedTools toolKeys={["circle", "oval", "dome", "gradient"]} title="Tools for custom foundations, roofs, and palettes" />
-        <HouseFaqList faqs={faqs} />
+        <RelatedTools
+          toolKeys={["circle", "oval", "dome", "gradient"]}
+          eyebrow={null}
+          title="Related Building Tools"
+          description="Tools for custom foundations, roofs, and palettes."
+        />
+        <HouseFaqList faqs={faqs} eyebrow={null} />
       </div>
     </main>
   );

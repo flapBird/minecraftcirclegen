@@ -62,10 +62,10 @@ export function HouseDesignDirectory({ currentPage }: { currentPage: HouseDesign
   );
 }
 
-export function HouseFaqList({ faqs }: { faqs: HouseFaq[] }) {
+export function HouseFaqList({ faqs, eyebrow = "COMMON QUESTIONS" }: { faqs: HouseFaq[]; eyebrow?: string | null }) {
   return (
     <section id="faq" className="house-section faq-section">
-      <p className="section-label">COMMON QUESTIONS</p>
+      {eyebrow && <p className="section-label">{eyebrow}</p>}
       <h2>Frequently asked questions</h2>
       <div className="faq-list">
         {faqs.map((faq) => (
@@ -79,15 +79,26 @@ export function HouseFaqList({ faqs }: { faqs: HouseFaq[] }) {
   );
 }
 
-export function RelatedTools({ toolKeys, title = "Tools for the next building step" }: { toolKeys: ToolKey[]; title?: string }) {
+export function RelatedTools({
+  toolKeys,
+  title = "Tools for the next building step",
+  description,
+  eyebrow = "RELATED BUILDING TOOLS",
+}: {
+  toolKeys: ToolKey[];
+  title?: string;
+  description?: string;
+  eyebrow?: string | null;
+}) {
   const tools = toolKeys.flatMap((key) => {
     const tool = TOOL_PAGES.find((item) => item.key === key);
     return tool ? [tool] : [];
   });
   return (
     <section className="house-section related-tools">
-      <p className="section-label">RELATED BUILDING TOOLS</p>
+      {eyebrow && <p className="section-label">{eyebrow}</p>}
       <h2>{title}</h2>
+      {description && <p className="house-section-description">{description}</p>}
       <div className="related-tools-grid">
         {tools.map((tool) => (
           <Link href={tool.href} key={tool.key}>

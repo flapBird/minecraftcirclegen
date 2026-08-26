@@ -33,7 +33,7 @@ const categories = [
 
 export default function HouseDesignsPage() {
   return (
-    <main id="main-content" className="house-content-page">
+    <main id="main-content" className="house-content-page house-designs-page">
       <StructuredData data={schemaGraph([
         collectionSchema({ name: title, description, path }),
         breadcrumbSchema(breadcrumbs),
@@ -67,22 +67,23 @@ export default function HouseDesignsPage() {
       </section>
       <div className="page-container house-page-body">
         <section className="house-section" aria-labelledby="house-categories-title">
-          <div className="house-section-heading">
-            <div><p className="section-label">CHOOSE A DIRECTION</p><h2 id="house-categories-title">House ideas by build type</h2></div>
-            <p>Start from play style or footprint, then compare exact designs inside each collection.</p>
+          <div className="house-section-heading house-designs-section-heading">
+            <h2 id="house-categories-title">Choose a Direction</h2>
+            <p>Explore house ideas by build type, starting with your play style or preferred footprint, then compare exact designs inside each collection.</p>
           </div>
           <div className="house-category-grid">
             {categories.map((category) => (
               <Link key={category.href} href={category.href}>
-                <span>{category.marker}</span><h3>{category.name}</h3><p>{category.copy}</p><i aria-hidden="true">→</i>
+                <div className="house-category-card-heading"><span>{category.marker}</span><h3>{category.name}</h3></div>
+                <p>{category.copy}</p><i aria-hidden="true">→</i>
               </Link>
             ))}
           </div>
         </section>
         <section id="featured-designs" className="house-section">
-          <div className="house-section-heading">
-            <div><p className="section-label">FEATURED HOUSE DESIGNS</p><h2>Compare complete, buildable houses</h2></div>
-            <p>These are distinct plans—not recolored copies. Open a card for its full material table, construction order, and layer controls.</p>
+          <div className="house-section-heading house-designs-section-heading">
+            <h2>Featured House Designs</h2>
+            <p>Compare complete, buildable houses with distinct plans—not recolored copies. Open any design for its full material table, construction order, and layer controls.</p>
           </div>
           <HouseGrid blueprints={HOUSE_BLUEPRINTS} />
         </section>
@@ -95,7 +96,6 @@ export default function HouseDesignsPage() {
           <Link href="/house-blueprints">Browse Minecraft house blueprints <span aria-hidden="true">→</span></Link>
         </section>
         <section className="house-section house-reading-section">
-          <p className="section-label">DESIGN DECISIONS</p>
           <h2>How to choose a Minecraft house design</h2>
           <p>Choose from the inside out. List the blocks you need—bed, storage, furnaces, crafting, enchanting, brewing—then select a footprint that leaves a clear route between them. A 7×7 outside wall creates a 5×5 interior; a 9×9 wall creates a 7×7 interior, which is almost twice the usable floor area.</p>
           <p>Next, match the shell to the place. A narrow 7×9 house fits a slope or riverbank, a broad 11×9 facade supports modern windows, and a taller compact house suits crowded villages. Use local materials first, then refine the palette with trim, stairs, slabs, and lighting.</p>
@@ -106,8 +106,13 @@ export default function HouseDesignsPage() {
             <article><h3>Leave a next step</h3><p>Reserve one side for a workshop, farm connection, tower, or storage wing instead of enclosing every edge.</p></article>
           </div>
         </section>
-        <RelatedTools toolKeys={["circle", "oval", "dome", "gradient"]} title="Shape and palette tools for house builds" />
-        <HouseFaqList faqs={HOUSE_DESIGNS_FAQS} />
+        <RelatedTools
+          toolKeys={["circle", "oval", "dome", "gradient"]}
+          eyebrow={null}
+          title="Related Building Tools"
+          description="Shape and palette tools for house builds."
+        />
+        <HouseFaqList faqs={HOUSE_DESIGNS_FAQS} eyebrow={null} />
       </div>
     </main>
   );
