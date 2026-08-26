@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   getLayerCount,
   maxSizeForShape,
@@ -25,21 +25,105 @@ interface DimensionControlProps {
 }
 
 function DimensionControl({ id, label, value, max, onChange }: DimensionControlProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const stepperRef = useRef<HTMLDivElement>(null);
+  const [draftState, setDraftState] = useState({ value, draft: String(value) });
+  const draft = draftState.value === value ? draftState.draft : String(value);
   const progress = ((value - MIN_GEOMETRY_SIZE) / (max - MIN_GEOMETRY_SIZE)) * 100;
+
+  const adjustValue = useCallback((direction: 1 | -1) => {
+    const parsed = Number(draft);
+    const current = Number.isFinite(parsed) ? Math.round(parsed) : value;
+    const next = Math.max(
+      MIN_GEOMETRY_SIZE,
+      Math.min(max, current + direction),
+    );
+    setDraftState({ value, draft: String(next) });
+    if (next !== current) onChange(next);
+  }, [draft, max, onChange, value]);
+
+  useEffect(() => {
+    const stepper = stepperRef.current;
+    const input = inputRef.current;
+    if (!stepper || !input) return;
+    const handleWheel = (event: WheelEvent) => {
+      if (event.deltaY === 0) return;
+      event.preventDefault();
+      input.focus({ preventScroll: true });
+      adjustValue(event.deltaY < 0 ? 1 : -1);
+    };
+    stepper.addEventListener("wheel", handleWheel, { passive: false });
+    return () => stepper.removeEventListener("wheel", handleWheel);
+  }, [adjustValue]);
+
+  const commitDraft = () => {
+    const parsed = Number(draft);
+    const next = Number.isFinite(parsed)
+      ? Math.max(MIN_GEOMETRY_SIZE, Math.min(max, Math.round(parsed)))
+      : value;
+    setDraftState({ value: next, draft: String(next) });
+    if (next !== value) onChange(next);
+  };
+
   return (
     <div className="simple-range-setting">
       <div className="setting-heading">
         <label htmlFor={id}>{label}</label>
-        <input
-          id={id}
-          className="setting-number-input"
-          type="number"
-          inputMode="numeric"
-          min={MIN_GEOMETRY_SIZE}
-          max={max}
-          value={value}
-          onChange={(event) => onChange(Number(event.target.value))}
-        />
+        <div ref={stepperRef} className="setting-number-stepper">
+          <input
+            ref={inputRef}
+            id={id}
+            className="setting-number-input"
+            type="number"
+            inputMode="numeric"
+            min={MIN_GEOMETRY_SIZE}
+            max={max}
+            value={draft}
+            onChange={(event) => {
+              const nextDraft = event.target.value;
+              setDraftState({ value, draft: nextDraft });
+              if (nextDraft.trim() === "") return;
+              const parsed = Number(nextDraft);
+              if (
+                Number.isFinite(parsed)
+                && parsed >= MIN_GEOMETRY_SIZE
+                && parsed <= max
+              ) {
+                onChange(Math.round(parsed));
+              }
+            }}
+            onBlur={commitDraft}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") event.currentTarget.blur();
+            }}
+          />
+          <span className="setting-number-stepper-buttons">
+            <button
+              type="button"
+              aria-label={`Increase ${label}`}
+              disabled={value >= max}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => {
+                inputRef.current?.focus({ preventScroll: true });
+                adjustValue(1);
+              }}
+            >
+              <span aria-hidden="true">▲</span>
+            </button>
+            <button
+              type="button"
+              aria-label={`Decrease ${label}`}
+              disabled={value <= MIN_GEOMETRY_SIZE}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => {
+                inputRef.current?.focus({ preventScroll: true });
+                adjustValue(-1);
+              }}
+            >
+              <span aria-hidden="true">▼</span>
+            </button>
+          </span>
+        </div>
       </div>
       <input
         className="range-control simple-range"

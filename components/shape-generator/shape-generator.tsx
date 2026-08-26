@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   SHAPE_LABELS,
   THREE_D_SHAPES,
@@ -29,12 +29,18 @@ export function ShapeGenerator() {
   const [showCoordinates, setShowCoordinates] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
+  const [autoRotate, setAutoRotate] = useState(false);
   const [toast, setToast] = useState("");
   const timer = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const previewRef = useRef<HTMLElement>(null);
+  const [fullscreenAvailable, setFullscreenAvailable] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const normalized = useMemo(() => normalizeShapeOptions(options), [options]);
-  const layers = useMemo(() => generateShapeLayers(normalized), [normalized]);
-  const blueprint = layers[Math.max(0, normalized.layer - 1)] ?? layers[0];
+  const previewOptions = useDeferredValue(normalized);
+  const previewZoom = useDeferredValue(zoom);
+  const layers = useMemo(() => generateShapeLayers(previewOptions), [previewOptions]);
+  const blueprint = layers[Math.max(0, previewOptions.layer - 1)] ?? layers[0];
   const is3d = THREE_D_SHAPES.includes(normalized.shape);
   const hasHeight = ["ellipse", "triangle", "rectangle", "star", "cylinder", "cone", "pyramid"].includes(normalized.shape);
   const supportsThickness = !["sphere", "dome"].includes(normalized.shape);
@@ -45,6 +51,19 @@ export function ShapeGenerator() {
     timer.current = window.setTimeout(() => setToast(""), 2600);
   }, []);
   useEffect(() => () => { if (timer.current !== null) window.clearTimeout(timer.current); }, []);
+
+  useEffect(() => {
+    const updateFullscreen = () => {
+      setFullscreenAvailable(Boolean(document.fullscreenEnabled));
+      setIsFullscreen(document.fullscreenElement === previewRef.current);
+    };
+    const timer = window.setTimeout(updateFullscreen, 0);
+    document.addEventListener("fullscreenchange", updateFullscreen);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("fullscreenchange", updateFullscreen);
+    };
+  }, []);
 
   const update = (partial: Partial<ShapeOptions>) => setOptions((current) => normalizeShapeOptions({ ...current, ...partial }));
 
@@ -68,24 +87,39 @@ export function ShapeGenerator() {
     }, "image/png");
   };
 
+  const toggleFullscreen = async () => {
+    const preview = previewRef.current;
+    if (!preview || !document.fullscreenEnabled) return;
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await preview.requestFullscreen();
+    } catch {
+      setFullscreenAvailable(false);
+      showStatus("Fullscreen is unavailable in this browser");
+    }
+  };
+
   return (
     <div className="generator-shell universal-shape-generator" id="generator">
       <div className="shape-workbench">
-        <section className="shape-preview-card" aria-labelledby="shape-preview-title">
-          <div className="server-card-heading"><h2 id="shape-preview-title" className="preview-heading">PREVIEW</h2><span>{is3d ? `${blueprint.totalBlocks.toLocaleString()} blocks` : `${blueprint.width} × ${blueprint.height} grid`}</span></div>
+        <section ref={previewRef} className="shape-preview-card" aria-label="Shape preview">
           <div className="shape-view-toolbar">
-            <div role="tablist" aria-label="Shape preview mode">
-              <button type="button" role="tab" aria-selected={is3d && viewMode === "3d"} disabled={!is3d} onClick={() => setViewMode("3d")}>3D</button>
-              <button type="button" role="tab" aria-selected={!is3d || viewMode === "2d"} onClick={() => setViewMode("2d")}>2D Layers</button>
+            <p className="shape-view-tip">{is3d && viewMode === "3d" ? `Drag to rotate · Scroll to zoom · Layer ${blueprint.layer} highlighted` : "Point at the grid to inspect relative coordinates"}</p>
+            <div className="shape-toolbar-controls" role="group" aria-label="Shape preview controls">
+              <div className="shape-view-tabs" role="tablist" aria-label="Shape preview mode">
+                <button type="button" role="tab" aria-selected={is3d && viewMode === "3d"} disabled={!is3d} onClick={() => setViewMode("3d")}>3D</button>
+                <button type="button" role="tab" aria-selected={!is3d || viewMode === "2d"} onClick={() => { setViewMode("2d"); setAutoRotate(false); }}>2D Layers</button>
+              </div>
+              <button type="button" className="shape-auto-rotate" aria-pressed={autoRotate} disabled={!is3d || viewMode !== "3d"} onClick={() => setAutoRotate((current) => !current)}><span aria-hidden="true">{autoRotate ? "Ⅱ" : "▶"}</span>{autoRotate ? "Pause" : "Auto rotate"}</button>
+              <div className="shape-zoom-controls"><button type="button" aria-label="Zoom out" onClick={() => setZoom((current) => Math.max(.5, current - .1))}>−</button><span>{Math.round(zoom * 100)}%</span><button type="button" aria-label="Zoom in" onClick={() => setZoom((current) => Math.min(2.5, current + .1))}>+</button><button type="button" onClick={() => setZoom(1)}>Fit</button><button type="button" className="shape-fullscreen-button" aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} aria-pressed={isFullscreen} disabled={!fullscreenAvailable} title={fullscreenAvailable ? (isFullscreen ? "Exit fullscreen" : "Enter fullscreen") : "Fullscreen is unavailable in this browser"} onClick={toggleFullscreen}><span aria-hidden="true">⛶</span></button></div>
             </div>
-            <div><button type="button" aria-label="Zoom out" onClick={() => setZoom((current) => Math.max(.5, current - .1))}>−</button><span>{Math.round(zoom * 100)}%</span><button type="button" aria-label="Zoom in" onClick={() => setZoom((current) => Math.min(2.5, current + .1))}>+</button><button type="button" onClick={() => setZoom(1)}>Fit</button></div>
           </div>
-          <ShapeCanvas blueprint={blueprint} layers={layers} mode={is3d ? viewMode : "2d"} showGrid={showGrid} showCoordinates={showCoordinates} zoom={zoom} onZoomChange={setZoom} canvasRef={canvasRef} />
+          <ShapeCanvas blueprint={blueprint} layers={layers} mode={is3d ? viewMode : "2d"} showGrid={showGrid} showCoordinates={showCoordinates} zoom={previewZoom} autoRotate={autoRotate} onZoomChange={setZoom} canvasRef={canvasRef} />
         </section>
 
         <aside className="shape-settings-card" aria-labelledby="shape-settings-title">
           <p className="section-label">SHAPE SETTINGS</p><h2 id="shape-settings-title">Configure the blueprint</h2>
-          <label className="shape-select"><span>Shape type</span><select value={normalized.shape} onChange={(event) => { const shape = event.target.value as UniversalShape; update({ shape, layer: 1 }); setViewMode(THREE_D_SHAPES.includes(shape) ? "3d" : "2d"); }}><optgroup label="2D Shapes">{TWO_D.map((shape) => <option key={shape} value={shape}>{SHAPE_LABELS[shape]}</option>)}</optgroup><optgroup label="3D / Building Shapes">{THREE_D.map((shape) => <option key={shape} value={shape}>{SHAPE_LABELS[shape]}</option>)}</optgroup></select></label>
+          <label className="shape-select"><span>Shape type</span><select value={normalized.shape} onChange={(event) => { const shape = event.target.value as UniversalShape; const nextIs3d = THREE_D_SHAPES.includes(shape); update({ shape, layer: 1 }); setViewMode(nextIs3d ? "3d" : "2d"); if (!nextIs3d) setAutoRotate(false); }}><optgroup label="2D Shapes">{TWO_D.map((shape) => <option key={shape} value={shape}>{SHAPE_LABELS[shape]}</option>)}</optgroup><optgroup label="3D / Building Shapes">{THREE_D.map((shape) => <option key={shape} value={shape}>{SHAPE_LABELS[shape]}</option>)}</optgroup></select></label>
           <div className="shape-control-stack">
             <NumberControl label={normalized.shape === "circle" || ["sphere", "dome", "cylinder", "cone"].includes(normalized.shape) ? "Diameter" : "Width"} value={normalized.width} max={is3d ? 128 : 256} onChange={(width) => update({ width, layer: 1 })} />
             {hasHeight && <NumberControl label={is3d ? "Build height" : "Height"} value={normalized.height} max={is3d ? 128 : 256} onChange={(height) => update({ height, layer: 1 })} />}

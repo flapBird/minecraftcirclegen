@@ -398,7 +398,7 @@ export default function Home() {
                 </p>
                 <div className="home-resource-links">
                   <Link href="/house-designs">Explore house designs →</Link>
-                  <Link href="/house-blueprints">Open house blueprints</Link>
+                  <Link href="/house-blueprints">Open house blueprints →</Link>
                 </div>
               </div>
               <div

@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useDeferredValue,
   useEffect,
   useMemo,
   useRef,
@@ -389,7 +390,8 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
   const [options, setOptions] = useState(() => normalizeGradientOptions(initialOptions));
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
-  const steps = useMemo(() => generateBlockGradient(options), [options]);
+  const previewOptions = useDeferredValue(options);
+  const steps = useMemo(() => generateBlockGradient(previewOptions), [previewOptions]);
   const palette = PALETTES.find((item) => item.value === options.palette) ?? PALETTES[0];
   const endpointMode = options.endpointMode ?? "color";
   const ribbonStart = endpointMode === "block" ? steps[0].block.hex : options.startColor;

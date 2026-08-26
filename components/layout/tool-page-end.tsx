@@ -67,28 +67,21 @@ export function ToolDirectory({ toolKey }: { toolKey: ToolKey }) {
 }
 
 export function HomeToolDirectory() {
+  const tools = TOOL_CATEGORIES.flatMap(getToolsForCategory);
+
   return (
     <section className="home-tool-directory" aria-labelledby="home-tool-directory-title">
       <div className="page-container">
-        <p className="section-label">TOOL COLLECTION</p>
         <h2 id="home-tool-directory-title">Explore Minecraft Tools</h2>
         <p className="home-tool-directory-intro">
           Move from a single footprint to complete shape, artwork, banner, and server-text workflows.
         </p>
-        <div className="home-tool-categories">
-          {TOOL_CATEGORIES.map((category) => (
-            <section key={category.key}>
-              <h3>{category.title}</h3>
-              <div className="home-tool-card-grid">
-                {getToolsForCategory(category).map((tool) => (
-                  <Link key={tool.key} href={tool.href}>
-                    <strong>{tool.title}</strong>
-                    <span>{tool.description}</span>
-                    <i aria-hidden="true">Open tool →</i>
-                  </Link>
-                ))}
-              </div>
-            </section>
+        <div className="home-tool-card-grid">
+          {tools.map((tool) => (
+            <Link key={tool.key} href={tool.href}>
+              <strong>{tool.title}</strong>
+              <span>{tool.description}</span>
+            </Link>
           ))}
         </div>
       </div>

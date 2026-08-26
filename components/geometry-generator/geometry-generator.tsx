@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { downloadGeometryPng } from "@/lib/geometry/export-geometry-png";
 import { generateGeometry, getLayerCount, normalizeSize } from "@/lib/geometry/generate-geometry";
 import { serializeGeometryUrl } from "@/lib/geometry/geometry-url-state";
@@ -24,7 +24,12 @@ export function GeometryGenerator({
   const [zoom, setZoom] = useState(1);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
-  const result = useMemo(() => generateGeometry(shape, options), [options, shape]);
+  const previewOptions = useDeferredValue(options);
+  const previewZoom = useDeferredValue(zoom);
+  const result = useMemo(
+    () => generateGeometry(shape, previewOptions),
+    [previewOptions, shape],
+  );
 
   const showStatus = useCallback((message: string) => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
@@ -37,11 +42,14 @@ export function GeometryGenerator({
   }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    ["diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => params.delete(key));
-    serializeGeometryUrl(shape, options).forEach((value, key) => params.set(key, value));
-    const query = params.toString();
-    window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      ["diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => params.delete(key));
+      serializeGeometryUrl(shape, options).forEach((value, key) => params.set(key, value));
+      const query = params.toString();
+      window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
+    }, 120);
+    return () => window.clearTimeout(timer);
   }, [options, shape]);
 
   const updateOptions = (updates: Partial<GeometryOptions>) => {
@@ -82,7 +90,7 @@ export function GeometryGenerator({
         <section className="tool-card canvas-card" aria-labelledby="blueprint-title">
           <h2 id="blueprint-title" className="sr-only">{result.label} blueprint</h2>
           <div className="blueprint-workbench">
-            <GeometryCanvas result={result} showGrid={showGrid} zoom={zoom} />
+            <GeometryCanvas result={result} showGrid={showGrid} zoom={previewZoom} />
             <aside className="workbench-settings" aria-label="Shape settings panel">
               <GeometryControls
                 shape={shape}

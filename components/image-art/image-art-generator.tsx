@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent } from "react";
 import { convertRasterToBlocks, resizeRasterImage } from "@/lib/image-art/convert-image-art";
 import { downloadImageArtPng, drawImageArt } from "@/lib/image-art/export-image-art-png";
 import type { ImageArtMode, ImageArtResult, ImageFit, RasterImage } from "@/lib/image-art/image-art-types";
@@ -29,6 +29,7 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const toastTimer = useRef<number | null>(null);
+  const previewPixelSize = useDeferredValue(pixelSize);
 
   const showStatus = useCallback((message: string) => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
@@ -44,13 +45,13 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
     if (mode === "map") {
       return MAP_SIZES.find((size) => size.value === mapSize) ?? MAP_SIZES[0];
     }
-    if (!source) return { width: pixelSize, height: pixelSize };
-    const scale = pixelSize / Math.max(source.width, source.height);
+    if (!source) return { width: previewPixelSize, height: previewPixelSize };
+    const scale = previewPixelSize / Math.max(source.width, source.height);
     return {
       width: Math.max(1, Math.round(source.width * scale)),
       height: Math.max(1, Math.round(source.height * scale)),
     };
-  }, [mapSize, mode, pixelSize, source]);
+  }, [mapSize, mode, previewPixelSize, source]);
 
   const result = useMemo<ImageArtResult | null>(() => {
     if (!source) return null;

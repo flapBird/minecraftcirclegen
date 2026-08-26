@@ -38,6 +38,71 @@ describe("GeometryControls", () => {
     expect(onChange).toHaveBeenCalledWith({ height: 17 });
   });
 
+  it("lets users clear and replace a dimension before validating it", () => {
+    const onChange = vi.fn();
+    render(
+      <GeometryControls
+        shape="circle"
+        options={options}
+        showGrid
+        zoom={1}
+        onChange={onChange}
+        onShowGridChange={vi.fn()}
+        onZoomChange={vi.fn()}
+        onDownload={vi.fn()}
+        onCopyLink={vi.fn()}
+        currentBlocks={44}
+        totalBlocks={44}
+        blueprintWidth={21}
+        blueprintHeight={21}
+        layerCount={1}
+      />,
+    );
+
+    const input = screen.getByRole("spinbutton", { name: "Diameter" });
+    fireEvent.change(input, { target: { value: "" } });
+    expect(input).toHaveValue(null);
+    expect(onChange).not.toHaveBeenCalled();
+
+    fireEvent.change(input, { target: { value: "31" } });
+    expect(input).toHaveValue(31);
+    expect(onChange).toHaveBeenCalledWith({ diameter: 31, layer: 1 });
+  });
+
+  it("keeps wheel stepping inside the control even when focus was lost", () => {
+    const onChange = vi.fn();
+    render(
+      <GeometryControls
+        shape="circle"
+        options={options}
+        showGrid
+        zoom={1}
+        onChange={onChange}
+        onShowGridChange={vi.fn()}
+        onZoomChange={vi.fn()}
+        onDownload={vi.fn()}
+        onCopyLink={vi.fn()}
+        currentBlocks={44}
+        totalBlocks={44}
+        blueprintWidth={21}
+        blueprintHeight={21}
+        layerCount={1}
+      />,
+    );
+
+    const input = screen.getByRole("spinbutton", { name: "Diameter" });
+    const notCancelled = fireEvent.wheel(input, { deltaY: -10 });
+
+    expect(notCancelled).toBe(false);
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue(22);
+    expect(onChange).toHaveBeenCalledWith({ diameter: 22, layer: 1 });
+
+    fireEvent.click(screen.getByRole("button", { name: "Decrease Diameter" }));
+    expect(input).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith({ diameter: 21, layer: 1 });
+  });
+
   it("shows the simplified sphere controls and shape switcher", () => {
     const onChange = vi.fn();
     render(

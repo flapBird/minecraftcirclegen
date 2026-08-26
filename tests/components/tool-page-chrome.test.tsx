@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { ToolPageEnd } from "@/components/layout/tool-page-end";
+import { HomeToolDirectory, ToolPageEnd } from "@/components/layout/tool-page-end";
 import { TOOL_FAQS } from "@/lib/site/tool-faqs";
 import { RELATED_TOOLS, TOOL_CATEGORIES, getToolPage } from "@/lib/site/tools";
 
@@ -50,5 +50,13 @@ describe("shared tool page navigation", () => {
       "Privacy Policy",
       "Terms of Use",
     ]);
+  });
+
+  it("uses the whole home tool card as the link without repeated action copy", () => {
+    render(<HomeToolDirectory />);
+
+    expect(screen.getByRole("heading", { name: "Explore Minecraft Tools" })).toBeInTheDocument();
+    expect(screen.queryByText(/Open tool/i)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Circle Generator/ })).toHaveAttribute("href", "/");
   });
 });

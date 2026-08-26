@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import type { ShapeBlueprint } from "@/lib/shape/generate-shape";
 
 type ViewMode = "2d" | "3d";
@@ -22,6 +22,7 @@ export function ShapeCanvas({
   showGrid,
   showCoordinates,
   zoom,
+  autoRotate,
   onZoomChange,
   canvasRef,
 }: {
@@ -31,7 +32,8 @@ export function ShapeCanvas({
   showGrid: boolean;
   showCoordinates: boolean;
   zoom: number;
-  onZoomChange: (zoom: number) => void;
+  autoRotate: boolean;
+  onZoomChange: Dispatch<SetStateAction<number>>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
   const shellRef = useRef<HTMLDivElement>(null);
@@ -71,6 +73,34 @@ export function ShapeCanvas({
     observer.observe(shell);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell || mode !== "3d") return;
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      onZoomChange((current) => Math.max(.5, Math.min(2.5, current + (event.deltaY < 0 ? .1 : -.1))));
+    };
+    shell.addEventListener("wheel", handleWheel, { passive: false });
+    return () => shell.removeEventListener("wheel", handleWheel);
+  }, [mode, onZoomChange]);
+
+  useEffect(() => {
+    if (!autoRotate || mode !== "3d") return;
+    let frame = 0;
+    let previous: number | null = null;
+    const animate = (timestamp: number) => {
+      if (previous === null) previous = timestamp;
+      const elapsed = timestamp - previous;
+      if (elapsed >= 40) {
+        previous = timestamp;
+        setRotation((current) => ({ ...current, yaw: current.yaw + Math.min(elapsed, 80) * .00032 }));
+      }
+      frame = window.requestAnimationFrame(animate);
+    };
+    frame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(frame);
+  }, [autoRotate, mode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -137,9 +167,6 @@ export function ShapeCanvas({
         context.fill();
         if (scale >= 4) { context.strokeStyle = "rgba(32,47,35,.28)"; context.lineWidth = Math.min(1.1, scale * .08); context.stroke(); }
       });
-      context.fillStyle = "#526157";
-      context.font = "600 12px system-ui";
-      context.fillText(`Drag to rotate · Scroll to zoom · Layer ${blueprint.layer} highlighted`, 16, size.height - 17);
       return;
     }
 
@@ -209,9 +236,9 @@ export function ShapeCanvas({
           onPointerUp={(event) => { dragRef.current = null; if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
           onPointerCancel={() => { dragRef.current = null; }}
           onPointerLeave={() => { if (mode === "2d") setHover(null); }}
-          onWheel={(event) => { if (mode === "3d") { event.preventDefault(); onZoomChange(Math.max(.5, Math.min(2.5, zoom + (event.deltaY < 0 ? .1 : -.1)))); } }}
           onKeyDown={(event) => { if (mode === "3d" && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) { event.preventDefault(); setRotation((current) => ({ yaw: current.yaw + (event.key === "ArrowLeft" ? -.12 : event.key === "ArrowRight" ? .12 : 0), pitch: Math.max(-1.15, Math.min(.15, current.pitch + (event.key === "ArrowUp" ? -.08 : event.key === "ArrowDown" ? .08 : 0))) })); } }}
         />
+        <span className="shape-canvas-stat" data-testid="shape-canvas-stat">{(blueprint.is3d ? blueprint.totalBlocks : blueprint.currentBlocks).toLocaleString()} blocks</span>
       </div>
       {mode === "2d" && <p className="shape-coordinate-readout" aria-live="polite">{hover ? `X ${hover.x} · Y ${blueprint.is3d ? blueprint.layer - 1 : 0} · Z ${hover.z} · ${hover.filled ? "Block" : "Empty"}` : "Point at the grid to inspect relative coordinates"}</p>}
     </div>
