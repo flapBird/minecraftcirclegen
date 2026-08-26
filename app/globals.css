@@ -3500,7 +3500,7 @@ a {
 }
 
 .seo-content .content-container {
-  width: min(1040px, calc(100% - 40px));
+  width: min(1240px, calc(100% - 64px));
   border: 0;
   background: transparent;
   box-shadow: none;
@@ -3547,6 +3547,14 @@ a {
   color: #4f584f;
   font-size: 1rem;
   line-height: 1.82;
+}
+
+.seo-content section > p:not(.section-label) {
+  margin-block: 0;
+}
+
+.seo-content section > p:not(.section-label) + p:not(.section-label) {
+  margin-top: 18px;
 }
 
 .guide-steps {
@@ -3824,10 +3832,9 @@ a {
   margin: 0 0 14px;
   color: white;
   font-family: inherit;
-  font-size: 0.94rem;
-  font-weight: 850;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+  font-size: 1.05rem;
+  font-weight: 780;
+  letter-spacing: -0.025em;
 }
 
 .footer-column nav {
@@ -4158,6 +4165,7 @@ a {
   }
 
   .seo-content .content-container {
+    width: min(100% - 24px, 680px);
     padding: 0;
   }
 
