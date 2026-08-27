@@ -75,4 +75,22 @@ describe("ShapeGenerator preview", () => {
     fireEvent.click(fullscreen);
     expect(requestFullscreen).toHaveBeenCalledOnce();
   });
+
+  it("uses an in-page fullscreen fallback when the mobile browser lacks the API", async () => {
+    Object.defineProperty(document, "fullscreenEnabled", { configurable: true, value: false });
+    render(<ShapeGenerator />);
+
+    const fullscreen = screen.getByRole("button", { name: "Enter fullscreen" });
+    expect(fullscreen).toBeEnabled();
+    fireEvent.click(fullscreen);
+
+    const preview = screen.getByRole("region", { name: "Shape preview" });
+    expect(preview).toHaveClass("is-fallback-fullscreen");
+    expect(screen.getByRole("button", { name: "Exit fullscreen" })).toHaveAttribute("aria-pressed", "true");
+    expect(document.body).toHaveStyle({ overflow: "hidden" });
+
+    fireEvent.click(screen.getByRole("button", { name: "Exit fullscreen" }));
+    expect(preview).not.toHaveClass("is-fallback-fullscreen");
+    expect(document.body).not.toHaveStyle({ overflow: "hidden" });
+  });
 });

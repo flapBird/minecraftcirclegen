@@ -82,8 +82,8 @@ export function ShapeGenerator() {
   const timer = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const previewRef = useRef<HTMLElement>(null);
-  const [fullscreenAvailable, setFullscreenAvailable] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [nativeFullscreenActive, setNativeFullscreenActive] = useState(false);
+  const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
   const normalized = useMemo(() => normalizeShapeOptions(options), [options]);
   const previewOptions = useDeferredValue(normalized);
   const previewZoom = useDeferredValue(zoom);
@@ -92,6 +92,7 @@ export function ShapeGenerator() {
   const is3d = THREE_D_SHAPES.includes(normalized.shape);
   const hasHeight = ["ellipse", "triangle", "rectangle", "star", "cylinder", "cone", "pyramid"].includes(normalized.shape);
   const supportsThickness = !["sphere", "dome"].includes(normalized.shape);
+  const isFullscreen = nativeFullscreenActive || fallbackFullscreen;
 
   const showStatus = useCallback((message: string) => {
     if (timer.current !== null) window.clearTimeout(timer.current);
@@ -102,8 +103,7 @@ export function ShapeGenerator() {
 
   useEffect(() => {
     const updateFullscreen = () => {
-      setFullscreenAvailable(Boolean(document.fullscreenEnabled));
-      setIsFullscreen(document.fullscreenElement === previewRef.current);
+      setNativeFullscreenActive(document.fullscreenElement === previewRef.current);
     };
     const timer = window.setTimeout(updateFullscreen, 0);
     document.addEventListener("fullscreenchange", updateFullscreen);
@@ -112,6 +112,23 @@ export function ShapeGenerator() {
       document.removeEventListener("fullscreenchange", updateFullscreen);
     };
   }, []);
+
+  useEffect(() => {
+    if (!fallbackFullscreen) return;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
+    const exitOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFallbackFullscreen(false);
+    };
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.addEventListener("keydown", exitOnEscape);
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
+      document.removeEventListener("keydown", exitOnEscape);
+    };
+  }, [fallbackFullscreen]);
 
   const update = (partial: Partial<ShapeOptions>) => setOptions((current) => normalizeShapeOptions({ ...current, ...partial }));
 
@@ -137,20 +154,30 @@ export function ShapeGenerator() {
 
   const toggleFullscreen = async () => {
     const preview = previewRef.current;
-    if (!preview || !document.fullscreenEnabled) return;
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await preview.requestFullscreen();
-    } catch {
-      setFullscreenAvailable(false);
-      showStatus("Fullscreen is unavailable in this browser");
+    if (!preview) return;
+    if (fallbackFullscreen) {
+      setFallbackFullscreen(false);
+      return;
     }
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      return;
+    }
+    if (document.fullscreenEnabled && typeof preview.requestFullscreen === "function") {
+      try {
+        await preview.requestFullscreen();
+        return;
+      } catch {
+        // Some mobile browsers expose the API but reject non-video elements.
+      }
+    }
+    setFallbackFullscreen(true);
   };
 
   return (
     <div className="generator-shell universal-shape-generator" id="generator">
       <div className="shape-workbench">
-        <section ref={previewRef} className="shape-preview-card" aria-label="Shape preview">
+        <section ref={previewRef} className={`shape-preview-card${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`} aria-label="Shape preview">
           <div className="shape-view-toolbar">
             <p className="shape-view-tip">{is3d && viewMode === "3d" ? `Drag to rotate · Scroll to zoom · Layer ${blueprint.layer} highlighted` : "Point at the grid to inspect relative coordinates"}</p>
             <div className="shape-toolbar-controls" role="group" aria-label="Shape preview controls">
@@ -159,7 +186,7 @@ export function ShapeGenerator() {
                 <button type="button" role="tab" aria-selected={!is3d || viewMode === "2d"} onClick={() => { setViewMode("2d"); setAutoRotate(false); }}>2D Layers</button>
               </div>
               <button type="button" className="shape-auto-rotate" aria-pressed={autoRotate} disabled={!is3d || viewMode !== "3d"} onClick={() => setAutoRotate((current) => !current)}><span aria-hidden="true">{autoRotate ? "Ⅱ" : "▶"}</span>{autoRotate ? "Pause" : "Auto rotate"}</button>
-              <div className="shape-zoom-controls"><button type="button" aria-label="Zoom out" onClick={() => setZoom((current) => Math.max(.5, current - .1))}>−</button><span>{Math.round(zoom * 100)}%</span><button type="button" aria-label="Zoom in" onClick={() => setZoom((current) => Math.min(2.5, current + .1))}>+</button><button type="button" onClick={() => setZoom(1)}>Fit</button><button type="button" className="shape-fullscreen-button" aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} aria-pressed={isFullscreen} disabled={!fullscreenAvailable} title={fullscreenAvailable ? (isFullscreen ? "Exit fullscreen" : "Enter fullscreen") : "Fullscreen is unavailable in this browser"} onClick={toggleFullscreen}><span aria-hidden="true">⛶</span></button></div>
+              <div className="shape-zoom-controls"><button type="button" aria-label="Zoom out" onClick={() => setZoom((current) => Math.max(.5, current - .1))}>−</button><span>{Math.round(zoom * 100)}%</span><button type="button" aria-label="Zoom in" onClick={() => setZoom((current) => Math.min(2.5, current + .1))}>+</button><button type="button" onClick={() => setZoom(1)}>Fit</button><button type="button" className="shape-fullscreen-button" aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} aria-pressed={isFullscreen} title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} onClick={toggleFullscreen}><span aria-hidden="true">⛶</span></button></div>
             </div>
           </div>
           <ShapeCanvas blueprint={blueprint} layers={layers} mode={is3d ? viewMode : "2d"} showGrid={showGrid} showCoordinates={showCoordinates} zoom={previewZoom} autoRotate={autoRotate} onZoomChange={setZoom} canvasRef={canvasRef} />

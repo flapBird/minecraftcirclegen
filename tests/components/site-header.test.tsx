@@ -126,12 +126,18 @@ describe("SiteHeader", () => {
     await userEvent.click(screen.getByLabelText("Open navigation menu"));
     const navigation = screen.getByRole("navigation", { name: "Mobile navigation" });
     await userEvent.click(within(navigation).getByText("Tools", { exact: true }));
-    expect(navigation.querySelector(".mobile-tools-menu")).toHaveAttribute("open");
+    expect(within(navigation).getByRole("button", { name: "Tools" })).toHaveAttribute("aria-expanded", "true");
+    expect(within(navigation).getByRole("link", { name: /^Oval/ })).toBeVisible();
 
     await userEvent.click(screen.getByLabelText("Close navigation menu"));
     await userEvent.click(screen.getByLabelText("Open navigation menu"));
 
-    expect(navigation.querySelector(".mobile-tools-menu")).not.toHaveAttribute("open");
-    expect(within(navigation).getByRole("link", { name: /^Oval/ })).toBeInTheDocument();
+    const tools = within(navigation).getByRole("button", { name: "Tools" });
+    expect(tools).toHaveAttribute("aria-expanded", "false");
+    expect(within(navigation).queryByRole("link", { name: /^Oval/ })).not.toBeInTheDocument();
+
+    await userEvent.click(tools);
+    expect(tools).toHaveAttribute("aria-expanded", "true");
+    expect(within(navigation).getByRole("link", { name: /^Oval/ })).toBeVisible();
   });
 });

@@ -47,8 +47,8 @@ function ToolGroup({ title, tools, onClick }: {
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const mobileDetailsRef = useRef<HTMLDetailsElement>(null);
-  const mobileToolsRef = useRef<HTMLDetailsElement>(null);
   const desktopToolsRef = useRef<HTMLDetailsElement>(null);
   const desktopToolsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
@@ -72,8 +72,8 @@ export function SiteHeader() {
     clearDesktopToolsTimer();
     setMenuOpen(false);
     setToolsOpen(false);
+    setMobileToolsOpen(false);
     if (mobileDetailsRef.current) mobileDetailsRef.current.open = false;
-    if (mobileToolsRef.current) mobileToolsRef.current.open = false;
     if (desktopToolsRef.current) desktopToolsRef.current.open = false;
   }, [clearDesktopToolsTimer]);
 
@@ -174,9 +174,7 @@ export function SiteHeader() {
           onToggle={(event) => {
             const open = event.currentTarget.open;
             setMenuOpen(open);
-            if (!open && mobileToolsRef.current) {
-              mobileToolsRef.current.open = false;
-            }
+            if (!open) setMobileToolsOpen(false);
           }}
         >
           <summary aria-label={`${menuOpen ? "Close" : "Open"} navigation menu`}>
@@ -186,11 +184,17 @@ export function SiteHeader() {
             <Link href={circleTool.href} className={pathname === circleTool.href ? "is-active" : undefined} aria-current={pathname === circleTool.href ? "page" : undefined} onClick={openPage}>
               {circleTool.navLabel}
             </Link>
-            <details ref={mobileToolsRef} className="mobile-tools-menu">
-              <summary>
+            <div className="mobile-tools-menu">
+              <button
+                type="button"
+                className="mobile-tools-toggle"
+                aria-expanded={mobileToolsOpen}
+                aria-controls="mobile-tools-panel"
+                onClick={() => setMobileToolsOpen((open) => !open)}
+              >
                 <span>Tools</span><i className="tools-chevron" aria-hidden="true" />
-              </summary>
-              <div>
+              </button>
+              {mobileToolsOpen && <div id="mobile-tools-panel">
                 {TOOL_CATEGORIES.map((category) => (
                   <ToolGroup
                     key={category.key}
@@ -199,8 +203,8 @@ export function SiteHeader() {
                     onClick={openPage}
                   />
                 ))}
-              </div>
-            </details>
+              </div>}
+            </div>
             {CONTENT_PAGES.map((page) => {
               const active = isCurrentPage(pathname, page.href);
               return (
