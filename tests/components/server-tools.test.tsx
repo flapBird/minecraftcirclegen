@@ -49,9 +49,9 @@ describe("Minecraft text and code tools", () => {
     expect(screen.getByRole("button", { name: /^MiniMessage/ })).toHaveAttribute("aria-pressed", "true");
     expect(within(dialog).getByText(/<#FF0000>/)).toBeInTheDocument();
     expect(within(dialog).getByRole("button", { name: "Copy codes" })).toHaveClass("palette-copy-all");
-    const output = dialog.querySelector(".palette-export-output");
     const colors = dialog.querySelector(".palette-export-center");
-    expect(Boolean(output && colors && (output.compareDocumentPosition(colors) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+    const output = dialog.querySelector(".palette-export-output");
+    expect(Boolean(colors && output && (colors.compareDocumentPosition(output) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
 
     fireEvent.click(screen.getByRole("button", { name: /^CSS variables/ }));
     expect(within(dialog).getByText(/:root/)).toBeInTheDocument();
