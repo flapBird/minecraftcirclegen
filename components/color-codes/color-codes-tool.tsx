@@ -267,6 +267,11 @@ export function ColorCodesTool() {
               <nav className="palette-export-presets" aria-label="Export use case">
                 {EXPORT_PRESETS.map((preset) => <button key={preset.id} type="button" className={exportPreset === preset.id ? "is-active" : ""} aria-pressed={exportPreset === preset.id} onClick={() => setExportPreset(preset.id)}><strong>{preset.name}</strong><span>{preset.description}</span></button>)}
               </nav>
+              <div className={`palette-export-output${showsPrefix ? " has-prefix" : ""}`}>
+                {showsPrefix && <label><span>Prefix</span><input value={prefix} onChange={(event) => setPrefix(event.target.value)} /></label>}
+                <pre tabIndex={0}><code>{exportValue}</code></pre>
+                <button type="button" className="primary-button palette-copy-all" onClick={() => copy(exportValue, "Palette")}>Copy codes <i className="copy-glyph" aria-hidden="true" /></button>
+              </div>
               <div className="palette-export-center">
                 <div className="palette-export-tabs" role="tablist" aria-label="Color value format">
                   {(["hex", "rgb", "hsl", "oklch"] as ColorFormat[]).map((format) => <button key={format} type="button" role="tab" aria-selected={colorFormat === format} onClick={() => setColorFormat(format)}>{format.toUpperCase()}</button>)}
@@ -274,11 +279,6 @@ export function ColorCodesTool() {
                 <div className="palette-export-swatches" aria-label="Exported palette colors">
                   {palette.map((color, index) => <button key={`${color}-export-${index}`} type="button" style={{ background: color, color: foregroundFor(color) }} aria-label={`Copy ${formatColor(color, colorFormat)}`} onClick={() => copy(formatColor(color, colorFormat), color)}><span>{paletteStep(index)}</span><code>{formatColor(color, colorFormat)}</code><i className="copy-glyph" aria-hidden="true" /></button>)}
                 </div>
-              </div>
-              <div className={`palette-export-output${showsPrefix ? " has-prefix" : ""}`}>
-                {showsPrefix && <label><span>Prefix</span><input value={prefix} onChange={(event) => setPrefix(event.target.value)} /></label>}
-                <pre tabIndex={0}><code>{exportValue}</code></pre>
-                <button type="button" className="primary-button palette-copy-all" onClick={() => copy(exportValue, "Palette")}>Copy codes <i className="copy-glyph" aria-hidden="true" /></button>
               </div>
             </div>
           </section>
