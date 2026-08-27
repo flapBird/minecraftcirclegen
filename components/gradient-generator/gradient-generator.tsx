@@ -388,12 +388,19 @@ function BlockControl({
 
 export function GradientGenerator({ initialOptions }: { initialOptions: GradientOptions }) {
   const [options, setOptions] = useState(() => normalizeGradientOptions(initialOptions));
+  const [stepsDraftState, setStepsDraftState] = useState(() => ({
+    value: options.steps,
+    draft: String(options.steps),
+  }));
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
   const previewOptions = useDeferredValue(options);
   const steps = useMemo(() => generateBlockGradient(previewOptions), [previewOptions]);
   const palette = PALETTES.find((item) => item.value === options.palette) ?? PALETTES[0];
   const endpointMode = options.endpointMode ?? "color";
+  const stepsDraft = stepsDraftState.value === options.steps
+    ? stepsDraftState.draft
+    : String(options.steps);
   const ribbonStart = endpointMode === "block" ? steps[0].block.hex : options.startColor;
   const ribbonEnd = endpointMode === "block"
     ? (steps.at(-1)?.block.hex ?? options.endColor)
@@ -445,6 +452,15 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
 
   const progress = ((options.steps - MIN_GRADIENT_STEPS) /
     (MAX_GRADIENT_STEPS - MIN_GRADIENT_STEPS)) * 100;
+
+  const commitStepsDraft = () => {
+    const parsed = Number(stepsDraft);
+    const next = Number.isFinite(parsed)
+      ? Math.max(MIN_GRADIENT_STEPS, Math.min(MAX_GRADIENT_STEPS, Math.round(parsed)))
+      : options.steps;
+    setStepsDraftState({ value: next, draft: String(next) });
+    if (next !== options.steps) update({ steps: next });
+  };
 
   return (
     <div className="generator-shell gradient-generator" id="generator">
@@ -613,9 +629,25 @@ export function GradientGenerator({ initialOptions }: { initialOptions: Gradient
                   inputMode="numeric"
                   min={MIN_GRADIENT_STEPS}
                   max={MAX_GRADIENT_STEPS}
-                  value={options.steps}
+                  value={stepsDraft}
                   aria-label="Gradient length value"
-                  onChange={(event) => update({ steps: Number(event.target.value) })}
+                  onChange={(event) => {
+                    const nextDraft = event.target.value;
+                    setStepsDraftState({ value: options.steps, draft: nextDraft });
+                    if (nextDraft.trim() === "") return;
+                    const parsed = Number(nextDraft);
+                    if (
+                      Number.isFinite(parsed)
+                      && parsed >= MIN_GRADIENT_STEPS
+                      && parsed <= MAX_GRADIENT_STEPS
+                    ) {
+                      update({ steps: Math.round(parsed) });
+                    }
+                  }}
+                  onBlur={commitStepsDraft}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") event.currentTarget.blur();
+                  }}
                 />
               </div>
               <input

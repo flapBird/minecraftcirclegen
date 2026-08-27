@@ -33,7 +33,9 @@ function DimensionControl({ id, label, value, max, onChange }: DimensionControlP
 
   const adjustValue = useCallback((direction: 1 | -1) => {
     const parsed = Number(draft);
-    const current = Number.isFinite(parsed) ? Math.round(parsed) : value;
+    const current = draft.trim() !== "" && Number.isFinite(parsed)
+      ? Math.round(parsed)
+      : value;
     const next = Math.max(
       MIN_GEOMETRY_SIZE,
       Math.min(max, current + direction),
@@ -102,11 +104,7 @@ function DimensionControl({ id, label, value, max, onChange }: DimensionControlP
               type="button"
               aria-label={`Increase ${label}`}
               disabled={value >= max}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => {
-                inputRef.current?.focus({ preventScroll: true });
-                adjustValue(1);
-              }}
+              onClick={() => adjustValue(1)}
             >
               <span aria-hidden="true">▲</span>
             </button>
@@ -114,11 +112,7 @@ function DimensionControl({ id, label, value, max, onChange }: DimensionControlP
               type="button"
               aria-label={`Decrease ${label}`}
               disabled={value <= MIN_GEOMETRY_SIZE}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => {
-                inputRef.current?.focus({ preventScroll: true });
-                adjustValue(-1);
-              }}
+              onClick={() => adjustValue(-1)}
             >
               <span aria-hidden="true">▼</span>
             </button>

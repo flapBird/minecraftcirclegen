@@ -20,7 +20,55 @@ const THREE_D: UniversalShape[] = ["sphere", "dome", "cylinder", "cone", "pyrami
 function NumberControl({ label, value, min = 3, max, onChange }: { label: string; value: number; min?: number; max: number; onChange: (value: number) => void }) {
   const progress = ((value - min) / Math.max(1, max - min)) * 100;
   const id = `shape-${label.toLowerCase().replaceAll(" ", "-")}`;
-  return <div className="shape-number-control"><div><label htmlFor={id}>{label}</label><input id={id} type="number" min={min} max={max} value={value} onChange={(event) => onChange(Number(event.target.value))} /></div><input type="range" aria-label={`${label} slider`} min={min} max={max} value={value} style={{ "--range-progress": `${progress}%` } as CSSProperties} onChange={(event) => onChange(Number(event.target.value))} /></div>;
+  const [draftState, setDraftState] = useState({ value, draft: String(value) });
+  const draft = draftState.value === value ? draftState.draft : String(value);
+
+  const commitDraft = () => {
+    const parsed = Number(draft);
+    const next = Number.isFinite(parsed)
+      ? Math.max(min, Math.min(max, Math.round(parsed)))
+      : value;
+    setDraftState({ value: next, draft: String(next) });
+    if (next !== value) onChange(next);
+  };
+
+  return (
+    <div className="shape-number-control">
+      <div>
+        <label htmlFor={id}>{label}</label>
+        <input
+          id={id}
+          type="number"
+          inputMode="numeric"
+          min={min}
+          max={max}
+          value={draft}
+          onChange={(event) => {
+            const nextDraft = event.target.value;
+            setDraftState({ value, draft: nextDraft });
+            if (nextDraft.trim() === "") return;
+            const parsed = Number(nextDraft);
+            if (Number.isFinite(parsed) && parsed >= min && parsed <= max) {
+              onChange(Math.round(parsed));
+            }
+          }}
+          onBlur={commitDraft}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") event.currentTarget.blur();
+          }}
+        />
+      </div>
+      <input
+        type="range"
+        aria-label={`${label} slider`}
+        min={min}
+        max={max}
+        value={value}
+        style={{ "--range-progress": `${progress}%` } as CSSProperties}
+        onChange={(event) => onChange(Number(event.target.value))}
+      />
+    </div>
+  );
 }
 
 export function ShapeGenerator() {

@@ -97,6 +97,8 @@ describe("SiteHeader", () => {
     ]);
 
     await userEvent.click(within(navigation).getByText("Tools", { exact: true }));
+    expect(document.body).toHaveStyle({ overflow: "hidden" });
+    expect(within(navigation).getByRole("heading", { name: "Build & Shape" })).toBeInTheDocument();
     expect(within(navigation).getAllByRole("link").map((link) => link.querySelector("strong")?.textContent ?? link.textContent?.trim())).toEqual([
       "Circle",
       "Oval",
@@ -116,5 +118,20 @@ describe("SiteHeader", () => {
 
     await userEvent.click(within(navigation).getByRole("link", { name: "Circle" }));
     await waitFor(() => expect(screen.getByLabelText("Open navigation menu")).toBeInTheDocument());
+    expect(document.body).not.toHaveStyle({ overflow: "hidden" });
+  });
+
+  it("resets the nested Tools section whenever the mobile menu closes", async () => {
+    render(<SiteHeader />);
+    await userEvent.click(screen.getByLabelText("Open navigation menu"));
+    const navigation = screen.getByRole("navigation", { name: "Mobile navigation" });
+    await userEvent.click(within(navigation).getByText("Tools", { exact: true }));
+    expect(navigation.querySelector(".mobile-tools-menu")).toHaveAttribute("open");
+
+    await userEvent.click(screen.getByLabelText("Close navigation menu"));
+    await userEvent.click(screen.getByLabelText("Open navigation menu"));
+
+    expect(navigation.querySelector(".mobile-tools-menu")).not.toHaveAttribute("open");
+    expect(within(navigation).getByRole("link", { name: /^Oval/ })).toBeInTheDocument();
   });
 });

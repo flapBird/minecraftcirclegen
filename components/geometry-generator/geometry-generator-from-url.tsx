@@ -16,7 +16,6 @@ export function GeometryGeneratorFromUrl({ shape }: { shape: GeometryShape }) {
 
   return (
     <GeometryGenerator
-      key={`${shape}:${query}`}
       shape={shape}
       initialOptions={initialOptions}
     />

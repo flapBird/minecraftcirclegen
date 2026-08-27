@@ -80,6 +80,15 @@ export function SiteHeader() {
   useEffect(() => clearDesktopToolsTimer, [clearDesktopToolsTimer]);
 
   useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     if (!menuOpen && !toolsOpen) return;
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as Node;
@@ -162,7 +171,13 @@ export function SiteHeader() {
           ref={mobileDetailsRef}
           className="mobile-nav"
           open={menuOpen}
-          onToggle={(event) => setMenuOpen(event.currentTarget.open)}
+          onToggle={(event) => {
+            const open = event.currentTarget.open;
+            setMenuOpen(open);
+            if (!open && mobileToolsRef.current) {
+              mobileToolsRef.current.open = false;
+            }
+          }}
         >
           <summary aria-label={`${menuOpen ? "Close" : "Open"} navigation menu`}>
             <span /><span /><span />
@@ -179,7 +194,7 @@ export function SiteHeader() {
                 {TOOL_CATEGORIES.map((category) => (
                   <ToolGroup
                     key={category.key}
-                    title={category.title}
+                    title={category.title.replace(/ Tools$/, "")}
                     tools={getToolsForCategory(category).filter((tool) => tool.key !== "circle")}
                     onClick={openPage}
                   />

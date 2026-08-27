@@ -10,5 +10,5 @@ export function GradientGeneratorFromUrl() {
   const query = searchParams.toString();
   const initialOptions = useMemo(() => parseGradientOptions(query), [query]);
 
-  return <GradientGenerator key={query} initialOptions={initialOptions} />;
+  return <GradientGenerator initialOptions={initialOptions} />;
 }

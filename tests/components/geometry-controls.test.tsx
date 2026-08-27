@@ -98,8 +98,9 @@ describe("GeometryControls", () => {
     expect(input).toHaveValue(22);
     expect(onChange).toHaveBeenCalledWith({ diameter: 22, layer: 1 });
 
+    input.blur();
     fireEvent.click(screen.getByRole("button", { name: "Decrease Diameter" }));
-    expect(input).toHaveFocus();
+    expect(input).not.toHaveFocus();
     expect(onChange).toHaveBeenLastCalledWith({ diameter: 21, layer: 1 });
   });
 

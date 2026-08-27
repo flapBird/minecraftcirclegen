@@ -37,6 +37,19 @@ describe("GradientGenerator", () => {
     expect(screen.getByText("5 blocks · build in order")).toBeInTheDocument();
   });
 
+  it("lets users clear and replace the numeric gradient length", () => {
+    render(<GradientGenerator initialOptions={DEFAULT_GRADIENT_OPTIONS} />);
+    const input = screen.getByRole("spinbutton", { name: "Gradient length value" });
+
+    fireEvent.change(input, { target: { value: "" } });
+    expect(input).toHaveValue(null);
+    fireEvent.change(input, { target: { value: "15" } });
+
+    expect(input).toHaveValue(15);
+    expect(screen.getByRole("slider", { name: "Gradient length slider" })).toHaveValue("15");
+    expect(screen.getAllByRole("listitem")).toHaveLength(15);
+  });
+
   it("reverses colors and copies the generated block list", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "clipboard", {

@@ -50,6 +50,18 @@ describe("ShapeGenerator preview", () => {
     expect(screen.getByRole("button", { name: "Auto rotate" })).toHaveAttribute("aria-pressed", "false");
   });
 
+  it("lets mobile users replace a multi-digit dimension without clamping the first digit", () => {
+    render(<ShapeGenerator />);
+    const input = screen.getByRole("spinbutton", { name: "Diameter" });
+
+    fireEvent.change(input, { target: { value: "" } });
+    expect(input).toHaveValue(null);
+    fireEvent.change(input, { target: { value: "101" } });
+
+    expect(input).toHaveValue(101);
+    expect(screen.getByRole("slider", { name: "Diameter slider" })).toHaveValue("101");
+  });
+
   it("places a fullscreen control after Fit and opens the preview", async () => {
     const requestFullscreen = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(document, "fullscreenEnabled", { configurable: true, value: true });

@@ -26,6 +26,19 @@ describe("generator URL boundaries", () => {
     expect(screen.getByRole("checkbox", { name: "Filled" })).toBeChecked();
   });
 
+  it("does not remount a geometry input when its live URL state changes", () => {
+    navigationState.query = "diameter=21";
+    const view = render(<GeometryGeneratorFromUrl shape="circle" />);
+    const input = screen.getByRole("spinbutton", { name: "Diameter" });
+    input.focus();
+
+    navigationState.query = "diameter=31";
+    view.rerender(<GeometryGeneratorFromUrl shape="circle" />);
+
+    expect(screen.getByRole("spinbutton", { name: "Diameter" })).toBe(input);
+    expect(input).toHaveFocus();
+  });
+
   it("restores shared gradient settings from the query string", () => {
     navigationState.query =
       "start=ffffff&end=000000&steps=5&palette=natural";
