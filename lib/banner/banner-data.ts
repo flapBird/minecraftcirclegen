@@ -51,6 +51,8 @@ export interface BannerLayer {
   colorId: string;
 }
 
+export const BANNER_JAVA_VERSION = "Java 1.20.5+";
+
 export function getDye(id: string) {
   return DYE_COLORS.find((color) => color.id === id) ?? DYE_COLORS[0];
 }

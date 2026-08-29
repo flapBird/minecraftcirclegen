@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   BANNER_PATTERNS,
+  BANNER_JAVA_VERSION,
   DYE_COLORS,
   decodeBannerDesign,
   encodeBannerDesign,
@@ -228,11 +229,11 @@ export function BannerMaker() {
                 </li>
               ))}
             </ol>
-          ) : <p className="banner-empty-layers">Choose a layer color, then click any pattern once to add it.</p>}
+          ) : <p className="banner-empty-layers">Add a pattern from the right to create your first layer.</p>}
         </section>
 
         <aside className="banner-settings-card" aria-labelledby="banner-settings-title">
-          <div className="banner-panel-heading"><div><p className="section-label">BANNER DESIGN</p><h2 id="banner-settings-title">Layer creation</h2></div><span>Java 1.21+</span></div>
+          <div className="banner-panel-heading"><div><p className="section-label">BANNER DESIGN</p><h2 id="banner-settings-title">Layer creation</h2></div><span>{BANNER_JAVA_VERSION}</span></div>
 
           <fieldset className="banner-color-fieldset banner-compact-colors">
             <legend>Base color</legend>
@@ -264,7 +265,7 @@ export function BannerMaker() {
           </section>
 
           <section className="banner-command" aria-labelledby="banner-command-title">
-            <div className="banner-inline-heading"><h3 id="banner-command-title">Generate command</h3><span>Java 1.20.5+</span></div>
+            <div className="banner-inline-heading"><h3 id="banner-command-title">Generate command</h3><span>{commandMode === "give" ? "/give" : "/setblock"} · {BANNER_JAVA_VERSION}</span></div>
             <div className="banner-command-tabs" role="tablist" aria-label="Banner command type">
               <button type="button" role="tab" aria-selected={commandMode === "give"} onClick={() => setCommandMode("give")}>Give</button>
               <button type="button" role="tab" aria-selected={commandMode === "setblock"} onClick={() => setCommandMode("setblock")}>SetBlock</button>

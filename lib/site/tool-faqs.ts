@@ -103,7 +103,7 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   banner: [
     {
       question: "Which Minecraft versions support the generated banner commands?",
-      answer: "The Give output uses Java Edition item components introduced in 1.20.5, and SetBlock uses banner block-entity pattern data. Both are labeled for Java 1.20.5 and later. Bedrock Edition uses different command capabilities.",
+      answer: "The /give output supports Java 1.20.5+ because it uses the item component format introduced in that release. The /setblock output also supports Java 1.20.5+ because it uses the banner block-entity pattern format introduced in 1.20.5. Bedrock Edition uses different command capabilities.",
     },
     {
       question: "How many patterns can I add?",

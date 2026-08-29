@@ -10,6 +10,8 @@ describe("BannerMaker", () => {
 
     expect(screen.getByRole("heading", { name: "PREVIEW" })).toBeInTheDocument();
     expect(screen.getByText("0 / 6 layers")).toBeInTheDocument();
+    expect(screen.getByText("Add a pattern from the right to create your first layer.")).toBeInTheDocument();
+    expect(screen.getByText("/give · Java 1.20.5+")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Current loom recipe" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Set pattern color to Black" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "Set pattern color to Red" }));
@@ -27,6 +29,7 @@ describe("BannerMaker", () => {
     expect(screen.getByRole("button", { name: "Randomize" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Clear All" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("tab", { name: "SetBlock" }));
+    expect(screen.getByText("/setblock · Java 1.20.5+")).toBeInTheDocument();
     expect(screen.getByText(/\/setblock ~ ~ ~/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Share design" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Saved Banners" })).toBeInTheDocument();
