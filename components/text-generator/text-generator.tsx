@@ -21,7 +21,7 @@ const OUTPUTS: Array<{ key: OutputKey; label: string; hint: string }> = [
   { key: "ampersand", label: "Plugin / Config", hint: "For plugins that translate ampersand codes." },
   { key: "mini", label: "MiniMessage", hint: "Requires a MiniMessage-compatible server plugin." },
   { key: "motd", label: "MOTD", hint: "Unicode-escaped section signs for server.properties." },
-  { key: "tellraw", label: "Tellraw component", hint: "A JSON-compatible structured text component for Java Edition." },
+  { key: "tellraw", label: "Tellraw / JSON", hint: "A JSON-compatible structured text component for Java Edition." },
 ];
 
 export function TextGenerator() {

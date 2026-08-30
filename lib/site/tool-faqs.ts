@@ -154,6 +154,78 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
       answer: "The familiar 16 named colors are closely related, but supported inputs and rendering contexts differ between editions. Always test the target field or server.",
     },
   ],
+  "enchanting-translator": [
+    {
+      question: "What language is on the Minecraft enchanting table?",
+      answer: "The glyphs are based on the Standard Galactic Alphabet, a substitution alphabet in which each Latin letter has a matching symbol.",
+    },
+    {
+      question: "Does the enchanting table text reveal the enchantment?",
+      answer: "No. Translating the decorative glyph text does not reliably tell you which enchantment the table will apply.",
+    },
+    {
+      question: "Can I translate enchanting table glyphs back to English?",
+      answer: "Yes. Use the reverse tab for glyphs created by this tool. Unsupported symbols, spaces, and punctuation are preserved.",
+    },
+    {
+      question: "Why do some glyphs use more than one Unicode character?",
+      answer: "The Standard Galactic Alphabet has no dedicated Unicode block, so a few copyable approximations use short grapheme sequences.",
+    },
+  ],
+  "give-command": [
+    {
+      question: "Which Minecraft versions does the give command generator support?",
+      answer: "It supports Java 1.21.5–26.2 inline SNBT text components, Java 1.20.5–1.21.4 first-generation item components, and Java 1.20.4 legacy item NBT.",
+    },
+    {
+      question: "Does the generator support Bedrock Edition?",
+      answer: "No. This version is explicitly for Java Edition because Bedrock item command capabilities and syntax differ substantially.",
+    },
+    {
+      question: "Are quotes and backslashes safe in custom names and lore?",
+      answer: "Yes. User text is encoded for the selected JSON or SNBT layer, including quotes, apostrophes, backslashes, control characters, and Unicode.",
+    },
+    {
+      question: "Why will the command preview sometimes disappear?",
+      answer: "The preview is withheld when the target, item, amount, lore, or enchantment settings are invalid, so a known-bad command is not offered for copying.",
+    },
+  ],
+  "name-checker": [
+    {
+      question: "Does not found mean a Minecraft username is available?",
+      answer: "Not necessarily. It only means no current Java profile was returned for that username; registration may still be affected by reserved names, account state, or service timing.",
+    },
+    {
+      question: "What characters can a Java username contain?",
+      answer: "The checker accepts 3–16 letters, numbers, and underscores before sending a lookup request.",
+    },
+    {
+      question: "Does the name checker work for Bedrock gamertags?",
+      answer: "No. It checks current Minecraft Java profiles, not Xbox or Bedrock gamertags.",
+    },
+    {
+      question: "Can I copy the player's UUID?",
+      answer: "Yes. A found profile includes copy buttons for the canonical username and both hyphenated and compact UUID forms.",
+    },
+  ],
+  "uuid-lookup": [
+    {
+      question: "Can I enter a Minecraft UUID without hyphens?",
+      answer: "Yes. The lookup accepts either the standard hyphenated form or a compact 32-character hexadecimal UUID.",
+    },
+    {
+      question: "Can I find a UUID from a Minecraft username?",
+      answer: "Yes. The Username to UUID tab searches a current Java profile and returns both common UUID formats.",
+    },
+    {
+      question: "Can I find a player name from a UUID?",
+      answer: "Yes. The UUID to Player tab resolves a valid UUID to the current Java profile when one is returned by Minecraft services.",
+    },
+    {
+      question: "Does the UUID lookup show name history?",
+      answer: "No. It returns the current profile name and does not depend on the retired public name-history endpoint.",
+    },
+  ],
   gradient: [
     {
       question: "What is a Minecraft block gradient?",

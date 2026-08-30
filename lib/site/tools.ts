@@ -10,7 +10,11 @@ export type ToolKey =
   | "gradient"
   | "pixel-art"
   | "map-art"
-  | "font";
+  | "font"
+  | "give-command"
+  | "name-checker"
+  | "uuid-lookup"
+  | "enchanting-translator";
 
 export interface ToolPage {
   key: ToolKey;
@@ -113,9 +117,37 @@ export const TOOL_PAGES: ToolPage[] = [
     title: "Color Codes",
     description: "Reference, preview, and copy Minecraft colors and formatting codes.",
   },
+  {
+    key: "enchanting-translator",
+    href: "/minecraft-enchanting-table-translator",
+    navLabel: "Enchanting Translator",
+    title: "Enchanting Table Translator",
+    description: "Translate English and Standard Galactic Alphabet glyphs in either direction.",
+  },
+  {
+    key: "give-command",
+    href: "/minecraft-give-command-generator",
+    navLabel: "Give Command",
+    title: "Give Command Generator",
+    description: "Create version-aware Java item commands with names, lore, and enchantments.",
+  },
+  {
+    key: "name-checker",
+    href: "/minecraft-name-checker",
+    navLabel: "Name Checker",
+    title: "Minecraft Name Checker",
+    description: "Search current Java usernames and copy the matching player UUID.",
+  },
+  {
+    key: "uuid-lookup",
+    href: "/minecraft-uuid-lookup",
+    navLabel: "UUID Lookup",
+    title: "Minecraft UUID Lookup",
+    description: "Find a UUID from a username or resolve a UUID to its current profile.",
+  },
 ];
 
-export type ToolCategoryKey = "build" | "art" | "text";
+export type ToolCategoryKey = "build" | "art" | "text" | "command" | "player";
 
 export interface ToolCategory {
   key: ToolCategoryKey;
@@ -137,7 +169,17 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   {
     key: "text",
     title: "Text & Server Tools",
-    toolKeys: ["text", "gradient", "color-codes"],
+    toolKeys: ["text", "gradient", "color-codes", "enchanting-translator"],
+  },
+  {
+    key: "command",
+    title: "Command & Data Tools",
+    toolKeys: ["give-command"],
+  },
+  {
+    key: "player",
+    title: "Player Tools",
+    toolKeys: ["name-checker", "uuid-lookup"],
   },
 ];
 
@@ -147,13 +189,17 @@ export const RELATED_TOOLS: Record<ToolKey, ToolKey[]> = {
   sphere: ["shape", "circle", "dome", "oval"],
   dome: ["shape", "sphere", "circle", "oval"],
   shape: ["circle", "oval", "sphere", "dome"],
-  banner: ["pixel-art", "color-codes", "font"],
-  text: ["color-codes", "gradient", "font"],
-  "color-codes": ["text", "gradient", "banner"],
+  banner: ["give-command", "pixel-art", "color-codes", "font"],
+  text: ["color-codes", "gradient", "give-command", "font"],
+  "color-codes": ["text", "gradient", "enchanting-translator", "banner"],
   gradient: ["color-codes", "text", "pixel-art"],
   "pixel-art": ["map-art", "font", "banner", "gradient"],
   "map-art": ["pixel-art", "gradient", "shape"],
-  font: ["text", "banner", "pixel-art", "color-codes"],
+  font: ["text", "enchanting-translator", "banner", "pixel-art"],
+  "enchanting-translator": ["font", "text", "color-codes"],
+  "give-command": ["banner", "text"],
+  "name-checker": ["uuid-lookup"],
+  "uuid-lookup": ["name-checker"],
 };
 
 export function getToolsForCategory(category: ToolCategory) {

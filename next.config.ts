@@ -7,7 +7,7 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${developmentScriptSource} https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://textures.minecraft.net",
   "font-src 'self'",
   "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com ws: wss:",
   "object-src 'none'",

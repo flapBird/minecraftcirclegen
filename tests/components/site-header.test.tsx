@@ -112,6 +112,10 @@ describe("SiteHeader", () => {
       "Text",
       "Gradient",
       "Color Codes",
+      "Enchanting Translator",
+      "Give Command",
+      "Name Checker",
+      "UUID Lookup",
       "House Designs",
       "Blueprints",
     ]);

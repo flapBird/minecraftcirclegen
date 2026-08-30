@@ -28,6 +28,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       "minecraft-banner-maker",
       "minecraft-text-generator",
       "minecraft-color-codes",
+      "minecraft-enchanting-table-translator",
+      "minecraft-give-command-generator",
+      "minecraft-name-checker",
+      "minecraft-uuid-lookup",
     ].map((path) => ({
       url: `${baseUrl}/${path}`,
       changeFrequency: "weekly" as const,

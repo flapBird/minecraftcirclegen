@@ -48,13 +48,14 @@ export default function MinecraftTextGeneratorPage() {
             </p>
           </section>
           <section id="formats">
-            <h2>Choose the format your server supports</h2>
+            <h2>Minecraft JSON text and server formats</h2>
             <p>
               Section-sign codes are Minecraft&apos;s legacy format. Ampersand codes are commonly
               translated by server plugins, while MiniMessage requires a compatible plugin. The MOTD
               output escapes section signs for <code>server.properties</code>. Tellraw uses a
               JSON-compatible structured text component and safely encodes quotes, line breaks, and other user input.
             </p>
+            <p>This is also the site&apos;s Minecraft JSON text generator: choose Tellraw component to create structured Java command output without splitting the same workflow into a duplicate standalone page.</p>
           </section>
           <section id="compatibility">
             <h2>Java, Bedrock, and plugin compatibility</h2>
