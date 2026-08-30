@@ -20,6 +20,7 @@ describe("GeometryControls", () => {
         options={options}
         showGrid
         zoom={1}
+        onShapeChange={vi.fn()}
         onChange={onChange}
         onShowGridChange={vi.fn()}
         onZoomChange={vi.fn()}
@@ -46,6 +47,7 @@ describe("GeometryControls", () => {
         options={options}
         showGrid
         zoom={1}
+        onShapeChange={vi.fn()}
         onChange={onChange}
         onShowGridChange={vi.fn()}
         onZoomChange={vi.fn()}
@@ -77,6 +79,7 @@ describe("GeometryControls", () => {
         options={options}
         showGrid
         zoom={1}
+        onShapeChange={vi.fn()}
         onChange={onChange}
         onShowGridChange={vi.fn()}
         onZoomChange={vi.fn()}
@@ -106,12 +109,14 @@ describe("GeometryControls", () => {
 
   it("shows the simplified sphere controls and shape switcher", () => {
     const onChange = vi.fn();
+    const onShapeChange = vi.fn();
     render(
       <GeometryControls
         shape="sphere"
         options={options}
         showGrid
         zoom={1}
+        onShapeChange={onShapeChange}
         onChange={onChange}
         onShowGridChange={vi.fn()}
         onZoomChange={vi.fn()}
@@ -125,8 +130,10 @@ describe("GeometryControls", () => {
       />,
     );
     expect(screen.getByRole("slider", { name: "Layer slider" })).toHaveAttribute("max", "21");
-    expect(screen.getByRole("navigation", { name: "Shape generators" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Sphere" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("group", { name: "Shape generators" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sphere" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Dome" }));
+    expect(onShapeChange).toHaveBeenCalledWith("dome");
     fireEvent.click(screen.getByRole("checkbox", { name: "Filled" }));
     expect(onChange).toHaveBeenCalledWith({ mode: "filled", thickness: 1 });
     expect(screen.getByRole("slider", { name: "Zoom slider" })).toHaveValue("1");

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   getLayerCount,
@@ -9,11 +8,11 @@ import {
 } from "@/lib/geometry/generate-geometry";
 import type { GeometryOptions, GeometryShape } from "@/lib/geometry/geometry-types";
 
-const SHAPES: Array<{ shape: GeometryShape; href: string; icon: string; label: string }> = [
-  { shape: "circle", href: "/#generator", icon: "○", label: "Circle" },
-  { shape: "oval", href: "/oval-generator#generator", icon: "↗", label: "Oval" },
-  { shape: "sphere", href: "/sphere-generator#generator", icon: "◎", label: "Sphere" },
-  { shape: "dome", href: "/dome-generator#generator", icon: "⌒", label: "Dome" },
+const SHAPES: Array<{ shape: GeometryShape; icon: string; label: string }> = [
+  { shape: "circle", icon: "○", label: "Circle" },
+  { shape: "oval", icon: "↗", label: "Oval" },
+  { shape: "sphere", icon: "◎", label: "Sphere" },
+  { shape: "dome", icon: "⌒", label: "Dome" },
 ];
 
 interface DimensionControlProps {
@@ -138,6 +137,7 @@ interface GeometryControlsProps {
   options: GeometryOptions;
   showGrid: boolean;
   zoom: number;
+  onShapeChange: (shape: GeometryShape) => void;
   onChange: (updates: Partial<GeometryOptions>) => void;
   onShowGridChange: (show: boolean) => void;
   onZoomChange: (zoom: number) => void;
@@ -155,6 +155,7 @@ export function GeometryControls({
   options,
   showGrid,
   zoom,
+  onShapeChange,
   onChange,
   onShowGridChange,
   onZoomChange,
@@ -173,19 +174,20 @@ export function GeometryControls({
   return (
     <section className="controls-card blueprint-settings" aria-labelledby="controls-title">
       <h2 id="controls-title" className="sr-only">Shape settings</h2>
-      <nav className="settings-shape-tabs" aria-label="Shape generators">
+      <div className="settings-shape-tabs" role="group" aria-label="Shape generators">
         {SHAPES.map((item) => (
-          <Link
+          <button
+            type="button"
             key={item.shape}
-            href={item.href}
             className={shape === item.shape ? "is-active" : ""}
-            aria-current={shape === item.shape ? "page" : undefined}
+            aria-pressed={shape === item.shape}
+            onClick={() => onShapeChange(item.shape)}
           >
             <span aria-hidden="true">{item.icon}</span>
             <strong>{item.label}</strong>
-          </Link>
+          </button>
         ))}
-      </nav>
+      </div>
 
       <div className="simple-settings-card">
         {shape === "oval" ? (

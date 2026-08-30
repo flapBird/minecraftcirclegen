@@ -9,12 +9,15 @@ import { GeometryCanvas } from "./geometry-canvas";
 import { GeometryControls } from "./geometry-controls";
 
 export function GeometryGenerator({
-  shape,
+  shape: initialShape,
+  canonicalShape = initialShape,
   initialOptions,
 }: {
   shape: GeometryShape;
+  canonicalShape?: GeometryShape;
   initialOptions: GeometryOptions;
 }) {
+  const [shape, setShape] = useState<GeometryShape>(initialShape);
   const [options, setOptions] = useState<GeometryOptions>(() => ({
     ...initialOptions,
     mode: initialOptions.mode === "filled" ? "filled" as const : "hollow" as const,
@@ -44,13 +47,14 @@ export function GeometryGenerator({
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
-      ["diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => params.delete(key));
+      ["shape", "diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => params.delete(key));
+      if (shape !== canonicalShape) params.set("shape", shape);
       serializeGeometryUrl(shape, options).forEach((value, key) => params.set(key, value));
       const query = params.toString();
       window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
     }, 120);
     return () => window.clearTimeout(timer);
-  }, [options, shape]);
+  }, [canonicalShape, options, shape]);
 
   const updateOptions = (updates: Partial<GeometryOptions>) => {
     setOptions((current) => {
@@ -64,6 +68,28 @@ export function GeometryGenerator({
       next.thickness = Math.max(1, Math.min(Math.ceil(thicknessBase / 2), Math.round(next.thickness)));
       return next;
     });
+  };
+
+  const changeShape = (nextShape: GeometryShape) => {
+    if (nextShape === shape) return;
+    setOptions((current) => {
+      const fromOval = shape === "oval";
+      const toOval = nextShape === "oval";
+      const nextDiameter = normalizeSize(fromOval ? current.width : current.diameter, nextShape);
+      const nextWidth = normalizeSize(toOval && !fromOval ? current.diameter : current.width, nextShape);
+      const nextHeight = normalizeSize(toOval && !fromOval ? current.diameter : current.height, nextShape);
+      const nextMode = current.mode === "filled" ? "filled" as const : "hollow" as const;
+      return {
+        ...current,
+        diameter: nextDiameter,
+        width: nextWidth,
+        height: nextHeight,
+        mode: nextMode,
+        thickness: 1,
+        layer: 1,
+      };
+    });
+    setShape(nextShape);
   };
 
   const copyLink = async () => {
@@ -97,6 +123,7 @@ export function GeometryGenerator({
                 options={options}
                 showGrid={showGrid}
                 zoom={zoom}
+                onShapeChange={changeShape}
                 onChange={updateOptions}
                 onShowGridChange={setShowGrid}
                 onZoomChange={setZoom}

@@ -11,10 +11,17 @@ const DEFAULTS: GeometryOptions = {
   layer: 1,
 };
 
+const GEOMETRY_SHAPES = new Set<GeometryShape>(["circle", "oval", "sphere", "dome"]);
+
 function integer(params: URLSearchParams, key: string, fallback: number, min: number, max: number) {
   const value = params.get(key);
   if (!value || !/^\d+$/.test(value)) return fallback;
   return Math.max(min, Math.min(max, Number(value)));
+}
+
+export function parseGeometryShape(search: string, fallback: GeometryShape): GeometryShape {
+  const shape = new URLSearchParams(search).get("shape") as GeometryShape | null;
+  return shape && GEOMETRY_SHAPES.has(shape) ? shape : fallback;
 }
 
 export function parseGeometryUrl(shape: GeometryShape, search: string): GeometryOptions {
