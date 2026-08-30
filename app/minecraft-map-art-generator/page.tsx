@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ImageArtGenerator } from "@/components/image-art/image-art-generator";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Map Art Generator – Image to Map Blueprint";
@@ -20,7 +19,6 @@ export default function MinecraftMapArtGeneratorPage() {
     <main id="main-content">
       <section className="hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="map-art" />
           <h1>Minecraft Map Art Generator</h1>
           <p className="hero-subtitle">
             Convert an image into a tiled, flat-map block blueprint using Minecraft map colors.
@@ -33,12 +31,12 @@ export default function MinecraftMapArtGeneratorPage() {
       <article className="seo-content">
         <div className="content-container">
           <section>
-            <p className="section-label">ABOUT THE TOOL</p>
-            <h2>Plan flat Minecraft map art in 128×128 tiles</h2>
+            <h2>What is the Minecraft Map Art Generator?</h2>
             <p>
-              A standard Minecraft map represents a 128×128 block area. This generator resizes and
-              matches an image to practical flat-map colors, then divides larger designs into clear
-              map-sized sections so you can build them on the ground and capture each tile in game.
+              The Minecraft Map Art Generator converts an image into a flat, buildable block blueprint
+              designed for in-game maps. A standard map represents a 128×128 block area, so the tool
+              matches the image to practical map colors and divides larger designs into clear map-sized
+              sections for building and capture.
             </p>
             <p>
               The first version focuses on human-buildable flat blueprints and material planning.
@@ -46,7 +44,6 @@ export default function MinecraftMapArtGeneratorPage() {
             </p>
           </section>
           <section id="how-to-use">
-            <p className="section-label">USING THE GENERATOR</p>
             <h2>How to make Minecraft map art</h2>
             <ol className="guide-steps">
               <li><strong>Upload an image.</strong><span>Square artwork fits one map most naturally, but other ratios can be cropped or contained.</span></li>

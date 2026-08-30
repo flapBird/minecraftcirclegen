@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ImageArtGenerator } from "@/components/image-art/image-art-generator";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Pixel Art Generator – Image to Blocks";
@@ -20,7 +19,6 @@ export default function MinecraftPixelArtGeneratorPage() {
     <main id="main-content">
       <section className="hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="pixel-art" />
           <h1>Minecraft Pixel Art Generator</h1>
           <p className="hero-subtitle">
             Convert any image into a block-by-block Minecraft mural and exact material list.
@@ -33,12 +31,12 @@ export default function MinecraftPixelArtGeneratorPage() {
       <article className="seo-content">
         <div className="content-container">
           <section>
-            <p className="section-label">ABOUT THE TOOL</p>
-            <h2>Turn pictures into buildable Minecraft pixel art</h2>
+            <h2>What is the Minecraft Pixel Art Generator?</h2>
             <p>
-              Upload a photo, logo, sprite, or drawing and the converter reduces it to a practical
-              block grid. Every output pixel is matched to a vanilla building block, producing both
-              a visual blueprint and an exact shopping list for survival or creative builds.
+              The Minecraft Pixel Art Generator converts a photo, logo, sprite, or drawing into a
+              practical block-by-block mural. Every output pixel is matched to a vanilla building
+              block, producing a visual blueprint, exact dimensions, and a material list for survival
+              or creative builds.
             </p>
             <p>
               Images are decoded and converted in your browser. The source file is not uploaded or
@@ -46,7 +44,6 @@ export default function MinecraftPixelArtGeneratorPage() {
             </p>
           </section>
           <section id="how-to-use">
-            <p className="section-label">USING THE GENERATOR</p>
             <h2>How to convert an image to Minecraft blocks</h2>
             <ol className="guide-steps">
               <li><strong>Choose an image.</strong><span>Bold shapes and clear contrast usually create the easiest builds.</span></li>

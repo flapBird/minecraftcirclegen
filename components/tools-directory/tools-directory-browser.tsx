@@ -84,7 +84,6 @@ export function ToolsDirectoryBrowser() {
               <div className="tools-index-grid">
                 {tools.map((tool) => (
                   <Link key={tool.key} href={tool.href}>
-                    <span className="tools-index-card-category">{category.title.replace(/ Tools$/, "")}</span>
                     <strong>{tool.title}</strong>
                     <p>{tool.description}</p>
                     <i aria-hidden="true">→</i>

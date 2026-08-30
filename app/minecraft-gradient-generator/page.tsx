@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { GradientGenerator } from "@/components/gradient-generator/gradient-generator";
 import { GradientModeSwitcher } from "@/components/gradient-generator/gradient-mode-switcher";
 import { DEFAULT_GRADIENT_OPTIONS } from "@/lib/gradient/gradient-url-state";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 import { ToolStructuredData } from "@/components/layout/tool-structured-data";
 import Link from "next/link";
@@ -35,7 +34,6 @@ export default function GradientGeneratorPage() {
       <ToolStructuredData name="Minecraft Gradient Generator" description={description} path="/minecraft-gradient-generator" />
       <section className="hero gradient-hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="gradient" />
           <h1>Minecraft Gradient Generator</h1>
           <p className="hero-subtitle">
             Create copyable RGB text or turn colors into a smooth, buildable sequence of Minecraft blocks.
@@ -56,13 +54,12 @@ export default function GradientGeneratorPage() {
       <article className="seo-content gradient-content">
         <div className="content-container">
           <section>
-            <p className="section-label">TWO GRADIENT MODES</p>
-            <h2>Text gradients and block gradients</h2>
+            <h2>What is the Minecraft Gradient Generator?</h2>
             <p>
-              Text Gradient assigns an RGB color to every character and exports MiniMessage,
+              The Minecraft Gradient Generator creates either copyable RGB text or a buildable color
+              transition made from real vanilla blocks. Text Gradient assigns an RGB color to every character and exports MiniMessage,
               a JSON-compatible Java tellraw component, and common plugin formats. Block Gradient preserves the original
-              tool: it matches a visual transition to real vanilla block textures and produces a
-              practical build order.
+              visual transition by matching colors to block textures and producing a practical material order.
             </p>
             <p>
               Vanilla legacy § formatting only provides 16 named colors, so it cannot express a true
@@ -70,8 +67,17 @@ export default function GradientGeneratorPage() {
               for legacy colors or the <Link href="/minecraft-text-generator">Minecraft Text Generator</Link> for whole-message formatting.
             </p>
           </section>
+          <section id="how-to-use">
+            <h2>How to use the Minecraft Gradient Generator</h2>
+            <ol className="guide-steps">
+              <li><strong>Choose Text or Block Gradient.</strong><span>Use Text for copyable RGB characters or Block for a buildable material transition.</span></li>
+              <li><strong>Set the content and endpoints.</strong><span>Enter text and two colors, or choose the start and end blocks or exact target colors.</span></li>
+              <li><strong>Adjust the result.</strong><span>Set text formatting, gradient length, or the candidate block palette for the selected mode.</span></li>
+              <li><strong>Review the preview.</strong><span>Check every character color or compare the smooth color target with the real block textures.</span></li>
+              <li><strong>Copy or download.</strong><span>Export the syntax needed by your plugin or command, or save the numbered block plan and material list.</span></li>
+            </ol>
+          </section>
           <section>
-            <p className="section-label">ABOUT THE TOOL</p>
             <h2>Plan smoother Minecraft block gradients</h2>
             <p>
               A digital gradient can use thousands of colors, but a Minecraft build needs a short,
@@ -88,7 +94,6 @@ export default function GradientGeneratorPage() {
           </section>
 
           <section>
-            <p className="section-label">TWO STARTING POINTS</p>
             <h2>Choose blocks or work from exact colors</h2>
             <div className="mode-explainer">
               <div>
@@ -110,21 +115,7 @@ export default function GradientGeneratorPage() {
             </div>
           </section>
 
-          <section id="how-to-use">
-            <p className="section-label">USING THE GENERATOR</p>
-            <h2>How to make a Minecraft block gradient</h2>
-            <ol className="guide-steps">
-              <li><strong>Choose the endpoint mode.</strong><span>Use Minecraft blocks for fixed materials, or Exact colors for a color-led search.</span></li>
-              <li><strong>Set the start and end.</strong><span>Search the texture library for two blocks, or enter the colors your build should move between.</span></li>
-              <li><strong>Choose the length.</strong><span>Short gradients create a clear material change; longer gradients provide more intermediate shades for wide surfaces.</span></li>
-              <li><strong>Pick a block palette.</strong><span>Search all blocks, favor common survival materials, or narrow the candidates to a material family.</span></li>
-              <li><strong>Check color and texture.</strong><span>Use the top bar to judge color flow and the lower bar to check whether neighboring block patterns work together.</span></li>
-              <li><strong>Build or save the order.</strong><span>Place the numbered blocks from left to right, copy the list, or download the matching PNG plan.</span></li>
-            </ol>
-          </section>
-
           <section>
-            <p className="section-label">HOW MATCHING WORKS</p>
             <h2>Why the suggested blocks form a smoother transition</h2>
             <p>
               The generator uses the average visible color of each real block texture rather than a
@@ -141,7 +132,6 @@ export default function GradientGeneratorPage() {
           </section>
 
           <section>
-            <p className="section-label">BUILDING TIPS</p>
             <h2>Make the gradient look natural in your build</h2>
             <ul className="tips-grid">
               <li><strong>Give every step enough space.</strong> On a wide wall, repeat each material for several blocks instead of changing material in every column.</li>

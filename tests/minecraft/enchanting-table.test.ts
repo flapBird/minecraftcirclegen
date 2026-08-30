@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ENCHANTING_TABLE_ALPHABET,
+  detectEnchantingTableDirection,
   enchantingTableToEnglish,
   englishToEnchantingTable,
   translateEnchantingTable,
@@ -27,5 +28,10 @@ describe("enchanting table translator", () => {
   it("supports both translation directions", () => {
     const glyphs = translateEnchantingTable("Minecraft", "english-to-glyphs");
     expect(translateEnchantingTable(glyphs, "glyphs-to-english")).toBe("minecraft");
+  });
+
+  it("auto-detects ordinary English and copyable enchanting glyphs", () => {
+    expect(detectEnchantingTableDirection("Hello, builder!")).toBe("english-to-glyphs");
+    expect(detectEnchantingTableDirection(englishToEnchantingTable("Hello"))).toBe("glyphs-to-english");
   });
 });

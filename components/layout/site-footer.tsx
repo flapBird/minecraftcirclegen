@@ -1,8 +1,18 @@
 import Link from "next/link";
-import { TOOL_CATEGORIES, getToolsForCategory } from "@/lib/site/tools";
+import { getToolPage, type ToolKey } from "@/lib/site/tools";
+
+const footerToolKeys = [
+  "circle",
+  "oval",
+  "sphere",
+  "dome",
+  "shape",
+  "pixel-art",
+  "text",
+] satisfies ToolKey[];
 
 export function SiteFooter() {
-  const tools = TOOL_CATEGORIES.flatMap((category) => getToolsForCategory(category));
+  const tools = footerToolKeys.map(getToolPage);
 
   return (
     <footer className="site-footer">
@@ -19,6 +29,7 @@ export function SiteFooter() {
           <section className="footer-column">
             <h2>Tools</h2>
             <nav aria-label="Footer tools">
+              <Link href="/minecraft-tools">All Tools</Link>
               {tools.map((tool) => (
                 <Link key={tool.key} href={tool.href}>{tool.title}</Link>
               ))}

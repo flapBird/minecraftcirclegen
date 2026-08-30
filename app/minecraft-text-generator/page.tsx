@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TextGenerator } from "@/components/text-generator/text-generator";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 import { ToolStructuredData } from "@/components/layout/tool-structured-data";
 
@@ -22,7 +21,6 @@ export default function MinecraftTextGeneratorPage() {
       <ToolStructuredData name="Minecraft Text Generator" description={description} path="/minecraft-text-generator" />
       <section className="hero server-tool-hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="text" />
           <h1>Minecraft Text Generator</h1>
           <p className="hero-subtitle">
             Format copyable Minecraft chat and server text, then export the syntax your command,
@@ -36,16 +34,25 @@ export default function MinecraftTextGeneratorPage() {
       <article className="seo-content">
         <div className="content-container">
           <section>
-            <p className="section-label">COPYABLE GAME TEXT</p>
-            <h2>Formatted text, not a font image</h2>
+            <h2>What is the Minecraft Text Generator?</h2>
             <p>
-              This generator prepares text for Minecraft chat, server configuration, plugins, and
-              commands. Choose one color and any combination of bold, italic, underline,
-              strikethrough, or obfuscated formatting, then copy the output format you need.
+              The Minecraft Text Generator prepares copyable, formatted text for Java chat commands,
+              server configuration, and compatible plugins. Choose a color and any combination of
+              bold, italic, underline, strikethrough, or obfuscated formatting, then export section-sign,
+              ampersand, MiniMessage, MOTD, or safely encoded tellraw output.
             </p>
             <p>
               Looking for a graphic or block-letter plan instead? The <Link href="/minecraft-font-generator">Minecraft Font Generator</Link> creates pixel-style image text; this page focuses on in-game text data.
             </p>
+          </section>
+          <section id="how-to-use">
+            <h2>How to use the Minecraft Text Generator</h2>
+            <ol className="guide-steps">
+              <li><strong>Enter the message.</strong><span>Type the exact text you want to show in chat, a server list, or a plugin message.</span></li>
+              <li><strong>Choose a color and styles.</strong><span>Apply one color plus any supported bold, italic, underline, strikethrough, or obfuscated formatting.</span></li>
+              <li><strong>Select the required format.</strong><span>Use the output tab that matches a Minecraft command, plugin, MiniMessage field, or server MOTD.</span></li>
+              <li><strong>Copy and test the result.</strong><span>Paste the generated syntax into its intended field and verify it with the same edition, version, and server software.</span></li>
+            </ol>
           </section>
           <section id="formats">
             <h2>Minecraft JSON text and server formats</h2>

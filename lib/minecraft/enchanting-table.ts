@@ -46,3 +46,17 @@ export function translateEnchantingTable(value: string, direction: EnchantingTra
     ? englishToEnchantingTable(value)
     : enchantingTableToEnglish(value);
 }
+
+/** Detects copyable SGA approximations without mistaking ordinary punctuation for glyph text. */
+export function detectEnchantingTableDirection(value: string): EnchantingTranslationDirection {
+  const glyphMatches = GLYPH_TO_ENGLISH.reduce((count, { glyph }) => {
+    let offset = 0;
+    let matches = 0;
+    while ((offset = value.indexOf(glyph, offset)) !== -1) {
+      matches += 1;
+      offset += glyph.length;
+    }
+    return count + matches;
+  }, 0);
+  return glyphMatches > 0 ? "glyphs-to-english" : "english-to-glyphs";
+}

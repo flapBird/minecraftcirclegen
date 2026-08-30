@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ColorCodesTool } from "@/components/color-codes/color-codes-tool";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 import { ToolStructuredData } from "@/components/layout/tool-structured-data";
 
@@ -22,7 +21,6 @@ export default function MinecraftColorCodesPage() {
       <ToolStructuredData name="Minecraft Color Codes" description={description} path="/minecraft-color-codes" />
       <section className="hero server-tool-hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="color-codes" />
           <h1>Minecraft Color Codes</h1>
           <p className="hero-subtitle">Pick any modern RGB text color, export a usable palette, or copy the complete legacy §, plugin, MOTD, and HEX reference.</p>
         </div>
@@ -33,13 +31,22 @@ export default function MinecraftColorCodesPage() {
       <article className="seo-content">
         <div className="content-container">
           <section>
-            <p className="section-label">HOW CODES WORK</p>
-            <h2>What are Minecraft color codes?</h2>
+            <h2>What is the Minecraft Color Codes tool?</h2>
             <p>
-              Minecraft&apos;s 16 legacy colors use a formatting marker followed by one hexadecimal-style
-              character. The section sign (<code>§</code>) is the native legacy marker. Many server
-              plugins accept an ampersand (<code>&amp;</code>) as an easier-to-type alias and translate it before display.
+              The Minecraft Color Codes tool is both a modern RGB color picker and a complete reference
+              for the 16 legacy colors and text styles. It shows the exact HEX value and produces native
+              section-sign codes, common plugin aliases, MOTD escapes, and MiniMessage colors where applicable.
             </p>
+            <p>Minecraft&apos;s legacy colors use a formatting marker followed by one hexadecimal-style character. The section sign (<code>§</code>) is the native legacy marker, while many server plugins accept an ampersand (<code>&amp;</code>) alias and translate it before display.</p>
+          </section>
+          <section id="how-to-use">
+            <h2>How to use Minecraft color codes</h2>
+            <ol className="guide-steps">
+              <li><strong>Choose a workflow.</strong><span>Pick a custom RGB color, build a small reusable palette, or open the legacy color reference.</span></li>
+              <li><strong>Select a color or style.</strong><span>Use the picker for exact HEX values or choose one of Minecraft&apos;s named legacy colors and formatting codes.</span></li>
+              <li><strong>Copy the matching syntax.</strong><span>Select the native, plugin, MOTD, MiniMessage, or HEX form required by the destination.</span></li>
+              <li><strong>Verify compatibility.</strong><span>Test the code in the exact command, plugin, configuration field, edition, and version where it will be used.</span></li>
+            </ol>
           </section>
           <section>
             <h2>Java and Bedrock compatibility</h2>

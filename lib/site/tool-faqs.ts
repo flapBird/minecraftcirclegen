@@ -8,8 +8,8 @@ export interface ToolFaq {
 export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   circle: [
     {
-      question: "What is a Minecraft circle generator?",
-      answer: "A Minecraft circle generator converts a diameter into a block-by-block circle blueprint, showing exactly which blocks to place on the square Minecraft grid.",
+      question: "What is the Minecraft circle generator?",
+      answer: "The Minecraft circle generator converts a diameter into a block-by-block circle blueprint, showing exactly which blocks to place on the square Minecraft grid.",
     },
     {
       question: "How do I make a perfect circle in Minecraft?",

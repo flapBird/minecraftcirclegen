@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { HomeToolDirectory } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
@@ -43,9 +42,9 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
-    question: "What is a Minecraft circle generator?",
+    question: "What is the Minecraft circle generator?",
     answer:
-      "A Minecraft circle generator converts a diameter into a block-by-block, pixel-style circle blueprint. It shows exactly which blocks to place instead of relying on a smooth geometric drawing that cannot be built on the Minecraft grid.",
+      "The Minecraft circle generator converts a diameter into a block-by-block, pixel-style circle blueprint. It shows exactly which blocks to place instead of relying on a smooth geometric drawing that cannot be built on the Minecraft grid.",
   },
   {
     question: "How do I make a perfect circle in Minecraft?",
@@ -136,7 +135,6 @@ export default function Home() {
       <main id="main-content">
         <section className="hero">
           <div className="page-container">
-            <PageBreadcrumb toolKey="circle" />
             <h1>Minecraft Circle Generator</h1>
             <p className="hero-subtitle">
               Create perfect Minecraft circles, calculate the blocks you need,
@@ -165,10 +163,9 @@ export default function Home() {
         <article className="seo-content">
           <div className="content-container">
             <section className="tool-introduction">
-              <p className="section-label">ABOUT THE TOOL</p>
-              <h2>What is a Minecraft circle generator?</h2>
+              <h2>What is the Minecraft circle generator?</h2>
               <p>
-                A Minecraft circle generator turns a diameter into a practical
+                The Minecraft circle generator turns a diameter into a practical
                 block-by-block plan for a round build. Because Minecraft uses a
                 square grid, a smooth mathematical circle cannot be placed
                 directly in the game. The tool converts that curve into a
@@ -185,7 +182,6 @@ export default function Home() {
             </section>
 
             <section id="how-to-use">
-              <p className="section-label">USING THE GENERATOR</p>
               <h2>How to use the Minecraft Circle Generator</h2>
               <p>
                 Start by entering the diameter of the circle you want to build.
@@ -267,8 +263,10 @@ export default function Home() {
               <h2>Hollow vs filled circles</h2>
               <div className="mode-explainer">
                 <div>
-                  <span className="mode-icon hollow" aria-hidden="true" />
-                  <h3>Hollow circles</h3>
+                  <div className="mode-explainer-heading">
+                    <span className="mode-icon hollow" aria-hidden="true" />
+                    <h3>Hollow circles</h3>
+                  </div>
                   <p>
                     Hollow mode draws a one-block outside edge. It is the
                     material-efficient choice for tower walls, arena boundaries,
@@ -277,8 +275,10 @@ export default function Home() {
                   </p>
                 </div>
                 <div>
-                  <span className="mode-icon filled" aria-hidden="true" />
-                  <h3>Filled circles</h3>
+                  <div className="mode-explainer-heading">
+                    <span className="mode-icon filled" aria-hidden="true" />
+                    <h3>Filled circles</h3>
+                  </div>
                   <p>
                     Filled mode occupies every block inside the outline. It is
                     best for foundations, floors, islands, circular platforms,
@@ -389,7 +389,6 @@ export default function Home() {
 
             <section className="home-house-resource">
               <div>
-                <p className="section-label">BUILDING RESOURCES</p>
                 <h2>Minecraft house designs you can actually build</h2>
                 <p>
                   Move from a shape generator to a complete project. Browse

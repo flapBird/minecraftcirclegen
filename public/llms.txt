@@ -59,7 +59,7 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 
 ## Site Information
 
-- [About](https://minecraftcirclegen.com/about): Project purpose, independence, and contact information.
-- [Privacy Policy](https://minecraftcirclegen.com/privacy): Browser processing, analytics, and privacy information.
+- [About](https://minecraftcirclegen.com/about): Project history, technology, independence, FAQ, and contact information.
+- [Privacy Policy](https://minecraftcirclegen.com/privacy): Browser processing, Google AdSense, analytics, and privacy choices.
 - [Terms of Use](https://minecraftcirclegen.com/terms): Conditions and limitations for generated plans and site use.
 - [XML Sitemap](https://minecraftcirclegen.com/sitemap.xml): Complete public route index.

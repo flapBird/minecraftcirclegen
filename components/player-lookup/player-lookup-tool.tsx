@@ -11,12 +11,16 @@ interface LookupState {
   message?: string;
 }
 
-export function PlayerLookupTool({ initialKind, showTabs = false }: {
+export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = false }: {
   initialKind: PlayerLookupKind;
+  initialValue?: string;
   showTabs?: boolean;
 }) {
   const [kind, setKind] = useState<PlayerLookupKind>(initialKind);
-  const [values, setValues] = useState({ username: "", uuid: "" });
+  const [values, setValues] = useState({
+    username: initialKind === "username" ? initialValue.slice(0, 16) : "",
+    uuid: initialKind === "uuid" ? initialValue.slice(0, 36) : "",
+  });
   const [lookup, setLookup] = useState<LookupState>({ status: "idle" });
   const [copyStatus, setCopyStatus] = useState("");
 
@@ -36,6 +40,10 @@ export function PlayerLookupTool({ initialKind, showTabs = false }: {
 
     setLookup({ status: "loading" });
     setCopyStatus("");
+    const pageUrl = new URL(window.location.href);
+    pageUrl.searchParams.delete(kind === "username" ? "uuid" : "username");
+    pageUrl.searchParams.set(kind, validation.value);
+    window.history.replaceState(null, "", pageUrl);
     try {
       const query = new URLSearchParams({ kind, value: validation.value });
       const response = await fetch(`/api/minecraft-player?${query.toString()}`, {
@@ -62,6 +70,8 @@ export function PlayerLookupTool({ initialKind, showTabs = false }: {
       setCopyStatus("Copy failed — select the value manually");
     }
   };
+
+  const copyResultLink = () => copy(window.location.href, "Result link");
 
   return <div className="generator-shell player-lookup-tool">
     <section className="player-lookup-card" aria-labelledby="player-lookup-title">
@@ -96,6 +106,7 @@ export function PlayerLookupTool({ initialKind, showTabs = false }: {
             ? "3–16 letters, numbers, or underscores."
             : "Hyphenated and compact 32-character UUIDs are accepted."}</small>
         </label>
+        {kind === "username" && <p className="lookup-scope-note"><strong>Current Java profile lookup only.</strong> A missing profile is not proof that a username can be registered.</p>}
         <button type="submit" className="primary-button" disabled={lookup.status === "loading"}>
           {lookup.status === "loading" ? "Checking…" : kind === "username" ? "Check Username" : "Look Up UUID"}
         </button>
@@ -108,16 +119,18 @@ export function PlayerLookupTool({ initialKind, showTabs = false }: {
       {lookup.status === "loading" && <div className="player-result-empty"><span className="lookup-spinner" aria-hidden="true" /><p>Contacting Minecraft profile services…</p></div>}
       {lookup.status === "not_found" && <div className="player-result-message is-not-found"><strong>Not found</strong><p>{lookup.message}</p>{kind === "username" && <small>This does not guarantee that the name can be registered immediately.</small>}</div>}
       {lookup.status === "error" && <div className="player-result-message is-error" role="alert"><strong>Lookup unavailable</strong><p>{lookup.message}</p></div>}
-      {lookup.status === "found" && lookup.player && <PlayerResult player={lookup.player} copy={copy} />}
+      {lookup.status === "found" && lookup.player && <PlayerResult player={lookup.player} copy={copy} copyResultLink={copyResultLink} />}
       <p className="copy-status">{copyStatus}</p>
     </section>
   </div>;
 }
 
-function PlayerResult({ player, copy }: {
+function PlayerResult({ player, copy, copyResultLink }: {
   player: MinecraftPlayerProfile;
   copy: (value: string, label: string) => void;
+  copyResultLink: () => void;
 }) {
+  const allDetails = `Minecraft Java profile\nUsername: ${player.username}\nUUID: ${player.uuid}\nCompact UUID: ${player.uuidCompact}`;
   return <div className="player-profile-result">
     <div className="player-profile-heading">
       <PlayerAvatar username={player.username} skinUrl={player.skinUrl} />
@@ -128,5 +141,15 @@ function PlayerResult({ player, copy }: {
       <div><dt>UUID with hyphens</dt><dd><code>{player.uuid}</code><button type="button" onClick={() => copy(player.uuid, "UUID")}>Copy</button></dd></div>
       <div><dt>UUID without hyphens</dt><dd><code>{player.uuidCompact}</code><button type="button" onClick={() => copy(player.uuidCompact, "Compact UUID")}>Copy</button></dd></div>
     </dl>
+    <div className="player-profile-actions">
+      <button type="button" className="secondary-button" onClick={() => copy(allDetails, "All profile details")}>Copy All Details</button>
+      <button type="button" className="secondary-button" onClick={copyResultLink}>Copy Result Link</button>
+    </div>
+    {player.skinUrl && <div className="player-skin-export">
+      <div><strong>Complete skin texture</strong><small>The full 64×64 skin file returned by Minecraft profile services.</small></div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={player.skinUrl} alt={`${player.username}'s complete Minecraft skin texture`} />
+      <a className="secondary-button" href={player.skinUrl} download={`${player.username}.png`} target="_blank" rel="noreferrer">Download Skin</a>
+    </div>}
   </div>;
 }

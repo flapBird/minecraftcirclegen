@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { FontGenerator } from "@/components/font-generator/font-generator";
-import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Font Generator – Pixel Text & PNG Export";
@@ -20,7 +19,6 @@ export default function MinecraftFontGeneratorPage() {
     <main id="main-content">
       <section className="hero font-hero">
         <div className="page-container">
-          <PageBreadcrumb toolKey="font" />
           <h1>Minecraft Font Generator</h1>
           <p className="hero-subtitle">
             Turn any text into crisp Minecraft-style pixel lettering. Add colour codes, gradients,
@@ -34,13 +32,12 @@ export default function MinecraftFontGeneratorPage() {
       <article className="seo-content">
         <div className="content-container">
           <section>
-            <p className="section-label">ABOUT THE TOOL</p>
-            <h2>Make Minecraft-style text images</h2>
+            <h2>What is the Minecraft Font Generator?</h2>
             <p>
-              Regular fonts are designed to stay smooth at many sizes, which makes it difficult to create
-              clean block lettering one pixel at a time. This generator builds each character from an
-              original 5×7 pixel grid, giving you crisp Minecraft-inspired text for thumbnails, server
-              banners, signs, overlays, and in-game build ideas.
+              The Minecraft Font Generator turns text into crisp pixel lettering, transparent PNGs,
+              and block-by-block building plans. Each supported character uses an original 5×7 grid,
+              making the result predictable for thumbnails, server banners, signs, overlays, and
+              in-game letter builds instead of relying on a smooth conventional font.
             </p>
             <p>
               Type your text, choose one of the 16 familiar Minecraft colours or a custom colour, then
@@ -51,7 +48,6 @@ export default function MinecraftFontGeneratorPage() {
           </section>
 
           <section id="features">
-            <p className="section-label">PIXEL LETTERING</p>
             <h2>Built on a consistent pixel grid</h2>
             <p>
               Every supported letter, number, and punctuation mark is drawn as a small bitmap instead of
@@ -69,7 +65,6 @@ export default function MinecraftFontGeneratorPage() {
           </section>
 
           <section id="formatting-codes">
-            <p className="section-label">COLOUR AND FORMATTING CODES</p>
             <h2>Use familiar Minecraft colour codes</h2>
             <p>
               Codes can start with either the section sign (§) or an ampersand (&amp;). Colour codes
@@ -82,7 +77,6 @@ export default function MinecraftFontGeneratorPage() {
           </section>
 
           <section id="how-to-use">
-            <p className="section-label">USING THE GENERATOR</p>
             <h2>How to make Minecraft pixel text</h2>
             <ol className="guide-steps">
               <li><strong>Type your text.</strong><span>Use supported letters, numbers, punctuation, and line breaks.</span></li>
@@ -93,7 +87,6 @@ export default function MinecraftFontGeneratorPage() {
           </section>
 
           <section id="export-options">
-            <p className="section-label">EXPORT OPTIONS</p>
             <h2>Export an image or a building plan</h2>
             <p>
               <strong>Copy PNG</strong> places the rendered image on the clipboard for pasting into a

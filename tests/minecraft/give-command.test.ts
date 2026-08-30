@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { JAVA_ITEMS } from "@/data/minecraft/java-items";
-import { generateGiveCommand } from "@/lib/minecraft/give-command";
+import {
+  ENCHANTMENTS,
+  generateGiveCommand,
+  getCompatibleEnchantments,
+} from "@/lib/minecraft/give-command";
 
 const baseInput = {
   version: "java-latest" as const,
@@ -84,5 +88,66 @@ describe("Java give command generator", () => {
     expect(enchantments.command).toBeNull();
     expect(enchantments.errors).toContain("Sharpness level must be between 1 and 5.");
     expect(enchantments.errors).toContain("Sharpness can only be added once.");
+  });
+
+  it("ships the complete enchantment list and filters it by item", () => {
+    expect(ENCHANTMENTS).toHaveLength(42);
+    expect(getCompatibleEnchantments("diamond_sword").map(({ id }) => id)).toContain("sharpness");
+    expect(getCompatibleEnchantments("diamond_sword").map(({ id }) => id)).not.toContain("power");
+    expect(getCompatibleEnchantments("bow").map(({ id }) => id)).toContain("power");
+    expect(getCompatibleEnchantments("elytra").map(({ id }) => id)).toContain("binding_curse");
+    expect(getCompatibleEnchantments("stone")).toEqual([]);
+
+    const invalid = generateGiveCommand({
+      ...baseInput,
+      enchantments: [{ id: "power", level: 5 }],
+    });
+    expect(invalid.command).toBeNull();
+    expect(invalid.errors).toContain("Power is not compatible with Diamond Sword.");
+  });
+
+  it("generates styled text and version-aware attribute modifiers", () => {
+    const attributes = [{
+      attribute: "attack_damage",
+      amount: 3,
+      operation: "add_value" as const,
+      slot: "mainhand" as const,
+    }];
+    const latest = generateGiveCommand({
+      ...baseInput,
+      customName: "Blade",
+      customNameStyle: { color: "aqua", bold: true, underlined: true },
+      attributes,
+    });
+    const earlyComponents = generateGiveCommand({
+      ...baseInput,
+      version: "java-components",
+      attributeComponentVersion: "1.20.5",
+      attributes,
+    });
+    const midComponents = generateGiveCommand({
+      ...baseInput,
+      version: "java-components",
+      attributeComponentVersion: "1.21",
+      attributes,
+    });
+    const legacy = generateGiveCommand({ ...baseInput, version: "java-legacy", attributes });
+
+    expect(latest.command).toContain("color:'aqua',bold:true,italic:false,underlined:true");
+    expect(latest.command).toContain("minecraft:attribute_modifiers=[{type:'minecraft:attack_damage',id:'minecraft:mcg_modifier_1'");
+    expect(earlyComponents.command).toContain("type:'minecraft:generic.attack_damage',uuid:[I;");
+    expect(midComponents.command).toContain("type:'minecraft:generic.attack_damage',id:'minecraft:mcg_modifier_1'");
+    expect(legacy.command).toContain("AttributeName:'minecraft:generic.attack_damage'");
+    expect(legacy.command).toContain("Operation:0");
+  });
+
+  it("uses stored enchantments for enchanted books", () => {
+    const book = generateGiveCommand({
+      ...baseInput,
+      itemId: "enchanted_book",
+      enchantments: [{ id: "power", level: 5 }],
+    });
+    expect(book.errors).toEqual([]);
+    expect(book.command).toContain("minecraft:stored_enchantments={'minecraft:power':5}");
   });
 });

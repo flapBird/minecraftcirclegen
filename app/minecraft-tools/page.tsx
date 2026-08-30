@@ -41,7 +41,6 @@ export default function MinecraftToolsPage() {
           <nav className="page-breadcrumb" aria-label="Breadcrumb">
             <ol><li><Link href="/">Home</Link></li><li aria-current="page">Minecraft Tools</li></ol>
           </nav>
-          <p className="section-label">ALL TOOLS</p>
           <h1>Minecraft Tools</h1>
           <p className="hero-subtitle">Find the right generator for building, artwork, server text, commands, or Java player data.</p>
         </div>
@@ -54,9 +53,62 @@ export default function MinecraftToolsPage() {
       <article className="seo-content tools-index-content">
         <div className="content-container">
           <section>
-            <p className="section-label">ONE USEFUL COLLECTION</p>
-            <h2>Free Minecraft generators in one place</h2>
-            <p>Use the category filters to browse by task, or search by a tool name such as circle, pixel art, banner, give command, username, or UUID. Each tool opens as a focused workspace with its own controls and instructions.</p>
+            <h2>What this tools page is for</h2>
+            <p>
+              Minecraft projects often start with a practical question: how wide
+              should a circle be, what does the next sphere layer look like, or
+              which blocks will match an image? This page keeps the site&apos;s
+              generators in one directory so you can search by name or narrow
+              the list to the job in front of you.
+            </p>
+            <p>
+              Open any tool to get its working controls, preview, and instructions.
+              Nothing needs to be installed, and the planning tools work directly
+              in the browser.
+            </p>
+          </section>
+          <section>
+            <h2>Choose a category by the job</h2>
+            <div className="tools-index-category-guide">
+              <div>
+                <h3>Build &amp; Shape</h3>
+                <p>
+                  Use these for circles, ovals, spheres, domes, and other 2D or 3D
+                  forms when you need exact rows, layers, and block counts.
+                </p>
+              </div>
+              <div>
+                <h3>Art &amp; Design</h3>
+                <p>
+                  Start here for pixel art, map art, block lettering, and banners.
+                  These tools turn an image or design idea into something you can
+                  rebuild block by block.
+                </p>
+              </div>
+              <div>
+                <h3>Text &amp; Server</h3>
+                <p>
+                  Format chat, MOTDs, MiniMessage text, color codes, and gradients,
+                  or translate Standard Galactic Alphabet text used by enchanting
+                  tables.
+                </p>
+              </div>
+              <div>
+                <h3>Command &amp; Data</h3>
+                <p>
+                  Build Java Edition item commands with names, lore, quantities,
+                  and enchantments without assembling the command by hand.
+                </p>
+              </div>
+              <div>
+                <h3>Player</h3>
+                <p>
+                  Check a current Java username or look up the UUID attached to a
+                  player profile when you are working with server records or
+                  commands.
+                </p>
+              </div>
+            </div>
           </section>
         </div>
       </article>

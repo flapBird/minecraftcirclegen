@@ -5,7 +5,7 @@ import { LegalPage } from "@/components/layout/legal-page";
 export const metadata: Metadata = {
   title: "Minecraft Circle Gen Privacy Policy",
   description:
-    "Privacy information for Minecraft Circle Gen, including analytics, local browser storage, and share-link parameters.",
+    "Privacy information for Minecraft Circle Gen, including Google AdSense, analytics, local browser storage, and share-link parameters.",
   alternates: { canonical: "https://minecraftcirclegen.com/privacy" },
 };
 
@@ -14,9 +14,9 @@ export default function PrivacyPage() {
     <LegalPage
       eyebrow="PRIVACY"
       title="Privacy Policy"
-      description="This policy explains how Minecraft Circle Gen handles analytics and share-link settings."
+      description="This policy explains how Minecraft Circle Gen handles advertising, analytics, local processing, and share-link settings."
     >
-      <p className="policy-date">Last updated: July 29, 2026</p>
+      <p className="policy-date">Last updated: August 30, 2026</p>
       <section>
         <h2>Information used by the tool</h2>
         <p>
@@ -51,6 +51,35 @@ export default function PrivacyPage() {
         </p>
       </section>
       <section>
+        <h2>Advertising and Google AdSense</h2>
+        <p>
+          Minecraft Circle Gen uses Google AdSense to support the site and may
+          display advertising provided by Google. Ads may not appear on every
+          page or every visit because availability can depend on factors such as
+          location, consent choices, ad demand, and site or account review
+          status.
+        </p>
+        <p>
+          Google and other third-party advertising vendors may place or read
+          cookies on your browser, or use web beacons, IP addresses, device
+          identifiers, and similar technologies, to deliver, measure, and
+          personalize advertising. Google may use advertising cookies to serve
+          ads based on your visits to this site and other websites.
+        </p>
+        <p>
+          You can control personalized advertising in Google&apos;s{" "}
+          <a href="https://adssettings.google.com/">Ads Settings</a>. You can
+          also learn more about how Google uses information from sites that use
+          its services on{" "}
+          <a href="https://policies.google.com/technologies/partner-sites">
+            Google&apos;s partner sites page
+          </a>
+          , or visit{" "}
+          <a href="https://www.aboutads.info/choices/">YourAdChoices</a> to
+          review opt-out choices offered by participating vendors.
+        </p>
+      </section>
+      <section>
         <h2>Hosting and technical logs</h2>
         <p>
           Like most websites, the hosting infrastructure may process basic
@@ -60,11 +89,11 @@ export default function PrivacyPage() {
         </p>
       </section>
       <section>
-        <h2>Future changes</h2>
+        <h2>Changes to this policy</h2>
         <p>
-          If advertising or other third-party services are added, this policy
-          will be updated to explain what is used and why. Material changes will
-          be reflected in the updated date above.
+          This policy will be updated when the site&apos;s data practices or
+          third-party services change. Material changes will be reflected in the
+          updated date above.
         </p>
       </section>
       <section>

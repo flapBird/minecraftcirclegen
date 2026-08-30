@@ -4,7 +4,10 @@ import { GiveCommandGenerator } from "@/components/give-command-generator/give-c
 import { PlayerLookupTool } from "@/components/player-lookup/player-lookup-tool";
 import { EnchantingTableTranslator } from "@/components/enchanting-table-translator/enchanting-table-translator";
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  window.history.replaceState(null, "", "/");
+});
 
 describe("new Minecraft tool interfaces", () => {
   it("updates the give command and blocks invalid stack amounts", () => {
@@ -20,10 +23,26 @@ describe("new Minecraft tool interfaces", () => {
     expect(screen.getByLabelText("Generated give command")).toHaveTextContent("雪");
   });
 
+  it("filters enchantments and adds styled text and attributes", () => {
+    render(<GiveCommandGenerator />);
+    fireEvent.click(screen.getByRole("button", { name: "+ Add enchantment" }));
+    const enchantment = screen.getByLabelText("Enchantment 1") as HTMLSelectElement;
+    expect(within(enchantment).getByRole("option", { name: "Sharpness" })).toBeInTheDocument();
+    expect(within(enchantment).queryByRole("option", { name: "Power" })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/^Custom name/), { target: { value: "Styled" } });
+    fireEvent.click(screen.getByRole("button", { name: "Name formatting bold" }));
+    fireEvent.click(screen.getByRole("button", { name: "+ Add attribute" }));
+    const command = screen.getByLabelText("Generated give command");
+    expect(command).toHaveTextContent("bold:true");
+    expect(command).toHaveTextContent("minecraft:attribute_modifiers");
+  });
+
   it("validates a username before making a player request", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     render(<PlayerLookupTool initialKind="username" />);
+    expect(screen.getByText(/Current Java profile lookup only/)).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("Minecraft username"), { target: { value: "a" } });
     fireEvent.click(screen.getByRole("button", { name: "Check Username" }));
@@ -74,6 +93,9 @@ describe("new Minecraft tool interfaces", () => {
     const output = screen.getByLabelText("Translation output") as HTMLTextAreaElement;
     expect(output.value).toContain("!?" );
     expect(output.value).not.toContain("ABC");
+    expect(screen.getByText(/characters ·/)).toBeInTheDocument();
+    fireEvent.change(input, { target: { value: "ᔑʖᓵ" } });
+    expect(screen.getByLabelText("Enchanting table glyphs")).toBeInTheDocument();
     expect(within(screen.getByRole("region", { name: "Minecraft Enchanting Table Alphabet" })).getAllByText(/^[A-Z]$/)).toHaveLength(26);
   });
 });
