@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { GradientGeneratorFromUrl } from "@/components/gradient-generator/gradient-generator-from-url";
+import { SITE_NAVIGATION_EVENT } from "@/lib/site/navigation-events";
 
 const navigationState = vi.hoisted(() => ({ query: "" }));
 
@@ -47,7 +48,7 @@ describe("generator URL boundaries", () => {
     fireEvent.click(screen.getByRole("button", { name: "Dome" }));
 
     expect(screen.getByRole("button", { name: "Dome" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("img", { name: /dome blueprint/i })).toBe(canvas);
+    expect(screen.getByRole("img", { name: /dome overview/i })).toBe(canvas);
     expect(screen.getByRole("slider", { name: "Layer slider" })).toBeInTheDocument();
     expect(screen.getByRole("spinbutton", { name: "Diameter" })).toHaveValue(31);
     await waitFor(() => expect(window.location.search).toContain("shape=dome"));
@@ -66,6 +67,26 @@ describe("generator URL boundaries", () => {
     expect(screen.getByRole("img", { name: /oval blueprint, 21 by 15 blocks/i })).toBe(canvas);
   });
 
+  it("keeps every shape's controls and preview distinct when switching in place", () => {
+    render(<GeometryGeneratorFromUrl shape="circle" />);
+    const canvas = screen.getByRole("img", { name: /circle blueprint/i });
+
+    expect(screen.queryByRole("slider", { name: "Layer slider" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Oval" }));
+    expect(screen.getByRole("spinbutton", { name: "Width" })).toHaveValue(21);
+    expect(screen.getByRole("spinbutton", { name: "Height" })).toHaveValue(15);
+    expect(screen.getByRole("img", { name: /oval blueprint/i })).toBe(canvas);
+
+    fireEvent.click(screen.getByRole("button", { name: "Sphere" }));
+    expect(screen.getByRole("slider", { name: "Layer slider" })).toHaveAttribute("max", "21");
+    expect(screen.getByRole("img", { name: /sphere blueprint/i })).toBe(canvas);
+
+    fireEvent.click(screen.getByRole("button", { name: "Dome" }));
+    expect(screen.getByRole("slider", { name: "Layer slider" })).toHaveAttribute("max", "11");
+    expect(screen.getByRole("img", { name: /dome overview/i })).toBe(canvas);
+  });
+
   it("restores a non-default geometry shape from the query string", () => {
     navigationState.query = "shape=sphere&diameter=27&layer=4";
 
@@ -74,6 +95,20 @@ describe("generator URL boundaries", () => {
     expect(screen.getByRole("button", { name: "Sphere" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("spinbutton", { name: "Diameter" })).toHaveValue(27);
     expect(screen.getByRole("slider", { name: "Layer slider" })).toHaveValue("4");
+  });
+
+  it("returns the homepage generator to Circle after same-page home navigation", () => {
+    navigationState.query = "shape=dome&diameter=31";
+    window.history.replaceState(null, "", "/?shape=dome&diameter=31");
+    render(<GeometryGeneratorFromUrl shape="circle" />);
+    const canvas = screen.getByRole("img", { name: /dome overview/i });
+
+    window.history.pushState(null, "", "/");
+    fireEvent(window, new Event(SITE_NAVIGATION_EVENT));
+
+    expect(screen.getByRole("button", { name: "Circle" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("img", { name: /circle blueprint/i })).toBe(canvas);
+    expect(screen.queryByRole("slider", { name: "Layer slider" })).not.toBeInTheDocument();
   });
 
   it("keeps a dedicated page in place while its shared generator changes shape", async () => {

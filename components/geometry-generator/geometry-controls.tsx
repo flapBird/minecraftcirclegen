@@ -234,6 +234,11 @@ export function GeometryControls({
               style={{ "--range-progress": `${layerCount <= 1 ? 0 : ((options.layer - 1) / (layerCount - 1)) * 100}%` } as CSSProperties}
               onChange={(event) => onChange({ layer: Number(event.target.value) })}
             />
+            <p className="geometry-layer-note">
+              {shape === "dome"
+                ? "The canvas combines the full roof footprint. Use the slider to highlight one horizontal building layer."
+                : "Each preview is one horizontal layer. Build from the bottom layer to the matching top layer."}
+            </p>
           </div>
         )}
 
@@ -291,7 +296,7 @@ export function GeometryControls({
             </div>
           )}
           <div>
-            <dt>Size</dt>
+            <dt>{volume ? "Layer grid" : "Size"}</dt>
             <dd>{blueprintWidth} × {blueprintHeight}</dd>
           </div>
         </dl>

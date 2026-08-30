@@ -23,5 +23,6 @@ export interface GeometryResult {
   totalBlocks: number;
   layer: number;
   layerCount: number;
+  layerGrid?: boolean[][];
+  layerMap?: number[][];
 }
-

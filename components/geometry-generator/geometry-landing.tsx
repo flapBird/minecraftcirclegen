@@ -93,11 +93,20 @@ export function GeometryLanding({ shape }: {
           </section>
           <section>
             <h2>Designed for actual block building</h2>
-            <p>
-              Every colored cell represents one Minecraft block. Center axes keep the plan aligned,
-              and Download current blueprint saves the exact grid currently shown. The layout works
-              for both Java and Bedrock builds.
-            </p>
+            {shape === "dome" ? (
+              <p>
+                The overview combines the dome&apos;s horizontal layers into one roof footprint, with
+                height shading and the selected building layer highlighted. Center axes keep the plan
+                aligned, and the material totals still count every block across every layer. The layout
+                works for both Java and Bedrock builds.
+              </p>
+            ) : (
+              <p>
+                Every colored cell represents one Minecraft block. Center axes keep the plan aligned,
+                and Download current blueprint saves the exact grid currently shown. The layout works
+                for both Java and Bedrock builds.
+              </p>
+            )}
           </section>
           <ToolPageEnd toolKey={copy.toolKey} />
         </div>

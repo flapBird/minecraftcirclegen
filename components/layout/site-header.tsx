@@ -16,6 +16,7 @@ import {
   getToolsForCategory,
   type ToolPage,
 } from "@/lib/site/tools";
+import { SITE_NAVIGATION_EVENT } from "@/lib/site/navigation-events";
 
 const circleTool = TOOL_PAGES[0];
 const groupedTools = TOOL_PAGES.filter((tool) => tool.key !== "circle");
@@ -115,7 +116,12 @@ export function SiteHeader() {
     const target = new URL(event.currentTarget.href);
     if (window.location.pathname !== target.pathname || target.hash) return;
     event.preventDefault();
-    window.history.pushState(null, "", `${window.location.pathname}${window.location.search}`);
+    const currentUrl = `${window.location.pathname}${window.location.search}`;
+    const targetUrl = `${target.pathname}${target.search}`;
+    if (currentUrl !== targetUrl) {
+      window.history.pushState(null, "", targetUrl);
+      window.dispatchEvent(new Event(SITE_NAVIGATION_EVENT));
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

@@ -3,10 +3,23 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { downloadGeometryPng } from "@/lib/geometry/export-geometry-png";
 import { generateGeometry, getLayerCount, normalizeSize } from "@/lib/geometry/generate-geometry";
-import { serializeGeometryUrl } from "@/lib/geometry/geometry-url-state";
+import {
+  parseGeometryShape,
+  parseGeometryUrl,
+  serializeGeometryUrl,
+} from "@/lib/geometry/geometry-url-state";
 import type { GeometryOptions, GeometryShape } from "@/lib/geometry/geometry-types";
+import { SITE_NAVIGATION_EVENT } from "@/lib/site/navigation-events";
 import { GeometryCanvas } from "./geometry-canvas";
 import { GeometryControls } from "./geometry-controls";
+
+function normalizeInitialOptions(initialOptions: GeometryOptions): GeometryOptions {
+  return {
+    ...initialOptions,
+    mode: initialOptions.mode === "filled" ? "filled" : "hollow",
+    thickness: 1,
+  };
+}
 
 export function GeometryGenerator({
   shape: initialShape,
@@ -18,11 +31,7 @@ export function GeometryGenerator({
   initialOptions: GeometryOptions;
 }) {
   const [shape, setShape] = useState<GeometryShape>(initialShape);
-  const [options, setOptions] = useState<GeometryOptions>(() => ({
-    ...initialOptions,
-    mode: initialOptions.mode === "filled" ? "filled" as const : "hollow" as const,
-    thickness: 1,
-  }));
+  const [options, setOptions] = useState<GeometryOptions>(() => normalizeInitialOptions(initialOptions));
   const [showGrid, setShowGrid] = useState(true);
   const [zoom, setZoom] = useState(1);
   const [toast, setToast] = useState("");
@@ -43,6 +52,21 @@ export function GeometryGenerator({
   useEffect(() => () => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
   }, []);
+
+  useEffect(() => {
+    const restoreUrlState = () => {
+      const nextShape = parseGeometryShape(window.location.search, canonicalShape);
+      const nextOptions = parseGeometryUrl(nextShape, window.location.search);
+      setShape(nextShape);
+      setOptions(normalizeInitialOptions(nextOptions));
+    };
+    window.addEventListener(SITE_NAVIGATION_EVENT, restoreUrlState);
+    window.addEventListener("popstate", restoreUrlState);
+    return () => {
+      window.removeEventListener(SITE_NAVIGATION_EVENT, restoreUrlState);
+      window.removeEventListener("popstate", restoreUrlState);
+    };
+  }, [canonicalShape]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {

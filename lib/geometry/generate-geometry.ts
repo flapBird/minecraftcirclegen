@@ -112,6 +112,48 @@ function countGrid(grid: boolean[][]) {
 }
 
 const volumeTotalCache = new Map<string, number>();
+const domeOverviewCache = new Map<string, {
+  grid: boolean[][];
+  layerMap: number[][];
+  totalBlocks: number;
+}>();
+
+function domeOverview(diameter: number, mode: CircleMode) {
+  const key = `${diameter}:${mode}`;
+  const cached = domeOverviewCache.get(key);
+  if (cached) return cached;
+
+  const layerMap = Array.from(
+    { length: diameter },
+    () => Array<number>(diameter).fill(0),
+  );
+  let totalBlocks = 0;
+  const layerCount = getLayerCount("dome", diameter);
+
+  for (let layer = 1; layer <= layerCount; layer += 1) {
+    const layerGrid = sphereSlice(
+      diameter,
+      fullYForLayer("dome", diameter, layer),
+      mode,
+    );
+    totalBlocks += countGrid(layerGrid);
+    layerGrid.forEach((row, z) => row.forEach((filled, x) => {
+      if (filled) layerMap[z][x] = Math.max(layerMap[z][x], layer);
+    }));
+  }
+
+  const overview = {
+    grid: layerMap.map((row) => row.map((layer) => layer > 0)),
+    layerMap,
+    totalBlocks,
+  };
+  if (domeOverviewCache.size >= 8) {
+    const oldest = domeOverviewCache.keys().next().value;
+    if (oldest !== undefined) domeOverviewCache.delete(oldest);
+  }
+  domeOverviewCache.set(key, overview);
+  return overview;
+}
 
 export function getLayerCount(shape: GeometryShape, diameter: number) {
   if (shape === "sphere") return diameter;
@@ -173,7 +215,28 @@ export function generateGeometry(
   const layerCount = getLayerCount(shape, diameter);
   const layer = Math.max(1, Math.min(layerCount, Math.round(rawOptions.layer || 1)));
   const currentY = fullYForLayer(shape, diameter, layer);
-  const grid = sphereSlice(diameter, currentY, mode);
+  const layerGrid = sphereSlice(diameter, currentY, mode);
+
+  if (shape === "dome") {
+    const overview = domeOverview(diameter, mode);
+    return {
+      shape,
+      label: "Dome",
+      width: diameter,
+      height: diameter,
+      grid: overview.grid,
+      layerGrid,
+      layerMap: overview.layerMap,
+      mode,
+      thickness: 1,
+      currentBlocks: countGrid(layerGrid),
+      totalBlocks: overview.totalBlocks,
+      layer,
+      layerCount,
+    };
+  }
+
+  const grid = layerGrid;
   const totalKey = `${shape}:${diameter}:${mode}`;
   let totalBlocks = volumeTotalCache.get(totalKey);
   if (totalBlocks === undefined) {
@@ -186,7 +249,7 @@ export function generateGeometry(
 
   return {
     shape,
-    label: shape === "sphere" ? "Sphere" : "Dome",
+    label: "Sphere",
     width: diameter,
     height: diameter,
     grid,

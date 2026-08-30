@@ -1186,6 +1186,13 @@ a {
   user-select: none;
 }
 
+.geometry-layer-note {
+  margin: 7px 0 0;
+  color: #747a72;
+  font-size: 0.65rem;
+  line-height: 1.45;
+}
+
 .geometry-content {
   padding-top: 78px;
 }

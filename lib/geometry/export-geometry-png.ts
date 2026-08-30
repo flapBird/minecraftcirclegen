@@ -21,7 +21,10 @@ export async function downloadGeometryPng(result: GeometryResult, showGrid: bool
   context.fillText(`Minecraft ${result.label} Blueprint`, margin, 54);
   context.fillStyle = "#667066";
   context.font = "500 23px system-ui, sans-serif";
-  const layerText = result.layerCount > 1 ? ` · Layer ${result.layer}/${result.layerCount}` : "";
+  const domeOverview = result.shape === "dome" && Boolean(result.layerMap);
+  const layerText = domeOverview
+    ? ` · Overview · Layer ${result.layer}/${result.layerCount} highlighted`
+    : result.layerCount > 1 ? ` · Layer ${result.layer}/${result.layerCount}` : "";
   context.fillText(
     `${result.width} × ${result.height} blocks · ${result.mode}${layerText}`,
     margin,
@@ -35,7 +38,17 @@ export async function downloadGeometryPng(result: GeometryResult, showGrid: bool
   result.grid.forEach((row, y) => row.forEach((filled, x) => {
     if (!filled) return;
     const inset = showGrid ? Math.min(0.7, cell * 0.08) : 0;
-    context.fillStyle = "#4f8345";
+    const domeLayer = result.layerMap?.[y]?.[x] ?? 0;
+    const activeDomeLayer = Boolean(result.layerGrid?.[y]?.[x]);
+    if (domeOverview && domeLayer > 0) {
+      const heightRatio = domeLayer / result.layerCount;
+      const lightness = Math.round(42 + heightRatio * 28);
+      context.fillStyle = activeDomeLayer
+        ? "#4f8345"
+        : `hsl(108 14% ${lightness}%)`;
+    } else {
+      context.fillStyle = "#4f8345";
+    }
     context.fillRect(
       originX + x * cell + inset,
       originY + y * cell + inset,
@@ -71,14 +84,18 @@ export async function downloadGeometryPng(result: GeometryResult, showGrid: bool
   context.fillStyle = "#667066";
   context.font = "500 20px system-ui, sans-serif";
   context.fillText(
-    `${result.currentBlocks.toLocaleString()} blocks on this blueprint`,
+    domeOverview
+      ? `${result.totalBlocks.toLocaleString()} total blocks · ${result.currentBlocks.toLocaleString()} on highlighted layer`
+      : `${result.currentBlocks.toLocaleString()} blocks on this blueprint`,
     margin,
     canvas.height - 32,
   );
 
   const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
   if (!blob) throw new Error("The blueprint image could not be created.");
-  const suffix = result.layerCount > 1 ? `-layer-${result.layer}` : "";
+  const suffix = domeOverview
+    ? `-overview-layer-${result.layer}`
+    : result.layerCount > 1 ? `-layer-${result.layer}` : "";
   const filename = `minecraft-${result.shape}-${result.width}x${result.height}${suffix}.png`;
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");

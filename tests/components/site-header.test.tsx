@@ -60,6 +60,16 @@ describe("SiteHeader", () => {
     expect(within(navigation).getByRole("link", { name: "House Designs" })).not.toHaveAttribute("aria-current");
   });
 
+  it("clears the active homepage tool query when the brand returns home", () => {
+    window.history.replaceState(null, "", "/?shape=dome&diameter=31");
+    render(<SiteHeader />);
+
+    fireEvent.click(screen.getByRole("link", { name: "Minecraft Circle Gen home" }));
+
+    expect(window.location.pathname).toBe("/");
+    expect(window.location.search).toBe("");
+  });
+
   it("uses a short hover-intent delay for the desktop Tools menu", () => {
     vi.useFakeTimers();
 

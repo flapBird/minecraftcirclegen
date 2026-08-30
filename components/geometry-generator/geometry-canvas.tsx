@@ -68,7 +68,17 @@ export function GeometryCanvas({ result, showGrid, zoom }: GeometryCanvasProps) 
       result.grid.forEach((row, y) => row.forEach((filled, x) => {
         if (!filled) return;
         const inset = showGrid ? Math.min(1, view.cell * 0.1) : 0;
-        context.fillStyle = "#4f8345";
+        const domeLayer = result.layerMap?.[y]?.[x] ?? 0;
+        const activeDomeLayer = Boolean(result.layerGrid?.[y]?.[x]);
+        if (result.shape === "dome" && domeLayer > 0) {
+          const heightRatio = domeLayer / result.layerCount;
+          const lightness = Math.round(42 + heightRatio * 28);
+          context.fillStyle = activeDomeLayer
+            ? "#4f8345"
+            : `hsl(108 14% ${lightness}%)`;
+        } else {
+          context.fillStyle = "#4f8345";
+        }
         context.fillRect(
           view.x + x * view.cell + inset,
           view.y + y * view.cell + inset,
@@ -114,8 +124,12 @@ export function GeometryCanvas({ result, showGrid, zoom }: GeometryCanvasProps) 
           ref={canvasRef}
           role="img"
           tabIndex={0}
-          aria-label={`${result.mode} ${result.label.toLowerCase()} blueprint, ${result.width} by ${result.height} blocks`}
-        >{result.label} blueprint requiring {result.currentBlocks} blocks.</canvas>
+          aria-label={result.shape === "dome"
+            ? `${result.mode} dome overview, layer ${result.layer} of ${result.layerCount} highlighted, ${result.width} by ${result.height} blocks`
+            : `${result.mode} ${result.label.toLowerCase()} blueprint, ${result.width} by ${result.height} blocks`}
+        >{result.shape === "dome"
+            ? `Dome overview with layer ${result.layer} highlighted, requiring ${result.totalBlocks} blocks in total.`
+            : `${result.label} blueprint requiring ${result.currentBlocks} blocks.`}</canvas>
       </div>
     </div>
   );
