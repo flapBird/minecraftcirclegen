@@ -2,11 +2,20 @@ import Link from "next/link";
 import { TOOL_FAQS } from "@/lib/site/tool-faqs";
 import {
   RELATED_TOOLS,
-  TOOL_CATEGORIES,
   getToolPage,
-  getToolsForCategory,
   type ToolKey,
 } from "@/lib/site/tools";
+
+const HOME_FEATURED_TOOL_KEYS: ToolKey[] = [
+  "shape",
+  "sphere",
+  "pixel-art",
+  "banner",
+  "text",
+  "give-command",
+  "name-checker",
+  "enchanting-translator",
+];
 
 export function ToolPageEnd({ toolKey }: { toolKey: ToolKey }) {
   const faqs = TOOL_FAQS[toolKey];
@@ -67,26 +76,25 @@ export function ToolDirectory({ toolKey }: { toolKey: ToolKey }) {
 }
 
 export function HomeToolDirectory() {
+  const tools = HOME_FEATURED_TOOL_KEYS.map(getToolPage);
   return (
-    <section id="explore-tools" className="home-tool-directory" aria-labelledby="home-tool-directory-title">
+    <section className="home-tool-directory" aria-labelledby="home-tool-directory-title">
       <div className="page-container">
-        <h2 id="home-tool-directory-title">Explore Minecraft Tools</h2>
+        <h2 id="home-tool-directory-title">Popular Minecraft Tools</h2>
         <p className="home-tool-directory-intro">
-          Choose a focused tool for building, artwork, server text, commands, or player data.
+          Start with a popular generator, or open the complete collection to search and browse every category.
         </p>
-        <div className="home-tool-categories">
-          {TOOL_CATEGORIES.map((category) => <section key={category.key} aria-labelledby={`home-category-${category.key}`}>
-            <h3 id={`home-category-${category.key}`}>{category.title}</h3>
-            <div className="home-tool-card-grid">
-              {getToolsForCategory(category).map((tool) => (
-                <Link key={tool.key} href={tool.href}>
-                  <strong>{tool.title}</strong>
-                  <span>{tool.description}</span>
-                </Link>
-              ))}
-            </div>
-          </section>)}
+        <div className="home-tool-card-grid">
+          {tools.map((tool) => (
+            <Link key={tool.key} href={tool.href}>
+              <strong>{tool.title}</strong>
+              <span>{tool.description}</span>
+            </Link>
+          ))}
         </div>
+        <Link className="home-tools-view-all" href="/minecraft-tools">
+          View all Minecraft tools <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </section>
   );

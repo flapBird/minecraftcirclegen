@@ -55,8 +55,9 @@ describe("shared tool page navigation", () => {
   it("uses the whole home tool card as the link without repeated action copy", () => {
     render(<HomeToolDirectory />);
 
-    expect(screen.getByRole("heading", { name: "Explore Minecraft Tools" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Popular Minecraft Tools" })).toBeInTheDocument();
     expect(screen.queryByText(/Open tool/i)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Circle Generator/ })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: /Shape Generator/ })).toHaveAttribute("href", "/minecraft-shape-generator");
+    expect(screen.getByRole("link", { name: /View all Minecraft tools/ })).toHaveAttribute("href", "/minecraft-tools");
   });
 });

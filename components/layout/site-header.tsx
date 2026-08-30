@@ -14,11 +14,14 @@ import {
   TOOL_CATEGORIES,
   TOOL_PAGES,
   getToolsForCategory,
-  type ToolCategoryKey,
+  type ToolPage,
 } from "@/lib/site/tools";
 
 const circleTool = TOOL_PAGES[0];
 const groupedTools = TOOL_PAGES.filter((tool) => tool.key !== "circle");
+const quickToolCategories = TOOL_CATEGORIES.filter((category) => (
+  category.key === "build" || category.key === "art" || category.key === "text"
+));
 const TOOLS_OPEN_DELAY_MS = 260;
 const TOOLS_CLOSE_DELAY_MS = 180;
 
@@ -26,94 +29,21 @@ function isCurrentPage(pathname: string, href: string) {
   return pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 }
 
-function getCategoryForPath(pathname: string) {
-  return TOOL_CATEGORIES.find((category) => (
-    getToolsForCategory(category).some((tool) => isCurrentPage(pathname, tool.href))
-  ));
-}
-
-function ToolsBrowser({
-  id,
-  activeCategoryKey,
-  query,
-  onCategoryChange,
-  onQueryChange,
-  onClick,
-}: {
-  id: string;
-  activeCategoryKey: ToolCategoryKey;
-  query: string;
-  onCategoryChange: (category: ToolCategoryKey) => void;
-  onQueryChange: (query: string) => void;
+function ToolGroup({ title, tools, onClick }: {
+  title: string;
+  tools: ToolPage[];
   onClick: (event: ReactMouseEvent<HTMLAnchorElement>) => void;
 }) {
-  const activeCategory = TOOL_CATEGORIES.find((category) => category.key === activeCategoryKey) ?? TOOL_CATEGORIES[0];
-  const normalizedQuery = query.trim().toLocaleLowerCase();
-  const tools = normalizedQuery
-    ? groupedTools.filter((tool) => {
-        const category = TOOL_CATEGORIES.find((item) => item.toolKeys.includes(tool.key));
-        return [tool.navLabel, tool.title, tool.description, category?.title]
-          .some((value) => value?.toLocaleLowerCase().includes(normalizedQuery));
-      })
-    : getToolsForCategory(activeCategory).filter((tool) => tool.key !== "circle");
-
   return (
-    <div className="tools-browser">
-      <div className="tools-browser-toolbar">
-        <label className="tools-search-field">
-          <span className="sr-only">Search Minecraft tools</span>
-          <i aria-hidden="true" />
-          <input
-            type="search"
-            value={query}
-            placeholder="Search tools…"
-            aria-label="Search Minecraft tools"
-            onChange={(event) => onQueryChange(event.target.value)}
-          />
-        </label>
-      </div>
-      <div className="tools-browser-body">
-        <div className="tools-category-list" aria-label="Tool categories">
-          {TOOL_CATEGORIES.map((category) => (
-            <button
-              key={category.key}
-              type="button"
-              className={category.key === activeCategoryKey && !normalizedQuery ? "is-active" : undefined}
-              aria-pressed={category.key === activeCategoryKey && !normalizedQuery}
-              aria-controls={`${id}-results`}
-              onClick={() => {
-                onQueryChange("");
-                onCategoryChange(category.key);
-              }}
-            >
-              {category.title.replace(/ Tools$/, "")}
-              <span>{category.toolKeys.filter((key) => key !== "circle").length}</span>
-            </button>
-          ))}
-        </div>
-        <section id={`${id}-results`} className="tools-results" aria-live="polite">
-          <div className="tools-results-heading">
-            <h2>{normalizedQuery ? "Search results" : activeCategory.title}</h2>
-            <span>{tools.length} {tools.length === 1 ? "tool" : "tools"}</span>
-          </div>
-          {tools.length > 0 ? (
-            <div className="tools-result-grid">
-              {tools.map((tool) => (
-                <Link key={tool.key} href={tool.href} onClick={onClick}>
-                  <strong>{tool.navLabel}</strong>
-                  <i aria-hidden="true">→</i>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <p className="tools-empty-state">No matching tools. Try another name or category.</p>
-          )}
-        </section>
-      </div>
-      <div className="tools-browser-footer">
-        <Link href="/#explore-tools" onClick={onClick}>View all tools <span aria-hidden="true">→</span></Link>
-      </div>
-    </div>
+    <section>
+      <h2>{title}</h2>
+      {tools.map((tool) => (
+        <Link key={tool.key} href={tool.href} onClick={onClick}>
+          <strong>{tool.navLabel}</strong>
+          <span>{tool.description}</span>
+        </Link>
+      ))}
+    </section>
   );
 }
 
@@ -122,14 +52,10 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
-  const [toolQuery, setToolQuery] = useState("");
-  const [activeToolsCategory, setActiveToolsCategory] = useState<ToolCategoryKey>(() => (
-    getCategoryForPath(pathname)?.key ?? TOOL_CATEGORIES[0].key
-  ));
   const mobileDetailsRef = useRef<HTMLDetailsElement>(null);
   const desktopToolsRef = useRef<HTMLDetailsElement>(null);
   const desktopToolsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const groupedToolActive = groupedTools.some((tool) => isCurrentPage(pathname, tool.href));
+  const groupedToolActive = pathname === "/minecraft-tools" || groupedTools.some((tool) => isCurrentPage(pathname, tool.href));
 
   const clearDesktopToolsTimer = useCallback(() => {
     if (desktopToolsTimerRef.current === null) return;
@@ -150,11 +76,9 @@ export function SiteHeader() {
     setMenuOpen(false);
     setToolsOpen(false);
     setMobileToolsOpen(false);
-    setToolQuery("");
-    setActiveToolsCategory(getCategoryForPath(pathname)?.key ?? TOOL_CATEGORIES[0].key);
     if (mobileDetailsRef.current) mobileDetailsRef.current.open = false;
     if (desktopToolsRef.current) desktopToolsRef.current.open = false;
-  }, [clearDesktopToolsTimer, pathname]);
+  }, [clearDesktopToolsTimer]);
 
   useEffect(() => clearDesktopToolsTimer, [clearDesktopToolsTimer]);
 
@@ -218,14 +142,7 @@ export function SiteHeader() {
             ref={desktopToolsRef}
             className={`desktop-tools-menu${groupedToolActive ? " is-active" : ""}`}
             open={toolsOpen}
-            onToggle={(event) => {
-              const open = event.currentTarget.open;
-              setToolsOpen(open);
-              if (open) {
-                setToolQuery("");
-                setActiveToolsCategory(getCategoryForPath(pathname)?.key ?? TOOL_CATEGORIES[0].key);
-              }
-            }}
+            onToggle={(event) => setToolsOpen(event.currentTarget.open)}
             onMouseEnter={() => scheduleDesktopTools(true)}
             onMouseLeave={() => scheduleDesktopTools(false)}
           >
@@ -233,14 +150,19 @@ export function SiteHeader() {
               Tools <span className="tools-chevron" aria-hidden="true" />
             </summary>
             <div className="desktop-tools-panel">
-              <ToolsBrowser
-                id="desktop-tools"
-                activeCategoryKey={activeToolsCategory}
-                query={toolQuery}
-                onCategoryChange={setActiveToolsCategory}
-                onQueryChange={setToolQuery}
-                onClick={openPage}
-              />
+              <div className="desktop-tools-groups">
+                {quickToolCategories.map((category) => (
+                  <ToolGroup
+                    key={category.key}
+                    title={category.title}
+                    tools={getToolsForCategory(category).filter((tool) => tool.key !== "circle")}
+                    onClick={openPage}
+                  />
+                ))}
+              </div>
+              <Link className="tools-menu-view-all" href="/minecraft-tools" onClick={openPage}>
+                View all Minecraft tools <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </details>
           {CONTENT_PAGES.map((page) => {
@@ -276,26 +198,24 @@ export function SiteHeader() {
                 className="mobile-tools-toggle"
                 aria-expanded={mobileToolsOpen}
                 aria-controls="mobile-tools-panel"
-                onClick={() => {
-                  const nextOpen = !mobileToolsOpen;
-                  if (nextOpen) {
-                    setToolQuery("");
-                    setActiveToolsCategory(getCategoryForPath(pathname)?.key ?? TOOL_CATEGORIES[0].key);
-                  }
-                  setMobileToolsOpen(nextOpen);
-                }}
+                onClick={() => setMobileToolsOpen((open) => !open)}
               >
                 <span>Tools</span><i className="tools-chevron" aria-hidden="true" />
               </button>
               {mobileToolsOpen && <div id="mobile-tools-panel">
-                <ToolsBrowser
-                  id="mobile-tools"
-                  activeCategoryKey={activeToolsCategory}
-                  query={toolQuery}
-                  onCategoryChange={setActiveToolsCategory}
-                  onQueryChange={setToolQuery}
-                  onClick={openPage}
-                />
+                <div className="mobile-tools-groups">
+                  {quickToolCategories.map((category) => (
+                    <ToolGroup
+                      key={category.key}
+                      title={category.title.replace(/ Tools$/, "")}
+                      tools={getToolsForCategory(category).filter((tool) => tool.key !== "circle")}
+                      onClick={openPage}
+                    />
+                  ))}
+                </div>
+                <Link className="tools-menu-view-all" href="/minecraft-tools" onClick={openPage}>
+                  View all Minecraft tools <span aria-hidden="true">→</span>
+                </Link>
               </div>}
             </div>
             {CONTENT_PAGES.map((page) => {
