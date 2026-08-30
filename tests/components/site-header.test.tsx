@@ -39,11 +39,18 @@ describe("SiteHeader", () => {
     expect(tools).toHaveAttribute("aria-current", "page");
     await userEvent.click(tools!);
 
-    expect(within(navigation).getByRole("heading", { name: "Build & Shape Tools" })).toBeInTheDocument();
-    expect(within(navigation).getByRole("heading", { name: "Art & Design Tools" })).toBeInTheDocument();
-    expect(within(navigation).getByRole("heading", { name: "Text & Server Tools" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("button", { name: /Build & Shape/ })).toHaveAttribute("aria-pressed", "true");
+    expect(within(navigation).getByRole("button", { name: /Art & Design/ })).toBeInTheDocument();
+    expect(within(navigation).getByRole("button", { name: /Text & Server/ })).toBeInTheDocument();
     expect(within(navigation).getByRole("link", { name: /Oval/ })).toHaveAttribute("href", "/oval-generator");
+    expect(within(navigation).queryByRole("link", { name: /Font/ })).not.toBeInTheDocument();
+
+    await userEvent.click(within(navigation).getByRole("button", { name: /Art & Design/ }));
     expect(within(navigation).getByRole("link", { name: /Font/ })).toHaveAttribute("href", "/minecraft-font-generator");
+
+    await userEvent.type(within(navigation).getByRole("searchbox", { name: "Search Minecraft tools" }), "give");
+    expect(within(navigation).getByRole("link", { name: "Give Command" })).toHaveAttribute("href", "/minecraft-give-command-generator");
+    expect(within(navigation).getByRole("link", { name: /View all tools/ })).toHaveAttribute("href", "/#explore-tools");
   });
 
   it("gives Blueprints its own active state", () => {
@@ -98,27 +105,21 @@ describe("SiteHeader", () => {
 
     await userEvent.click(within(navigation).getByText("Tools", { exact: true }));
     expect(document.body).toHaveStyle({ overflow: "hidden" });
-    expect(within(navigation).getByRole("heading", { name: "Build & Shape" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("button", { name: /Build & Shape/ })).toHaveAttribute("aria-pressed", "true");
     expect(within(navigation).getAllByRole("link").map((link) => link.querySelector("strong")?.textContent ?? link.textContent?.trim())).toEqual([
       "Circle",
       "Oval",
       "Sphere",
       "Dome",
       "Shape",
-      "Pixel Art",
-      "Map Art",
-      "Font",
-      "Banner",
-      "Text",
-      "Gradient",
-      "Color Codes",
-      "Enchanting Translator",
-      "Give Command",
-      "Name Checker",
-      "UUID Lookup",
+      "View all tools →",
       "House Designs",
       "Blueprints",
     ]);
+
+    await userEvent.click(within(navigation).getByRole("button", { name: /Player/ }));
+    expect(within(navigation).getByRole("link", { name: "Name Checker" })).toBeInTheDocument();
+    expect(within(navigation).getByRole("link", { name: "UUID Lookup" })).toBeInTheDocument();
 
     await userEvent.click(within(navigation).getByRole("link", { name: "Circle" }));
     await waitFor(() => expect(screen.getByLabelText("Open navigation menu")).toBeInTheDocument());

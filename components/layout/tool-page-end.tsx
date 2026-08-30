@@ -68,7 +68,7 @@ export function ToolDirectory({ toolKey }: { toolKey: ToolKey }) {
 
 export function HomeToolDirectory() {
   return (
-    <section className="home-tool-directory" aria-labelledby="home-tool-directory-title">
+    <section id="explore-tools" className="home-tool-directory" aria-labelledby="home-tool-directory-title">
       <div className="page-container">
         <h2 id="home-tool-directory-title">Explore Minecraft Tools</h2>
         <p className="home-tool-directory-intro">
