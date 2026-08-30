@@ -74,10 +74,9 @@ export function GeometryGenerator({
     if (nextShape === shape) return;
     setOptions((current) => {
       const fromOval = shape === "oval";
-      const toOval = nextShape === "oval";
       const nextDiameter = normalizeSize(fromOval ? current.width : current.diameter, nextShape);
-      const nextWidth = normalizeSize(toOval && !fromOval ? current.diameter : current.width, nextShape);
-      const nextHeight = normalizeSize(toOval && !fromOval ? current.diameter : current.height, nextShape);
+      const nextWidth = normalizeSize(current.width, nextShape);
+      const nextHeight = normalizeSize(current.height, nextShape);
       const nextMode = current.mode === "filled" ? "filled" as const : "hollow" as const;
       return {
         ...current,

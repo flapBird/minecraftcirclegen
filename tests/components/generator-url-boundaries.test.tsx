@@ -54,6 +54,18 @@ describe("generator URL boundaries", () => {
     expect(window.location.pathname).toBe("/");
   });
 
+  it("uses the oval's independent width and height when switching from a circle", () => {
+    navigationState.query = "diameter=21";
+    render(<GeometryGeneratorFromUrl shape="circle" />);
+    const canvas = screen.getByRole("img", { name: /circle blueprint/i });
+
+    fireEvent.click(screen.getByRole("button", { name: "Oval" }));
+
+    expect(screen.getByRole("spinbutton", { name: "Width" })).toHaveValue(21);
+    expect(screen.getByRole("spinbutton", { name: "Height" })).toHaveValue(15);
+    expect(screen.getByRole("img", { name: /oval blueprint, 21 by 15 blocks/i })).toBe(canvas);
+  });
+
   it("restores a non-default geometry shape from the query string", () => {
     navigationState.query = "shape=sphere&diameter=27&layer=4";
 
