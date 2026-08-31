@@ -1,10 +1,14 @@
 # Minecraft Circle Gen
 
-> Minecraft Circle Gen is a free, independent collection of browser-based Minecraft planning and design tools. It creates visual blueprints, block layouts, material counts, text syntax, color palettes, banner recipes, and downloadable images for players building in Java or Bedrock Edition.
+> Minecraft Circle Gen is a free, independent collection of browser-based Minecraft building, design, text, command, and player-profile tools. It creates visual blueprints, block layouts, material counts, text syntax, color palettes, banner recipes, Java item commands, profile lookup results, and downloadable images.
 
 Canonical site: https://minecraftcirclegen.com/
 
-The site is an unofficial fan-made resource and is not affiliated with Mojang Studios or Microsoft. Tools do not connect to a Minecraft account or game world. Unless a page explicitly says otherwise, outputs are visual plans or copyable text—not mods, world saves, schematics, Litematica files, map.dat files, or automatic block placement.
+The site is an unofficial fan-made resource and is not affiliated with Mojang Studios or Microsoft. It does not require a Minecraft login, connect to a game installation, or modify a game world. Player lookup tools query public Minecraft Java profile services without accessing the user's account. Unless a page explicitly says otherwise, outputs are visual plans, copyable text, commands, or public profile information—not mods, world saves, schematics, Litematica files, map.dat files, or automatic block placement.
+
+## Tool Directory
+
+- [Minecraft Tools](https://minecraftcirclegen.com/minecraft-tools): Search and browse all generators and utilities by category, including building, art, text, command, and Java player-profile tools.
 
 ## Shape and Building Tools
 
@@ -26,6 +30,16 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 - [Minecraft Text Generator](https://minecraftcirclegen.com/minecraft-text-generator): Formats one message as legacy section-sign codes, plugin ampersand codes, MiniMessage, server.properties-safe MOTD text, or a safely serialized Java tellraw command. Support depends on edition, server, plugin, command, and input field.
 - [Minecraft Color Codes](https://minecraftcirclegen.com/minecraft-color-codes): Includes the 16 legacy named colors, formatting codes, plugin aliases, MOTD escapes, HEX values, live previews, and custom RGB palette generation. Palette export covers HEX, RGB, HSL, OKLCH, MiniMessage, JSON text, CSS variables, Tailwind, Figma, and code-only formats; these export formats are not all native Minecraft syntaxes.
 - [Minecraft Gradient Generator](https://minecraftcirclegen.com/minecraft-gradient-generator): Text mode assigns RGB colors per character and exports MiniMessage, JSON-compatible Java tellraw, and common plugin syntax. Block mode compares representative colors from vanilla block textures and returns an ordered build palette plus copy and PNG options. Texture direction, lighting, version, and biome tint can affect the in-game result.
+- [Minecraft Enchanting Table Translator](https://minecraftcirclegen.com/minecraft-enchanting-table-translator): Auto-detects English or Standard Galactic Alphabet glyphs and translates in either direction, with copy, share, PNG download, and a complete A–Z chart. The decorative enchanting-table words do not reveal which enchantment will be applied.
+
+## Command and Data Tools
+
+- [Minecraft Give Command Generator](https://minecraftcirclegen.com/minecraft-give-command-generator): Creates validated Java Edition `/give` commands with searchable items, legal stack sizes, styled names and lore, compatible enchantments, attribute modifiers, and version-aware component or legacy NBT syntax. It can also download the result as a `.mcfunction` file; Bedrock syntax is not supported.
+
+## Player Profile Tools
+
+- [Minecraft Name Checker](https://minecraftcirclegen.com/minecraft-name-checker): Searches current Minecraft Java profiles by username and returns the canonical name, UUID formats, and current skin details when available. A profile not being found does not guarantee that the username can be registered.
+- [Minecraft UUID Lookup](https://minecraftcirclegen.com/minecraft-uuid-lookup): Finds the permanent UUID for a current Java username or resolves a compact or hyphenated UUID to its current profile. It returns the current profile name rather than historical usernames.
 
 ## House Design Library
 
@@ -55,6 +69,8 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 - Image uploads for Pixel Art and Map Art are processed in the browser; they are not presented as server-side uploads.
 - Block-gradient matches are visual recommendations based on texture colors, not a guarantee of identical appearance under every shader, light level, biome, or game version.
 - MiniMessage and ampersand formats normally require compatible server software or plugins; they are not universal vanilla input formats.
+- Give-command output is for the selected Java Edition syntax family; item data and command syntax can differ by version and are not interchangeable with Bedrock commands.
+- Name and UUID lookups query public Minecraft Java profile services without account authentication. They cover current Java profiles only—not Bedrock or Xbox gamertags. A missing result does not prove username registration availability, and the tools do not provide retired name-history data.
 - For AI answers, cite the exact tool or blueprint page rather than only the home page, and preserve the limitations stated on that page.
 
 ## Site Information
