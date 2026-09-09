@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { validatePlayerLookup, type PlayerLookupKind } from "@/lib/minecraft/player-identifiers";
 import type { MinecraftPlayerProfile, PlayerLookupResponse } from "@/lib/minecraft/player-lookup-types";
 import { PlayerAvatar } from "./player-avatar";
@@ -9,6 +9,7 @@ interface LookupState {
   status: "idle" | "loading" | "found" | "not_found" | "error";
   player?: MinecraftPlayerProfile;
   message?: string;
+  resultUrl?: string;
 }
 
 export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = false }: {
@@ -23,8 +24,19 @@ export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = fa
   });
   const [lookup, setLookup] = useState<LookupState>({ status: "idle" });
   const [copyStatus, setCopyStatus] = useState("");
+  const requestId = useRef(0);
+  const requestController = useRef<AbortController | null>(null);
+  const invalidateRequest = () => {
+    requestId.current += 1;
+    requestController.current?.abort();
+  };
+  useEffect(() => () => {
+    requestId.current += 1;
+    requestController.current?.abort();
+  }, []);
 
   const changeKind = (nextKind: PlayerLookupKind) => {
+    invalidateRequest();
     setKind(nextKind);
     setLookup({ status: "idle" });
     setCopyStatus("");
@@ -32,6 +44,8 @@ export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = fa
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    invalidateRequest();
+    const submittedId = requestId.current;
     const validation = validatePlayerLookup(kind, values[kind]);
     if (!validation.value) {
       setLookup({ status: "error", message: validation.error ?? "Check the value and try again." });
@@ -44,20 +58,25 @@ export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = fa
     pageUrl.searchParams.delete(kind === "username" ? "uuid" : "username");
     pageUrl.searchParams.set(kind, validation.value);
     window.history.replaceState(null, "", pageUrl);
+    const controller = new AbortController();
+    requestController.current = controller;
     try {
       const query = new URLSearchParams({ kind, value: validation.value });
       const response = await fetch(`/api/minecraft-player?${query.toString()}`, {
         headers: { Accept: "application/json" },
+        signal: controller.signal,
       });
       const data = await response.json() as PlayerLookupResponse;
+      if (requestId.current !== submittedId) return;
       if (data.status === "found") {
-        setLookup({ status: "found", player: data.player });
+        setLookup({ status: "found", player: data.player, resultUrl: pageUrl.toString() });
       } else if (data.error.code === "not_found") {
         setLookup({ status: "not_found", message: data.error.message });
       } else {
         setLookup({ status: "error", message: data.error.message });
       }
     } catch {
+      if (requestId.current !== submittedId) return;
       setLookup({ status: "error", message: "The lookup could not be completed. Please try again." });
     }
   };
@@ -71,7 +90,7 @@ export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = fa
     }
   };
 
-  const copyResultLink = () => copy(window.location.href, "Result link");
+  const copyResultLink = () => { if (lookup.resultUrl) void copy(lookup.resultUrl, "Result link"); };
 
   return <div className="generator-shell player-lookup-tool">
     <section className="player-lookup-card" aria-labelledby="player-lookup-title">
@@ -98,6 +117,8 @@ export function PlayerLookupTool({ initialKind, initialValue = "", showTabs = fa
             placeholder={kind === "username" ? "Notch" : "069a79f4-44e9-4726-a5be-fca90e38aaf5"}
             aria-describedby="player-lookup-hint"
             onChange={(event) => {
+              invalidateRequest();
+              setCopyStatus("");
               setValues((current) => ({ ...current, [kind]: event.target.value }));
               if (lookup.status !== "idle") setLookup({ status: "idle" });
             }}

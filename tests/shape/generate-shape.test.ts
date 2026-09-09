@@ -1,9 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { generateShape, generateShapeLayers, shapeCoordinates, type ShapeOptions } from "@/lib/shape/generate-shape";
+import { generateGeometry } from "@/lib/geometry/generate-geometry";
 
 const base: ShapeOptions = { shape: "circle", width: 21, height: 15, depth: 21, sides: 6, thickness: 1, filled: false, layer: 1 };
 
 describe("generateShape", () => {
+  it("matches independent dome layer grids for odd/even and filled/hollow plans", () => {
+    for (const size of [3, 4, 6, 10, 20, 21]) for (const filled of [false, true]) {
+      const layers = generateShapeLayers({ ...base, shape: "dome", width: size, filled });
+      for (const layer of layers) {
+        const dedicated = generateGeometry("dome", { diameter: size, width: size, height: size, mode: filled ? "filled" : "hollow", thickness: 1, layer: layer.layer });
+        expect(layer.grid).toEqual(dedicated.layerGrid);
+        expect(layer.totalBlocks).toBe(dedicated.totalBlocks);
+      }
+    }
+  });
   it("generates every requested MVP shape", () => {
     for (const shape of ["circle", "ellipse", "triangle", "rectangle", "polygon", "star", "sphere", "dome", "cylinder", "cone", "pyramid"] as const) {
       const result = generateShape({ ...base, shape });

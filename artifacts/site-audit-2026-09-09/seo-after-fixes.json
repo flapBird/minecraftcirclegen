@@ -1,0 +1,226 @@
+[
+  {
+    "route": "/about",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/about",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/dome-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/dome-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/house-blueprints/11x11-modern-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/11x11-modern-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/11x11-modern-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/11x11-modern-minecraft-house.webp"
+  },
+  {
+    "route": "/house-blueprints/11x9-modern-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/11x9-modern-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp"
+  },
+  {
+    "route": "/house-blueprints/7x7-starter-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/7x7-starter-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp"
+  },
+  {
+    "route": "/house-blueprints/7x9-small-survival-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/7x9-small-survival-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp"
+  },
+  {
+    "route": "/house-blueprints/9x11-cottage-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/9x11-cottage-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp"
+  },
+  {
+    "route": "/house-blueprints/9x9-oak-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/9x9-oak-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp"
+  },
+  {
+    "route": "/house-blueprints/9x9-small-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/9x9-small-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp"
+  },
+  {
+    "route": "/house-blueprints/compact-two-story-house",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints/compact-two-story-house",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp"
+  },
+  {
+    "route": "/house-blueprints",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-blueprints",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp"
+  },
+  {
+    "route": "/house-designs/modern",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs/modern",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp"
+  },
+  {
+    "route": "/house-designs/small",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs/small",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp"
+  },
+  {
+    "route": "/house-designs/staircases",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs/staircases",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp"
+  },
+  {
+    "route": "/house-designs/starter",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs/starter",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp"
+  },
+  {
+    "route": "/house-designs/survival",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs/survival",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp"
+  },
+  {
+    "route": "/house-designs",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/house-designs",
+    "ogImage": "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp",
+    "twitterImage": "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp"
+  },
+  {
+    "route": "/",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-banner-maker",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-banner-maker",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-color-codes",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-color-codes",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-font-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-font-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-give-command-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-give-command-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-gradient-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-gradient-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-map-art-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-map-art-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-pixel-art-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-pixel-art-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-shape-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-shape-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-text-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-text-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/minecraft-tools",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/minecraft-tools",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/oval-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/oval-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/privacy",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/privacy",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/sphere-generator",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/sphere-generator",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  },
+  {
+    "route": "/terms",
+    "h1": 1,
+    "canonical": "https://minecraftcirclegen.com/terms",
+    "ogImage": "https://minecraftcirclegen.com/og.png",
+    "twitterImage": "https://minecraftcirclegen.com/og.png"
+  }
+]

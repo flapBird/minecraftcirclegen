@@ -103,7 +103,7 @@ describe("Java give command generator", () => {
       enchantments: [{ id: "power", level: 5 }],
     });
     expect(invalid.command).toBeNull();
-    expect(invalid.errors).toContain("Power is not compatible with Diamond Sword.");
+    expect(invalid.errors).toContain("Power is not compatible with Diamond Sword in the selected version.");
   });
 
   it("generates styled text and version-aware attribute modifiers", () => {
@@ -149,5 +149,19 @@ describe("Java give command generator", () => {
     });
     expect(book.errors).toEqual([]);
     expect(book.command).toContain("minecraft:stored_enchantments={'minecraft:power':5}");
+  });
+
+  it("filters enchantments introduced after the chosen release", () => {
+    const book = { ...baseInput, itemId: "enchanted_book", enchantments: [{ id: "wind_burst", level: 1 }] };
+    expect(generateGiveCommand({ ...book, version: "java-legacy" }).command).toBeNull();
+    expect(generateGiveCommand({ ...book, version: "java-components", attributeComponentVersion: "1.20.5" }).command).toBeNull();
+    expect(generateGiveCommand({ ...book, version: "java-components", attributeComponentVersion: "1.21" }).errors).toEqual([]);
+    expect(getCompatibleEnchantments("enchanted_book", "java-legacy").map(({ id }) => id)).not.toContain("wind_burst");
+  });
+
+  it.each(["1.20.5", "1.21", "1.21.2"] as const)("uses the jump attribute ID for %s", (attributeComponentVersion) => {
+    const result = generateGiveCommand({ ...baseInput, version: "java-components", attributeComponentVersion, attributes: [{ attribute: "jump_strength", amount: 1, operation: "add_value", slot: "mainhand" }] });
+    expect(result.errors).toEqual([]);
+    expect(result.command).toContain(`type:'minecraft:${attributeComponentVersion === "1.21.2" ? "" : "generic."}jump_strength'`);
   });
 });

@@ -3,6 +3,11 @@ export interface GradientCharacter {
   hex: string;
 }
 
+export function normalizeTextGradientStops(stops: string[]) {
+  return (stops.length >= 2 ? stops : ["#55FF55", "#55FFFF"])
+    .map((stop) => /^#[0-9a-f]{6}$/i.test(stop) ? stop.toUpperCase() : "#FFFFFF");
+}
+
 function parseHex(hex: string) {
   const clean = /^#[0-9a-f]{6}$/i.test(hex) ? hex.slice(1) : "ffffff";
   return [0, 2, 4].map((index) => Number.parseInt(clean.slice(index, index + 2), 16));
@@ -19,7 +24,7 @@ function interpolate(start: string, end: string, amount: number) {
 }
 
 export function generateTextGradient(text: string, stops: string[]): GradientCharacter[] {
-  const activeStops = stops.length >= 2 ? stops : ["#55FF55", "#55FFFF"];
+  const activeStops = normalizeTextGradientStops(stops);
   const visibleLength = Math.max(1, [...text].filter((character) => character !== "\n").length - 1);
   let cursor = 0;
   return [...text].map((character) => {
@@ -35,7 +40,7 @@ export function textGradientOutputs(characters: GradientCharacter[], stops: stri
   const plain = characters.map((item) => item.character).join("");
   const miniMessageText = plain.replaceAll("\\", "\\\\").replaceAll("<", "\\<");
   const hex = characters.map((item) => item.character === "\n" ? "\n" : `<${item.hex}>${item.character}`).join("");
-  const miniMessage = `<gradient:${stops.join(":")}>${miniMessageText}</gradient>`;
+  const miniMessage = `<gradient:${normalizeTextGradientStops(stops).join(":")}>${miniMessageText}</gradient>`;
   const jsonComponents = characters.map((item) => ({ text: item.character, color: item.hex.toLowerCase() }));
   const tellraw = `/tellraw @a ${JSON.stringify(jsonComponents)}`;
   const pluginRgb = characters.map((item) => item.character === "\n" ? "\n" : `&${item.hex}${item.character}`).join("");

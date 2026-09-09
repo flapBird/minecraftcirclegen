@@ -150,6 +150,7 @@ export function FontGenerator() {
               <small>{text.split(/\r\n?|\n/).length} lines · {text.length} characters</small>
             </div>
             <p className="font-format-hint">
+              Creates pixel artwork and block plans, not an installable font. Letters use uppercase A–Z; unsupported characters become question marks.
               Inline codes: <code>&amp;a</code> colour, <code>&amp;l</code> bold, <code>&amp;o</code> italic,
               <code>&amp;n</code> underline, <code>&amp;m</code> strike, <code>&amp;k</code> obfuscated, <code>&amp;r</code> reset. <code>§</code> also works.
             </p>

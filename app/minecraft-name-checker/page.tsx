@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PlayerLookupTool } from "@/components/player-lookup/player-lookup-tool";
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/minecraft-name-checker" },
-  openGraph: { title, description, url: "/minecraft-name-checker", type: "website" },
-  twitter: { card: "summary_large_image", title, description },
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES, title, description, url: "/minecraft-name-checker", type: "website" },
+  twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title, description },
 };
 
 export default async function MinecraftNameCheckerPage({ searchParams }: {

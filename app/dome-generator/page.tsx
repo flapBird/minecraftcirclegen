@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import { GeometryLanding } from "@/components/geometry-generator/geometry-landing";
 
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/dome-generator" },
-  openGraph: { title, description, url: "/dome-generator", type: "website" },
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES, title, description, url: "/dome-generator", type: "website" },
 };
 
 export default function DomePage() {

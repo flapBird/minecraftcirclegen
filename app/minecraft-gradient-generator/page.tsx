@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GradientGenerator } from "@/components/gradient-generator/gradient-generator";
@@ -15,13 +16,13 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/minecraft-gradient-generator" },
-  openGraph: {
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES,
     title,
     description,
     url: "/minecraft-gradient-generator",
     type: "website",
   },
-  twitter: {
+  twitter: { images: DEFAULT_SOCIAL_IMAGES,
     card: "summary_large_image",
     title,
     description,

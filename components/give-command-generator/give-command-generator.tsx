@@ -11,6 +11,7 @@ import {
   GIVE_COMMAND_VERSIONS,
   TEXT_COLORS,
   generateGiveCommand,
+  giveCommandFunctionFile,
   getCompatibleEnchantments,
   type GiveAttributeComponentVersion,
   type GiveAttributeModifier,
@@ -57,7 +58,7 @@ export function GiveCommandGenerator() {
   const draggedLore = useRef<number | null>(null);
   const draggedEnchantment = useRef<number | null>(null);
   const selectedItem = getJavaItem(itemId);
-  const compatibleEnchantments = useMemo(() => getCompatibleEnchantments(itemId), [itemId]);
+  const compatibleEnchantments = useMemo(() => getCompatibleEnchantments(itemId, version, attributeComponentVersion), [itemId, version, attributeComponentVersion]);
 
   const filteredItems = useMemo(() => {
     const query = itemQuery.trim().toLowerCase();
@@ -82,6 +83,15 @@ export function GiveCommandGenerator() {
     unbreakable,
   }), [amount, attributeComponentVersion, attributes, customName, customNameStyle, enchantments, itemId, lore, loreStyles, playerName, targetChoice, unbreakable, version]);
 
+  const changeVersion = (nextVersion: GiveCommandVersion, nextSubVersion = attributeComponentVersion) => {
+    const allowed = new Set(getCompatibleEnchantments(itemId, nextVersion, nextSubVersion).map(({ id }) => id));
+    const retained = enchantments.filter(({ id }) => allowed.has(id));
+    setVersion(nextVersion);
+    setAttributeComponentVersion(nextSubVersion);
+    setEnchantments(retained);
+    if (retained.length !== enchantments.length) setStatus("Enchantments unavailable in the selected version were removed");
+  };
+
   const chooseItem = (nextItemId: string) => {
     const item = getJavaItem(nextItemId);
     if (!item) return;
@@ -90,7 +100,7 @@ export function GiveCommandGenerator() {
     setItemListOpen(false);
     if (amount > item.maxStack) setAmount(item.maxStack);
     setEnchantments((current) => {
-      const compatibleIds = new Set(getCompatibleEnchantments(item.id).map(({ id }) => id));
+      const compatibleIds = new Set(getCompatibleEnchantments(item.id, version, attributeComponentVersion).map(({ id }) => id));
       const next = current.filter((row) => compatibleIds.has(row.id));
       if (next.length !== current.length) setStatus("Enchantments incompatible with the new item were removed");
       return next;
@@ -200,7 +210,7 @@ export function GiveCommandGenerator() {
 
   const downloadFunction = () => {
     if (!result.command) return;
-    const blob = new Blob([`${result.command}\n`], { type: "text/plain;charset=utf-8" });
+    const blob = new Blob([giveCommandFunctionFile(result.command)], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
@@ -221,15 +231,15 @@ export function GiveCommandGenerator() {
 
           <label className="tool-field">
             <span>Command version</span>
-            <select value={version} onChange={(event) => setVersion(event.target.value as GiveCommandVersion)}>
+            <select value={version} onChange={(event) => changeVersion(event.target.value as GiveCommandVersion)}>
               {GIVE_COMMAND_VERSIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
             </select>
             <small>{GIVE_COMMAND_VERSIONS.find((option) => option.id === version)?.detail}</small>
           </label>
 
-          {version === "java-components" && attributes.length > 0 && <label className="tool-field">
-            <span>Attribute modifier sub-version</span>
-            <select value={attributeComponentVersion} onChange={(event) => setAttributeComponentVersion(event.target.value as GiveAttributeComponentVersion)}>
+          {version === "java-components" && <label className="tool-field">
+            <span>Java sub-version</span>
+            <select value={attributeComponentVersion} onChange={(event) => changeVersion(version, event.target.value as GiveAttributeComponentVersion)}>
               {ATTRIBUTE_COMPONENT_VERSIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
             </select>
             <small>{ATTRIBUTE_COMPONENT_VERSIONS.find((option) => option.id === attributeComponentVersion)?.detail}</small>

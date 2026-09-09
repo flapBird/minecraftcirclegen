@@ -70,7 +70,7 @@ export const GIVE_COMMAND_VERSIONS: Array<{
 }> = [
   { id: "java-latest", label: "Java 1.21.5–26.2", detail: "Current item components with inline SNBT text components." },
   { id: "java-components", label: "Java 1.20.5–1.21.4", detail: "First-generation item components with JSON text strings." },
-  { id: "java-legacy", label: "Java 1.20.4 and earlier", detail: "Legacy item NBT used before item components." },
+  { id: "java-legacy", label: "Java 1.20.4", detail: "Legacy item NBT with the Java 1.20.4 item catalogue." },
 ];
 
 export const ATTRIBUTE_COMPONENT_VERSIONS: Array<{
@@ -197,14 +197,17 @@ function itemGroups(itemId: string): Set<EnchantmentItemGroup> {
   return groups;
 }
 
-export function getCompatibleEnchantments(itemId: string) {
+export function getCompatibleEnchantments(itemId: string, version: GiveCommandVersion = "java-latest", subVersion: GiveAttributeComponentVersion = "1.21.2") {
   const groups = itemGroups(itemId);
-  if (groups.has("enchanted_book")) return ENCHANTMENTS;
-  return ENCHANTMENTS.filter((enchantment) => enchantment.compatibleWith.some((group) => groups.has(group)));
+  const supportsMaceEnchantments = version === "java-latest" || (version === "java-components" && subVersion !== "1.20.5");
+  return ENCHANTMENTS.filter((enchantment) =>
+    (supportsMaceEnchantments || !["breach", "density", "wind_burst"].includes(enchantment.id)) &&
+    (groups.has("enchanted_book") || enchantment.compatibleWith.some((group) => groups.has(group))),
+  );
 }
 
-export function isEnchantmentCompatible(itemId: string, enchantmentId: string) {
-  return getCompatibleEnchantments(itemId).some(({ id }) => id === enchantmentId);
+export function isEnchantmentCompatible(itemId: string, enchantmentId: string, version: GiveCommandVersion = "java-latest", subVersion: GiveAttributeComponentVersion = "1.21.2") {
+  return getCompatibleEnchantments(itemId, version, subVersion).some(({ id }) => id === enchantmentId);
 }
 
 function lengthOf(value: string) {
@@ -268,7 +271,7 @@ function validate(input: GiveCommandInput) {
     if (seen.has(enchantment.id)) errors.push(`${option.name} can only be added once.`);
     seen.add(enchantment.id);
     if (!Number.isInteger(enchantment.level) || enchantment.level < 1 || enchantment.level > option.maxLevel) errors.push(`${option.name} level must be between 1 and ${option.maxLevel}.`);
-    if (item && !isEnchantmentCompatible(item.id, enchantment.id)) errors.push(`${option.name} is not compatible with ${item.name}.`);
+    if (item && !isEnchantmentCompatible(item.id, enchantment.id, input.version, input.attributeComponentVersion)) errors.push(`${option.name} is not compatible with ${item.name} in the selected version.`);
   });
 
   const attributes = input.attributes ?? [];
@@ -299,7 +302,8 @@ function modifierId(index: number) {
 
 function attributeType(modifier: GiveAttributeModifier, modernIds: boolean) {
   const option = ATTRIBUTES.find(({ id }) => id === modifier.attribute) ?? ATTRIBUTES[0];
-  return `minecraft:${modernIds ? option.id : option.legacyId}`;
+  const prefixedId = option.id === "jump_strength" ? "generic.jump_strength" : option.legacyId;
+  return `minecraft:${modernIds ? option.id : prefixedId}`;
 }
 
 function modernAttributeEntry(modifier: GiveAttributeModifier, index: number, modernIds: boolean) {
@@ -355,7 +359,7 @@ function legacyNbt(input: GiveCommandInput) {
   if (lore.length) display.push(`Lore:[${lore.map(({ line, style }) => jsonTextString(line, style)).join(",")}]`);
   if (display.length) tags.push(`display:{${display.join(",")}}`);
   if (input.enchantments.length) {
-    const enchantments = input.enchantments.map((enchantment) => `{id:${quoteSnbtString(`minecraft:${enchantment.id}`)},lvl:${enchantment.level}s}`).join(",");
+    const enchantments = input.enchantments.map((enchantment) => `{id:${quoteSnbtString(`minecraft:${enchantment.id === "sweeping_edge" ? "sweeping" : enchantment.id}`)},lvl:${enchantment.level}s}`).join(",");
     tags.push(`${input.itemId === "enchanted_book" ? "StoredEnchantments" : "Enchantments"}:[${enchantments}]`);
   }
   const attributes = input.attributes ?? [];
@@ -380,4 +384,8 @@ export function generateGiveCommand(input: GiveCommandInput): GiveCommandResult 
       ? firstGenerationComponents(input)
       : legacyNbt(input);
   return { command: `/give ${input.target} minecraft:${input.itemId}${itemData} ${input.amount}`, errors: [] };
+}
+
+export function giveCommandFunctionFile(command: string) {
+  return `${command.replace(/^\//, "")}\n`;
 }

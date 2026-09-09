@@ -30,5 +30,34 @@ describe("house blueprint content", () => {
       }
     }
   });
-});
 
+  it("accounts for each placed item, counting a two-block door once", () => {
+    for (const house of HOUSE_BLUEPRINTS) {
+      const rows = house.layers.flatMap((layer) => layer.rows).join("");
+      const placedCells = [...rows].filter((cell) => cell !== ".").length;
+      expect(rows.match(/D/g)).toHaveLength(1);
+      expect(rows.match(/U/g)).toHaveLength(1);
+      expect(house.blockCount).toBe(placedCells - 1);
+      expect(house.materials.find(({ name }) => name.endsWith("door"))?.count).toBe(1);
+      expect(house.materials.some(({ name }) => name.includes("/") || name.includes(" or "))).toBe(false);
+      for (const material of house.materials) expect(material.count).toBeGreaterThan(0);
+    }
+  });
+
+  it("provides continuous stairs with two blocks of headroom and a landing", () => {
+    for (const house of HOUSE_BLUEPRINTS.filter(({ floors }) => floors === 2)) {
+      const stairPositions: Array<{ x: number; y: number; z: number }> = [];
+      house.layers.forEach((layer, y) => layer.rows.forEach((row, z) => [...row].forEach((cell, x) => {
+        if (cell === "T") stairPositions.push({ x, y, z });
+      })));
+      expect(stairPositions).toHaveLength(4);
+      stairPositions.forEach(({ x, y, z }, index) => {
+        expect(house.layers[y + 1].rows[z][x]).toBe(".");
+        expect(house.layers[y + 2].rows[z][x]).toBe(".");
+        if (index > 0) expect(stairPositions[index - 1]).toEqual({ x, y: y - 1, z: z + 1 });
+      });
+      const top = stairPositions[3];
+      expect(house.layers[top.y].rows[top.z - 1][top.x]).toBe("F");
+    }
+  });
+});

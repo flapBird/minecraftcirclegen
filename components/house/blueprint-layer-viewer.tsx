@@ -30,7 +30,8 @@ export function BlueprintLayerViewer({
     const cell = Math.max(30, Math.min(60, Math.floor(720 / Math.max(width, length))));
     const margin = 48;
     const legendHeight = palette.length * 28 + 100;
-    const svgWidth = width * cell + margin * 2;
+    const legendWidth = Math.max(...palette.map((item) => `${item.code} — ${item.label}`.length), 0) * 9 + margin * 2 + 28;
+    const svgWidth = Math.max(width * cell + margin * 2, legendWidth);
     const svgHeight = length * cell + margin * 2 + legendHeight;
     const cells = layer.rows.flatMap((row, z) => row.split("").map((code, x) => {
       const item = paletteMap.get(code);

@@ -123,7 +123,7 @@ function exportPalette(palette: string[], preset: ExportPreset, format: ColorFor
   if (preset === "json") return JSON.stringify(palette.map((color, index) => ({ text: `Palette ${paletteStep(index)}`, color })), null, 2);
   if (preset === "figma") return JSON.stringify(Object.fromEntries(palette.map((color, index) => [`${safePrefix}/${paletteStep(index)}`, { $type: "color", $value: color }])), null, 2);
   if (preset === "tailwind") return `@theme {\n${palette.map((color, index) => `  --color-${safePrefix}-${paletteStep(index)}: ${formatColor(color, format)};`).join("\n")}\n}`;
-  if (preset === "tailwind3") return `module.exports = {\n  theme: {\n    extend: {\n      colors: {\n        ${safePrefix}: {\n${palette.map((color, index) => `          ${paletteStep(index)}: "${formatColor(color, format)}",`).join("\n")}\n        }\n      }\n    }\n  }\n};`;
+  if (preset === "tailwind3") return `module.exports = {\n  theme: {\n    extend: {\n      colors: {\n        ${JSON.stringify(safePrefix)}: {\n${palette.map((color, index) => `          ${paletteStep(index)}: "${formatColor(color, format)}",`).join("\n")}\n        }\n      }\n    }\n  }\n};`;
   if (preset === "css") return `:root {\n${palette.map((color, index) => `  --${safePrefix}-${paletteStep(index)}: ${formatColor(color, format)};`).join("\n")}\n}`;
   return palette.map((color) => formatColor(color, format)).join("\n");
 }
@@ -144,6 +144,9 @@ export function ColorCodesTool() {
   const [prefix, setPrefix] = useState("minecraft");
   const timer = useRef<number | null>(null);
   const paletteMenu = useRef<HTMLDivElement | null>(null);
+  const exportDialog = useRef<HTMLElement | null>(null);
+  const exportBackdrop = useRef<HTMLDivElement | null>(null);
+  const exportTrigger = useRef<HTMLButtonElement | null>(null);
   const paletteOptions = useMemo(() => makePaletteOptions(customColor), [customColor]);
   const selectedPalette = paletteOptions.find((option) => option.id === paletteMode) ?? paletteOptions[0];
   const palette = selectedPalette.colors;
@@ -165,13 +168,48 @@ export function ColorCodesTool() {
 
   useEffect(() => {
     if (!exportOpen) return;
+    const dialog = exportDialog.current;
+    if (!dialog) return;
+    const returnFocus = exportTrigger.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setExportOpen(false); };
+    const background: Array<{ element: Element; inert: boolean }> = [];
+    let branch: Element | null = exportBackdrop.current;
+    while (branch?.parentElement) {
+      for (const sibling of branch.parentElement.children) {
+        if (sibling === branch) continue;
+        background.push({ element: sibling, inert: sibling.hasAttribute("inert") });
+        sibling.setAttribute("inert", "");
+      }
+      if (branch.parentElement === document.body) break;
+      branch = branch.parentElement;
+    }
+    const focusable = () => Array.from(dialog.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])'))
+      .filter((element) => !element.closest("[hidden], [inert]"));
+    const first = () => focusable()[0] ?? dialog;
+    const containFocus = (event: FocusEvent) => {
+      if (!dialog.contains(event.target as Node)) first().focus();
+    };
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { event.preventDefault(); setExportOpen(false); }
+      if (event.key !== "Tab") return;
+      const elements = focusable();
+      const last = elements.at(-1) ?? dialog;
+      if (event.shiftKey && document.activeElement === first()) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first().focus();
+      }
+    };
+    first().focus();
+    document.addEventListener("focusin", containFocus);
     window.addEventListener("keydown", close);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", close);
+      document.removeEventListener("focusin", containFocus);
+      background.forEach(({ element, inert }) => { if (!inert) element.removeAttribute("inert"); });
+      returnFocus?.focus();
     };
   }, [exportOpen]);
 
@@ -211,7 +249,7 @@ export function ColorCodesTool() {
           </div>
           <div className="compact-palette-actions" ref={paletteMenu}>
             <button type="button" className="compact-palette-expand" aria-label="Choose palette type" aria-expanded={paletteMenuOpen} onClick={() => setPaletteMenuOpen((open) => !open)}><span aria-hidden="true" /></button>
-            <button type="button" className="compact-export-button" aria-label="Export color palette" title="Export color palette" onClick={() => setExportOpen(true)}><span aria-hidden="true" /></button>
+            <button ref={exportTrigger} type="button" className="compact-export-button" aria-label="Export color palette" title="Export color palette" onClick={() => setExportOpen(true)}><span aria-hidden="true" /></button>
             {paletteMenuOpen && <div className="compact-palette-menu" role="menu" aria-label="Palette type">
               {paletteOptions.map((option) => <button key={option.id} type="button" role="menuitemradio" aria-checked={paletteMode === option.id} onClick={() => { setPaletteMode(option.id); setPaletteMenuOpen(false); }}><span>{option.name}</span><i>{option.colors.map((color, index) => <b key={`${option.id}-${color}-${index}`} style={{ background: color }} className={index === option.active ? "is-base" : ""} />)}</i></button>)}
             </div>}
@@ -260,8 +298,8 @@ export function ColorCodesTool() {
       </section>
 
       {exportOpen && (
-        <div className="palette-export-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setExportOpen(false); }}>
-          <section className="palette-export-dialog" role="dialog" aria-modal="true" aria-labelledby="palette-export-title">
+        <div ref={exportBackdrop} className="palette-export-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setExportOpen(false); }}>
+          <section ref={exportDialog} tabIndex={-1} className="palette-export-dialog" role="dialog" aria-modal="true" aria-labelledby="palette-export-title">
             <header className="palette-export-header"><h2 id="palette-export-title">Export color codes</h2><button type="button" aria-label="Close palette export" onClick={() => setExportOpen(false)}>×</button></header>
             <div className="palette-export-body">
               <nav className="palette-export-presets" aria-label="Export use case">

@@ -1,4 +1,4 @@
-import type { BlueprintCell, BlueprintLayer } from "./types";
+import type { BlueprintCell, BlueprintLayer, HouseMaterial } from "./types";
 
 type BlueprintSpec = {
   width: number;
@@ -11,6 +11,8 @@ type BlueprintSpec = {
     wall: string;
     frame: string;
     roof: string;
+    door: string;
+    stairs?: string;
   };
 };
 
@@ -31,9 +33,26 @@ export function createPalette(names: BlueprintSpec["paletteNames"]): BlueprintCe
     { code: "W", label: names.wall, color: colors.wall },
     { code: "L", label: names.frame, color: colors.frame },
     { code: "G", label: "Glass pane", color: colors.glass },
-    { code: "D", label: "Door opening", color: colors.door },
+    { code: "D", label: `${names.door} — lower half, opens toward front`, material: names.door, color: colors.door },
+    { code: "U", label: "Door upper half — placed with D below", material: names.door, itemsPerCell: 0, color: colors.door },
     { code: "R", label: names.roof, color: colors.roof },
+    ...(names.stairs ? [{ code: "T", label: `${names.stairs} — bottom half, ascending toward grid top`, material: names.stairs, color: colors.floor }] : []),
   ];
+}
+
+export function countBlueprintMaterials(layers: BlueprintLayer[], palette: BlueprintCell[]): HouseMaterial[] {
+  const cells = new Map(palette.map((cell) => [cell.code, cell]));
+  const counts = new Map<string, number>();
+  for (const layer of layers) for (const row of layer.rows) for (const code of row) {
+    if (code === ".") continue;
+    const cell = cells.get(code);
+    if (!cell) throw new Error(`Unknown blueprint cell: ${code}`);
+    const count = cell.itemsPerCell ?? 1;
+    if (count === 0) continue;
+    const name = cell.material ?? cell.label;
+    counts.set(name, (counts.get(name) ?? 0) + count);
+  }
+  return [...counts].map(([name, count]) => ({ name, count }));
 }
 
 function blank(width: number, length: number) {
@@ -54,7 +73,7 @@ function foundation(width: number, length: number) {
   return serialize(grid);
 }
 
-function walls(width: number, length: number, level: number, upperFloor: boolean) {
+function walls(width: number, length: number, level: number, upperFloor: boolean, stairs = false) {
   const grid = blank(width, length);
   const doorX = Math.floor(width / 2);
   const midZ = Math.floor(length / 2);
@@ -68,7 +87,8 @@ function walls(width: number, length: number, level: number, upperFloor: boolean
     }
   }
 
-  if (!upperFloor && level < 3) grid[length - 1][doorX] = "D";
+  if (!upperFloor && level < 3) grid[length - 1][doorX] = level === 1 ? "D" : "U";
+  if (stairs && !upperFloor) grid[length - 2 - level][width - 3] = "T";
   if (level === 2) {
     const frontWindows = [2, width - 3].filter((x) => x > 0 && x < width - 1 && x !== doorX);
     frontWindows.forEach((x) => { grid[length - 1][x] = "G"; });
@@ -87,8 +107,9 @@ function deck(width: number, length: number) {
     for (let x = 0; x < width; x += 1) grid[z][x] = "F";
   }
   const stairX = Math.max(1, width - 3);
-  grid[Math.max(1, length - 3)][stairX] = ".";
-  grid[Math.max(1, length - 4)][stairX] = ".";
+  grid[length - 4][stairX] = ".";
+  grid[length - 5][stairX] = ".";
+  grid[length - 6][stairX] = "T";
   return serialize(grid);
 }
 
@@ -115,14 +136,14 @@ export function buildBlueprintLayers(spec: BlueprintSpec): BlueprintLayer[] {
       level === 1
         ? "Place the door opening and corner posts while building the first wall course."
         : level === 2
-          ? "Add the second door block and the marked glass panes."
+          ? "Leave U for the upper half of the door already placed at D below; add the marked glass panes."
           : "Complete the wall plate above the openings so the roof has continuous support.",
-      walls(spec.width, spec.length, level, false),
+      walls(spec.width, spec.length, level, false, spec.floors === 2),
     );
   }
 
   if (spec.floors === 2) {
-    add("Upper floor", "Fill the second-floor deck, leaving the two marked empty cells for the staircase opening.", deck(spec.width, spec.length));
+    add("Upper floor", "Leave the two empty stairwell cells open for headroom. Place T as a bottom-half stair rising toward the top of the grid; the next floor cell is the landing.", deck(spec.width, spec.length));
     for (let level = 1; level <= 3; level += 1) {
       add(
         level === 1 ? "Upper walls" : level === 2 ? "Upper windows" : "Upper wall plate",
@@ -133,15 +154,15 @@ export function buildBlueprintLayers(spec: BlueprintSpec): BlueprintLayer[] {
   }
 
   if (spec.roof === "flat") {
-    add("Flat roof", "Cover the full footprint with slabs or full blocks and keep the outside edge continuous.", roof(spec.width, spec.length, 0, true));
+    add("Flat roof", "Cover the full footprint with the full blocks named R in the legend. The count assumes full blocks, not slabs.", roof(spec.width, spec.length, 0, true));
   } else {
     const roofLayerCount = Math.ceil(spec.length / 2);
     for (let inset = 0; inset < roofLayerCount; inset += 1) {
       add(
         inset === 0 ? "Roof base" : inset === roofLayerCount - 1 ? "Roof ridge" : `Roof tier ${inset + 1}`,
         inset === 0
-          ? "Place the first roof tier across the full depth of the house."
-          : "Move one block inward from both long eaves and repeat the roof tier.",
+          ? "Place the full-block roof base across the footprint. This is a solid stepped roof, not a stair or slab roof."
+          : "Move one row inward from the front and rear edges, then fill the marked tier with full blocks. The ridge runs left to right in the grid.",
         roof(spec.width, spec.length, inset, false),
       );
     }
@@ -149,4 +170,3 @@ export function buildBlueprintLayers(spec: BlueprintSpec): BlueprintLayer[] {
 
   return layers;
 }
-

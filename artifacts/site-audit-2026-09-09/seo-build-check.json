@@ -1,0 +1,578 @@
+[
+  {
+    "route": "/about",
+    "title": "About Minecraft Circle Gen",
+    "titleLength": 26,
+    "descriptionLength": 116,
+    "h1": [
+      "Built to make Minecraft planning easier"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/about"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/dome-generator",
+    "title": "Minecraft Dome Generator – Layer-by-Layer Blueprint",
+    "titleLength": 51,
+    "descriptionLength": 123,
+    "h1": [
+      "Minecraft Dome Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/dome-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/11x11-modern-house",
+    "title": "11×11 Two-Level Modern House Blueprint: Layers & Material List",
+    "titleLength": 62,
+    "descriptionLength": 144,
+    "h1": [
+      "11×11 Two-Level Modern House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/11x11-modern-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/11x11-modern-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/11x9-modern-house",
+    "title": "11×9 Modern House Blueprint: Layers & Material List",
+    "titleLength": 51,
+    "descriptionLength": 132,
+    "h1": [
+      "11×9 Modern House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/11x9-modern-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/7x7-starter-house",
+    "title": "7×7 Starter House Blueprint: Layers & Material List",
+    "titleLength": 51,
+    "descriptionLength": 131,
+    "h1": [
+      "7×7 Starter House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/7x7-starter-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/7x9-small-survival-house",
+    "title": "7×9 Small Survival House Blueprint: Layers & Material List",
+    "titleLength": 58,
+    "descriptionLength": 138,
+    "h1": [
+      "7×9 Small Survival House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/7x9-small-survival-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/9x11-cottage-house",
+    "title": "9×11 Cottage House Blueprint: Layers & Material List",
+    "titleLength": 52,
+    "descriptionLength": 133,
+    "h1": [
+      "9×11 Cottage House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/9x11-cottage-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/9x9-oak-house",
+    "title": "9×9 Oak Starter House Blueprint: Layers & Material List",
+    "titleLength": 55,
+    "descriptionLength": 135,
+    "h1": [
+      "9×9 Oak Starter House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/9x9-oak-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/9x9-small-house",
+    "title": "9×9 Small Cottage House Blueprint: Layers & Material List",
+    "titleLength": 57,
+    "descriptionLength": 137,
+    "h1": [
+      "9×9 Small Cottage House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/9x9-small-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints/compact-two-story-house",
+    "title": "Compact Two-Story House Blueprint: Layers & Material List",
+    "titleLength": 57,
+    "descriptionLength": 138,
+    "h1": [
+      "Compact Two-Story House Blueprint"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints/compact-two-story-house"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-blueprints",
+    "title": "Minecraft House Blueprints: Exact Plans & Material Lists",
+    "titleLength": 56,
+    "descriptionLength": 142,
+    "h1": [
+      "Minecraft House Blueprints"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-blueprints"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x11-minecraft-cottage-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs/modern",
+    "title": "Minecraft Modern House Designs with Plans & Blueprints",
+    "titleLength": 54,
+    "descriptionLength": 138,
+    "h1": [
+      "Minecraft Modern House Designs"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs/modern"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/11x9-modern-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs/small",
+    "title": "Small Minecraft House Designs: Compact Plans & Blueprints",
+    "titleLength": 57,
+    "descriptionLength": 123,
+    "h1": [
+      "Small Minecraft House Designs"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs/small"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x9-small-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs/staircases",
+    "title": "Minecraft House Staircase Designs: 8 Buildable Layouts",
+    "titleLength": 54,
+    "descriptionLength": 132,
+    "h1": [
+      "Minecraft House Staircase Designs"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs/staircases"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/compact-two-story-minecraft-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs/starter",
+    "title": "Minecraft Starter House Designs: Easy Plans & Blueprints",
+    "titleLength": 56,
+    "descriptionLength": 138,
+    "h1": [
+      "Minecraft Starter House Designs"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs/starter"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/7x7-minecraft-starter-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs/survival",
+    "title": "Minecraft Survival House Designs: Practical Blueprints",
+    "titleLength": 54,
+    "descriptionLength": 130,
+    "h1": [
+      "Minecraft Survival House Designs"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs/survival"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/7x9-minecraft-survival-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/house-designs",
+    "title": "Minecraft House Designs: Ideas, Blueprints & Easy Builds",
+    "titleLength": 56,
+    "descriptionLength": 142,
+    "h1": [
+      "Minecraft House Designs & Ideas"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/house-designs"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/house-designs/9x9-oak-minecraft-starter-house.webp"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/",
+    "title": "Minecraft Circle Generator – Build Perfect Block Circles",
+    "titleLength": 56,
+    "descriptionLength": 142,
+    "h1": [
+      "Minecraft Circle Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com"
+    ],
+    "ogImage": [
+      "https://minecraftcirclegen.com/og.png"
+    ],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-banner-maker",
+    "title": "Minecraft Banner Maker – Design Custom Minecraft Banners",
+    "titleLength": 56,
+    "descriptionLength": 136,
+    "h1": [
+      "Minecraft Banner Maker"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-banner-maker"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-color-codes",
+    "title": "Minecraft Color Codes – Picker, Palette & Code Reference",
+    "titleLength": 56,
+    "descriptionLength": 154,
+    "h1": [
+      "Minecraft Color Codes"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-color-codes"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-font-generator",
+    "title": "Minecraft Font Generator – Pixel Text & PNG Export",
+    "titleLength": 50,
+    "descriptionLength": 156,
+    "h1": [
+      "Minecraft Font Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-font-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-give-command-generator",
+    "title": "Minecraft Give Command Generator – Create Item Commands",
+    "titleLength": 55,
+    "descriptionLength": 154,
+    "h1": [
+      "Minecraft Give Command Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-give-command-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-gradient-generator",
+    "title": "Minecraft Gradient Generator – Text & Block Gradients",
+    "titleLength": 53,
+    "descriptionLength": 134,
+    "h1": [
+      "Minecraft Gradient Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-gradient-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-map-art-generator",
+    "title": "Minecraft Map Art Generator – Image to Map Blueprint",
+    "titleLength": 52,
+    "descriptionLength": 138,
+    "h1": [
+      "Minecraft Map Art Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-map-art-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-pixel-art-generator",
+    "title": "Minecraft Pixel Art Generator – Image to Blocks",
+    "titleLength": 47,
+    "descriptionLength": 135,
+    "h1": [
+      "Minecraft Pixel Art Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-pixel-art-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-shape-generator",
+    "title": "Minecraft Shape Generator – Build Circles, Spheres & More",
+    "titleLength": 57,
+    "descriptionLength": 153,
+    "h1": [
+      "Minecraft Shape Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-shape-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-text-generator",
+    "title": "Minecraft Text Generator – Colors, MOTD & Tellraw",
+    "titleLength": 49,
+    "descriptionLength": 126,
+    "h1": [
+      "Minecraft Text Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-text-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/minecraft-tools",
+    "title": "Minecraft Tools – Free Generators & Player Utilities",
+    "titleLength": 52,
+    "descriptionLength": 132,
+    "h1": [
+      "Minecraft Tools"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/minecraft-tools"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/oval-generator",
+    "title": "Minecraft Oval Generator – Block Ellipse Blueprint",
+    "titleLength": 50,
+    "descriptionLength": 123,
+    "h1": [
+      "Minecraft Oval Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/oval-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/privacy",
+    "title": "Minecraft Circle Gen Privacy Policy",
+    "titleLength": 35,
+    "descriptionLength": 132,
+    "h1": [
+      "Privacy Policy"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/privacy"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/sphere-generator",
+    "title": "Minecraft Sphere Generator – Layer-by-Layer Blueprint",
+    "titleLength": 53,
+    "descriptionLength": 135,
+    "h1": [
+      "Minecraft Sphere Generator"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/sphere-generator"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  },
+  {
+    "route": "/terms",
+    "title": "Minecraft Circle Gen Terms of Use",
+    "titleLength": 33,
+    "descriptionLength": 60,
+    "h1": [
+      "Terms of Use"
+    ],
+    "canonical": [
+      "https://minecraftcirclegen.com/terms"
+    ],
+    "ogImage": [],
+    "main": true,
+    "badLinks": [],
+    "duplicateIds": [],
+    "schemaErrors": []
+  }
+]

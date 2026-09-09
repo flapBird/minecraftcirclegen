@@ -65,14 +65,14 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
             </div>
             <figure className="house-detail-image">
               <Image src={blueprint.image} alt={blueprint.imageAlt} width={1200} height={899} sizes="(max-width: 850px) 100vw, 52vw" priority />
-              <figcaption>Original voxel illustration — a design reference, not an in-game screenshot.</figcaption>
+              <figcaption>Original voxel illustration — style inspiration. The grids specify a simplified structural shell; decorative features in the image are not included.</figcaption>
             </figure>
           </div>
           <dl className="house-detail-stats">
             <div><dt>Footprint</dt><dd>{blueprint.width}×{blueprint.length}</dd></div>
             <div><dt>Blueprint height</dt><dd>{blueprint.height} layers</dd></div>
             <div><dt>Build time</dt><dd>{blueprint.estimatedBuildTime}</dd></div>
-            <div><dt>Approx. blocks</dt><dd>{blueprint.blockCount.toLocaleString("en-US")}</dd></div>
+            <div><dt>Structure items</dt><dd>{blueprint.blockCount.toLocaleString("en-US")}</dd></div>
             <div><dt>Style</dt><dd>{blueprint.style}</dd></div>
           </dl>
         </div>
@@ -81,7 +81,7 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
         <section className="house-section blueprint-detail-intro">
           <p className="section-label">MATERIAL CHECKLIST</p>
           <h2>Blocks to collect</h2>
-          <p>Counts cover the structural plan and listed details. Bring a small reserve for temporary scaffolding or substitutions.</p>
+          <p>Counts are calculated from the layer grids for the structural shell, including the door and any marked stairs. Furniture, lighting, decorative details, and scaffolding are additional. Roofs use the full blocks in the legend.</p>
           <div className="blueprint-prep-grid">
             <MaterialTable blueprint={blueprint} />
             <aside className="house-layout-notes">
@@ -89,7 +89,7 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
               <h3>Layout notes</h3>
               <ul className="house-check-list">
                 <li>The bottom edge of every grid is the front-door side.</li>
-                <li>Each colored square represents one block at the active height.</li>
+                <li>Each colored square marks a block position. D and U are the two halves of one door item. T marks a bottom-half stair rising toward the top of the grid.</li>
                 <li>Empty squares stay open; do not fill the inside of wall layers.</li>
                 <li>Equal-count material swaps work in both Java and Bedrock.</li>
               </ul>

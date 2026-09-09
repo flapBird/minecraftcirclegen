@@ -12,6 +12,8 @@ export type BlueprintCell = {
   code: string;
   label: string;
   color: string;
+  material?: string;
+  itemsPerCell?: number;
 };
 
 export type BlueprintLayer = {
@@ -67,4 +69,3 @@ export type HouseCollection = {
   relatedTools: ToolKey[];
   faqs: HouseFaq[];
 };
-

@@ -277,7 +277,7 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
   "map-art": [
     {
       question: "How large is one Minecraft map-art tile?",
-      answer: "A standard map covers a 128×128-block area, so one image pixel in a single-map plan corresponds to one placed block.",
+      answer: "A scale-0 (unzoomed) map covers a 128×128-block area, so one image pixel in a single-map plan corresponds to one placed block.",
     },
     {
       question: "Does this generator create flat map art?",

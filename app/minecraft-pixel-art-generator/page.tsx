@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import { ImageArtGenerator } from "@/components/image-art/image-art-generator";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/minecraft-pixel-art-generator" },
-  openGraph: { title, description, url: "/minecraft-pixel-art-generator", type: "website" },
-  twitter: { card: "summary_large_image", title, description },
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES, title, description, url: "/minecraft-pixel-art-generator", type: "website" },
+  twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title, description },
 };
 
 export default function MinecraftPixelArtGeneratorPage() {

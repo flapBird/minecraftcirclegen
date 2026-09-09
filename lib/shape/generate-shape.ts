@@ -198,7 +198,7 @@ function volumeLayer(options: ShapeOptions, layer: number) {
   if (shape === "sphere") return sphereLayer(width, layer - 1, filled);
   if (shape === "dome") {
     const middle = Math.floor((width - 1) / 2);
-    return sphereLayer(width, middle + layer - 1, filled);
+    return sphereLayer(width, middle - (layer - 1), filled);
   }
   if (shape === "cylinder") return centeredEllipseGrid(width, width, filled, thickness);
   if (shape === "cone") {

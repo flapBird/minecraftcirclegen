@@ -70,7 +70,15 @@ export function makeLegacyText(
 }
 
 export function makeMotdText(text: string, colorCode: string, styles: TextStyles) {
-  return makeLegacyText(text, colorCode, styles, "§").replaceAll("§", "\\u00A7");
+  return makeLegacyText(text, colorCode, styles, "§").replace(/[\\\u0000-\u001f\u007f-\uffff]/g, (character) => {
+    if (character === "\\") return "\\\\";
+    if (character === "\n") return "\\n";
+    if (character === "\r") return "\\r";
+    if (character === "\t") return "\\t";
+    if (character === "\f") return "\\f";
+    if (character === "§") return "\\u00A7";
+    return `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`;
+  });
 }
 
 export function makeMiniMessage(text: string, colorCode: string, styles: TextStyles) {

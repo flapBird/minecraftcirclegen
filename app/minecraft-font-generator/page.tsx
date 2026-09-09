@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import { FontGenerator } from "@/components/font-generator/font-generator";
 import { ToolPageEnd } from "@/components/layout/tool-page-end";
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/minecraft-font-generator" },
-  openGraph: { title, description, url: "/minecraft-font-generator", type: "website" },
-  twitter: { card: "summary_large_image", title, description },
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES, title, description, url: "/minecraft-font-generator", type: "website" },
+  twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title, description },
 };
 
 export default function MinecraftFontGeneratorPage() {

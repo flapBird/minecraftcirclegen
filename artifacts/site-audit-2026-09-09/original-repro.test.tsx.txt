@@ -1,0 +1,91 @@
+// Audit evidence: these tests assert the observed faulty behavior, not desired behavior.
+import { afterEach, expect, it, vi } from 'vitest';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { generateShapeLayers } from '@/lib/shape/generate-shape';
+import { generateGeometry } from '@/lib/geometry/generate-geometry';
+import { HOUSE_BLUEPRINTS } from '@/content/houses/blueprints';
+import { generateGiveCommand, type GiveCommandInput } from '@/lib/minecraft/give-command';
+import { makeMotdText, DEFAULT_TEXT_STYLES } from '@/lib/minecraft-text/formatting';
+import { PlayerLookupTool } from '@/components/player-lookup/player-lookup-tool';
+import { GiveCommandGenerator } from '@/components/give-command-generator/give-command-generator';
+import { ColorCodesTool } from '@/components/color-codes/color-codes-tool';
+import { generateTextGradient, textGradientOutputs } from '@/lib/gradient/generate-text-gradient';
+
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); window.history.replaceState(null, '', '/'); });
+
+it('reproduces even-diameter dome disagreement', () => {
+  const actual = generateShapeLayers({ shape: 'dome', width: 20, height: 20, depth: 20, sides: 6, thickness: 1, filled: false, layer: 1 });
+  const dedicated = generateGeometry('dome', { diameter: 20, width: 20, height: 20, mode: 'hollow', thickness: 1, layer: 1 });
+  expect(actual[0].totalBlocks).toBe(508);
+  expect(dedicated.totalBlocks).toBe(484);
+});
+
+it('reproduces house material counts independent of actual blueprint', () => {
+  const house = HOUSE_BLUEPRINTS.find(b => b.slug === '7x7-starter-house')!;
+  const count = (symbol: string) => house.layers.reduce((n, l) => n + [...l.rows.join('')].filter(c => c === symbol).length, 0);
+  expect(count('R')).toBe(112);
+  expect(house.materials.find(m => m.name === 'Oak stairs/slabs')?.count).toBe(48);
+  expect(count('S')).toBe(24);
+  expect(house.materials.find(m => m.name === 'Cobblestone')?.count).toBe(48);
+});
+
+it('reproduces version-inappropriate identifiers accepted as valid', () => {
+  const input: GiveCommandInput = { version: 'java-legacy', target: '@p', itemId: 'diamond_sword', amount: 1, customName: '', lore: [], enchantments: [{ id: 'sweeping_edge', level: 3 }], unbreakable: false };
+  expect(generateGiveCommand(input)).toMatchObject({ errors: [], command: expect.stringContaining('minecraft:sweeping_edge') });
+  expect(generateGiveCommand({ ...input, version: 'java-components', enchantments: [], attributeComponentVersion: '1.20.5', attributes: [{ attribute: 'jump_strength', amount: 1, operation: 'add_value', slot: 'mainhand' }] })).toMatchObject({ errors: [], command: expect.stringContaining('minecraft:horse.jump_strength') });
+});
+
+it('reproduces leading slash in downloaded function payload', () => {
+  const blobs: Blob[] = [];
+  vi.stubGlobal('URL', Object.assign(URL, { createObjectURL: vi.fn((b: Blob) => { blobs.push(b); return 'blob:audit'; }), revokeObjectURL: vi.fn() }));
+  vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+  const NativeBlob = Blob;
+  let payload = '';
+  vi.stubGlobal('Blob', class extends NativeBlob { constructor(parts: BlobPart[], options?: BlobPropertyBag) { super(parts, options); payload = parts.join(''); } });
+  render(<GiveCommandGenerator />);
+  fireEvent.click(screen.getByRole('button', { name: '.mcfunction' }));
+  expect(payload).toBe('/give @p minecraft:diamond_sword 1\n');
+});
+
+it('reproduces unescaped MOTD newline and backslash', () => {
+  expect(makeMotdText('Hello\nWorld', 'a', DEFAULT_TEXT_STYLES)).toBe('\\u00A7aHello\nWorld');
+  expect(makeMotdText('C:\\new', 'a', DEFAULT_TEXT_STYLES)).toBe('\\u00A7aC:\\new');
+});
+
+it('reproduces gradient preview/export disagreement for partial hex input', () => {
+  const stops = ['#55', '#55FFFF'];
+  const output = textGradientOutputs(generateTextGradient('Hi', stops), stops);
+  expect(output.hex).toContain('#FFFFFF');
+  expect(output.miniMessage).toBe('<gradient:#55:#55FFFF>Hi</gradient>');
+});
+
+it('reproduces stale lookup result overwriting a newer query', async () => {
+  let resolveOld!: (value: Response) => void;
+  const old = new Promise<Response>(resolve => { resolveOld = resolve; });
+  const profile = (username: string) => Response.json({ status: 'found', player: { username, uuid: '069a79f4-44e9-4726-a5be-fca90e38aaf5', uuidCompact: '069a79f444e94726a5befca90e38aaf5', skinUrl: null } });
+  vi.stubGlobal('fetch', vi.fn().mockReturnValueOnce(old).mockResolvedValueOnce(profile('SecondUser')));
+  render(<PlayerLookupTool initialKind="username" />);
+  const input = screen.getByLabelText('Minecraft username');
+  fireEvent.change(input, { target: { value: 'FirstUser' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Check Username' }));
+  fireEvent.change(input, { target: { value: 'SecondUser' } });
+  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Check Username' })); });
+  expect(screen.getAllByText('SecondUser').length).toBeGreaterThan(0);
+  await act(async () => { resolveOld(profile('FirstUser')); });
+  expect(input).toHaveValue('SecondUser');
+  expect(window.location.search).toContain('SecondUser');
+  expect(screen.getAllByText('FirstUser').length).toBeGreaterThan(0);
+});
+
+it('reproduces invalid Tailwind v3 export for a hyphenated prefix and missing modal focus', () => {
+  render(<ColorCodesTool />);
+  const trigger = screen.getByRole('button', { name: 'Export color palette' });
+  trigger.focus();
+  fireEvent.click(trigger);
+  expect(document.activeElement).toBe(trigger);
+  fireEvent.click(screen.getByRole('button', { name: /Tailwind v3/ }));
+  fireEvent.change(screen.getByLabelText('Prefix'), { target: { value: 'my-brand' } });
+  const code = document.querySelector('.palette-export-output pre')!.textContent!;
+  expect(code).toContain('my-brand: {');
+  expect(() => new Function('module', code)).toThrow(SyntaxError);
+});

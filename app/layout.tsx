@@ -1,3 +1,4 @@
+import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   title: "Minecraft Circle Gen",
   description:
     "Free Minecraft building generators for block shapes, gradients, blueprints, material counts, and PNG export.",
+  openGraph: { images: DEFAULT_SOCIAL_IMAGES },
+  twitter: { card: "summary_large_image", images: DEFAULT_SOCIAL_IMAGES },
   applicationName: "Minecraft Circle Gen",
   icons: {
     icon: [

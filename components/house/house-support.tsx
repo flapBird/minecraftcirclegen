@@ -123,7 +123,7 @@ export function MaterialTable({ blueprint }: { blueprint: HouseBlueprint }) {
             <tr key={material.name}><th scope="row">{material.name}</th><td>{material.count.toLocaleString("en-US")}</td></tr>
           ))}
         </tbody>
-        <tfoot><tr><th scope="row">Approximate total</th><td>{blueprint.blockCount.toLocaleString("en-US")}</td></tr></tfoot>
+        <tfoot><tr><th scope="row">Structure item total</th><td>{blueprint.blockCount.toLocaleString("en-US")}</td></tr></tfoot>
       </table>
     </div>
   );
