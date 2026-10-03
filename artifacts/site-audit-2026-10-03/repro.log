@@ -1,0 +1,9 @@
+
+ RUN  v3.2.4 /Users/admin/Documents/Codex/minecraftcirclegen
+
+ ✓ artifacts/site-audit-2026-10-03/repro.test.tsx (4 tests) 425ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  17:40:53
+   Duration  1.93s (transform 304ms, setup 249ms, collect 423ms, tests 425ms, environment 492ms, prepare 71ms)

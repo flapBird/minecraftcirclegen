@@ -1,0 +1,46 @@
+{
+  "observed_on": "2026-10-03",
+  "source": "GSC UI read through native Chrome; values transcribed from current accessibility output, not a CSV export",
+  "property": "sc-domain:minecraftcirclegen.com",
+  "search_type": "Web (text)",
+  "comparison": {
+    "label": "Last 7 days vs Previous 7 days",
+    "exact_date_range": "Not verified in date table; do not substitute calendar weeks",
+    "clicks": {
+      "current": 0,
+      "previous": 16
+    },
+    "impressions": {
+      "current": 24,
+      "previous": 792,
+      "change_percent": -96.97
+    },
+    "ctr_percent": {
+      "current": 0,
+      "previous": 2
+    },
+    "average_position": {
+      "current": 26.5,
+      "previous": 19.1
+    }
+  },
+  "overview": {
+    "chart_start": "2026-07-28",
+    "chart_end": "2026-09-29",
+    "clicks": 67,
+    "impressions_display": "7.37K",
+    "ctr_percent": 0.9,
+    "average_position": 46.9,
+    "drop_start": "Approximately September 23, inferred visually; daily table not verified"
+  },
+  "not_checked": [
+    "page and query comparisons",
+    "device and country breakdowns",
+    "manual actions",
+    "security issues",
+    "page indexing",
+    "URL inspection",
+    "crawl stats",
+    "Core Web Vitals"
+  ]
+}

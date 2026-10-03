@@ -1,0 +1,75 @@
+
+> minecraft-circle-gen@0.1.0 test
+> vitest run --maxWorkers=1 --no-file-parallelism
+
+
+ RUN  v3.2.4 /Users/admin/Documents/Codex/minecraftcirclegen
+
+ ✓ tests/components/server-tools.test.tsx (5 tests) 1719ms
+   ✓ Minecraft text and code tools > presents colors and formatting as compact reference tables  340ms
+   ✓ Minecraft text and code tools > keeps arbitrary RGB palettes separate from legacy Minecraft codes and exports them  793ms
+   ✓ Minecraft text and code tools > offers compact palette families from the toolbar  321ms
+ ✓ tests/components/gradient-generator.test.tsx (5 tests) 1733ms
+   ✓ GradientGenerator > keeps the page URL clean while settings change  352ms
+   ✓ GradientGenerator > uses the searchable visual picker to set fixed Minecraft block endpoints  792ms
+ ✓ tests/components/creative-generators.test.tsx (6 tests) 1408ms
+   ✓ creative generators > updates block size and line spacing in the live font preview  453ms
+   ✓ creative generators > places text controls before the preview and exposes the complete style controls  394ms
+   ✓ creative generators > updates the canvas when styles, outline, padding, and fill mode change  382ms
+ ✓ tests/components/banner-maker.test.tsx (2 tests) 2011ms
+   ✓ BannerMaker > adds visual pattern layers directly after choosing a color  855ms
+   ✓ BannerMaker > saves, restores, and removes banners on the current device  1153ms
+ ✓ tests/components/shape-generator.test.tsx (6 tests) 5201ms
+   ✓ ShapeGenerator preview > uses an interactive volume view and switches to the exact 2D layer  1900ms
+   ✓ ShapeGenerator preview > starts and pauses automatic rotation  662ms
+   ✓ ShapeGenerator preview > lets mobile users replace a multi-digit dimension without clamping the first digit  1876ms
+ ✓ tests/components/generator-url-boundaries.test.tsx (9 tests) 3063ms
+   ✓ generator URL boundaries > restores shared geometry settings from the query string  858ms
+   ✓ generator URL boundaries > switches geometry shapes in place and stores the active shape in the URL  329ms
+   ✓ generator URL boundaries > uses the oval's independent width and height when switching from a circle  668ms
+ ✓ tests/components/audit-fixes.test.tsx (9 tests) 1440ms
+   ✓ downloads slash-free function files while retaining chat syntax  311ms
+   ✓ exports a valid hyphenated Tailwind key and manages modal keyboard focus  885ms
+ ✓ tests/components/site-header.test.tsx (6 tests) 1294ms
+   ✓ SiteHeader > keeps a fixed three-column desktop menu with a complete-directory link  527ms
+ ✓ tests/components/new-tools.test.tsx (5 tests) 829ms
+   ✓ new Minecraft tool interfaces > updates the give command and blocks invalid stack amounts  339ms
+ ✓ tests/components/tools-directory.test.tsx (3 tests) 814ms
+   ✓ ToolsDirectoryBrowser > renders every tool in HTML and filters by category  528ms
+ ✓ tests/components/new-tool-pages.test.tsx (3 tests) 513ms
+   ✓ new Minecraft tool page guidance > introduces the Give Command Generator and explains how to use it  302ms
+ ✓ tests/circle/generate-circle.test.ts (75 tests) 1007ms
+ ✓ tests/components/geometry-controls.test.tsx (4 tests) 554ms
+ ✓ tests/components/tool-page-chrome.test.tsx (3 tests) 306ms
+ ✓ tests/components/circle-controls.test.tsx (4 tests) 444ms
+   ✓ CircleControls > accepts diameter input and increment controls  311ms
+ ✓ tests/components/circle-generator.test.tsx (2 tests) 593ms
+   ✓ CircleGenerator integration > updates the live blueprint summary when the diameter changes  519ms
+ ✓ tests/components/blueprint-layer-viewer.test.tsx (2 tests) 277ms
+ ✓ tests/components/house-design-directory.test.tsx (1 test) 231ms
+ ✓ tests/components/legal-pages.test.tsx (2 tests) 189ms
+ ✓ tests/components/circle-share-button.test.tsx (1 test) 153ms
+ ✓ tests/shape/generate-shape.test.ts (5 tests) 147ms
+ ✓ tests/circle/export-circle-png.test.ts (2 tests) 232ms
+ ✓ tests/circle/generate-row-patterns.test.ts (4 tests) 91ms
+ ✓ tests/minecraft/player-lookup.test.ts (4 tests) 34ms
+ ✓ tests/house/blueprints.test.ts (4 tests) 36ms
+ ✓ tests/minecraft/give-command.test.ts (12 tests) 46ms
+ ✓ tests/gradient/export-gradient-png.test.ts (1 test) 23ms
+ ✓ tests/gradient/generate-gradient.test.ts (6 tests) 33ms
+ ✓ tests/font/pixel-font.test.ts (9 tests) 12ms
+ ✓ tests/components/tool-page-content.test.ts (14 tests) 18ms
+ ✓ tests/image-art/convert-image-art.test.ts (4 tests) 14ms
+ ✓ tests/circle/circle-url-state.test.ts (4 tests) 13ms
+ ✓ tests/font/export-font-png.test.ts (2 tests) 29ms
+ ✓ tests/geometry/generate-geometry.test.ts (6 tests) 28ms
+ ✓ tests/minecraft-text/formatting.test.ts (3 tests) 13ms
+ ✓ tests/banner/banner-data.test.ts (4 tests) 9ms
+ ✓ tests/gradient/generate-text-gradient.test.ts (2 tests) 6ms
+ ✓ tests/minecraft/enchanting-table.test.ts (4 tests) 3ms
+ ✓ tests/analytics/google-analytics.test.ts (2 tests) 4ms
+
+ Test Files  39 passed (39)
+      Tests  245 passed (245)
+   Start at  15:50:21
+   Duration  115.46s (transform 1.93s, setup 16.82s, collect 4.44s, tests 24.57s, environment 45.15s, prepare 7.17s)

@@ -1,0 +1,63 @@
+
+> minecraft-circle-gen@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.0 (webpack)
+✓ Running next.config.ts took 2.8s
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 30.3s
+  Running TypeScript ...
+  Finished TypeScript in 7.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/41) ...
+  Generating static pages using 7 workers (10/41)
+  Generating static pages using 7 workers (20/41)
+  Generating static pages using 7 workers (30/41)
+✓ Generating static pages using 7 workers (41/41) in 3.2s
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/minecraft-player
+├ ○ /dome-generator
+├ ○ /house-blueprints
+├   /house-blueprints/[slug]
+│ ├ ● /house-blueprints/7x7-starter-house
+│ ├ ● /house-blueprints/9x9-oak-house
+│ ├ ● /house-blueprints/7x9-small-survival-house
+│ └ ● [+5 more paths]
+├ ○ /house-designs
+├ ○ /house-designs/modern
+├ ○ /house-designs/small
+├ ○ /house-designs/staircases
+├ ○ /house-designs/starter
+├ ○ /house-designs/survival
+├ ○ /manifest.webmanifest
+├ ○ /minecraft-banner-maker
+├ ○ /minecraft-color-codes
+├ ƒ /minecraft-enchanting-table-translator
+├ ○ /minecraft-font-generator
+├ ○ /minecraft-give-command-generator
+├ ○ /minecraft-gradient-generator
+├ ○ /minecraft-map-art-generator
+├ ƒ /minecraft-name-checker
+├ ○ /minecraft-pixel-art-generator
+├ ○ /minecraft-shape-generator
+├ ○ /minecraft-text-generator
+├ ○ /minecraft-tools
+├ ƒ /minecraft-uuid-lookup
+├ ○ /oval-generator
+├ ○ /privacy
+├ ○ /robots.txt
+├ ○ /sitemap.xml
+├ ○ /sphere-generator
+└ ○ /terms
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
