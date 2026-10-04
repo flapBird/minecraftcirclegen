@@ -206,6 +206,9 @@ function pointKey(x: number, y: number) {
 }
 
 export function renderPixelText(options: PixelTextOptions): PixelTextResult {
+  if (options.text.length > 4000 || options.text.split(/\r\n?|\n/).length > 64) {
+    throw new Error("Use at most 4,000 characters and 64 lines. Your text has been kept for editing.");
+  }
   const letterSpacing = Math.max(0, Math.min(3, Math.round(options.letterSpacing)));
   const lineSpacing = Math.max(0, Math.min(12, Math.round(options.lineSpacing)));
   const shadowDistance = Math.max(1, Math.min(4, Math.round(options.shadowDistance ?? 1)));
@@ -224,6 +227,9 @@ export function renderPixelText(options: PixelTextOptions): PixelTextResult {
   const effectOutset = effectInset + (options.shadow ? shadowDistance : 0);
   const width = contentWidth + effectInset + effectOutset;
   const height = contentHeight + effectInset + effectOutset;
+  if (width * height > 262144) {
+    throw new Error("The block grid is too large. Shorten the text or reduce spacing.");
+  }
   const cells: PixelTextCell[][] = Array.from({ length: height }, () => Array(width).fill(0));
   const cellColors: (string | null)[][] = Array.from({ length: height }, () => Array(width).fill(null));
   const mainPoints = new Map<string, PixelPoint>();

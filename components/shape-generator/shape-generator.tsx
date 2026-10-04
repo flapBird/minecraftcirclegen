@@ -90,7 +90,7 @@ export function ShapeGenerator() {
   const layers = useMemo(() => generateShapeLayers(previewOptions), [previewOptions]);
   const blueprint = layers[Math.max(0, previewOptions.layer - 1)] ?? layers[0];
   const is3d = THREE_D_SHAPES.includes(normalized.shape);
-  const hasHeight = ["ellipse", "triangle", "rectangle", "star", "cylinder", "cone", "pyramid"].includes(normalized.shape);
+  const hasHeight = ["ellipse", "triangle", "rectangle", "polygon", "star", "cylinder", "cone", "pyramid"].includes(normalized.shape);
   const supportsThickness = !["sphere", "dome"].includes(normalized.shape);
   const isFullscreen = nativeFullscreenActive || fallbackFullscreen;
 

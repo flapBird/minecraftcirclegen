@@ -53,3 +53,14 @@ describe("font PNG painting", () => {
     expect(fills).toContain("#222222");
   });
 });
+
+it("rejects oversized canvas allocations before creating a canvas", async () => {
+  const { fontCanvasSize, downloadFontPng } = await import("@/lib/font/export-font-png");
+  const result = renderPixelText({ text: "A".repeat(500), letterSpacing: 1, lineSpacing: 2, shadow: true });
+  const create = vi.spyOn(document, "createElement");
+  expect(() => downloadFontPng(result, { ...baseOptions, blockSize: 12 })).toThrow("8,192");
+  expect(create).not.toHaveBeenCalled();
+  create.mockRestore();
+  expect(() => fontCanvasSize({ width: 5000, height: 5000 }, { blockSize: 1, padding: 0 })).toThrow("16 megapixels");
+  expect(fontCanvasSize({ width: 8192, height: 1 }, { blockSize: 1, padding: 0 }).width).toBe(8192);
+});

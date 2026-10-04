@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       title="Privacy Policy"
       description="This policy explains how Minecraft Circle Gen handles advertising, analytics, local processing, and share-link settings."
     >
-      <p className="policy-date">Last updated: August 30, 2026</p>
+      <p className="policy-date">Last updated: October 4, 2026</p>
       <section>
         <h2>Information used by the tool</h2>
         <p>
@@ -44,10 +44,12 @@ export default function PrivacyPage() {
           cookies or similar browser storage to distinguish visits.
         </p>
         <p>
-          Analytics is used to improve the site&apos;s usability and
-          performance. It does not store your generated grid, artwork, banner, or
-          tool settings. You can limit analytics through your browser&apos;s privacy
-          settings or a content blocker.
+          We also use Microsoft Clarity to understand interactions through
+          session recordings and heatmaps. Clarity may process usage, device,
+          and cookie data. Page URLs and visible page content may appear in
+          analytics, so avoid entering sensitive information in tools or share links.
+          See <a href="https://privacy.microsoft.com/privacystatement">Microsoft&apos;s Privacy Statement</a>.
+          You can limit analytics through your browser&apos;s privacy settings or a content blocker.
         </p>
       </section>
       <section>

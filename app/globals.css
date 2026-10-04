@@ -6745,3 +6745,11 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .lookup-spinner { animation: none; }
 }
+
+.image-cell-inspector { margin-top: 16px; padding: 14px; border: 1px solid #c9d1c4; border-radius: 8px; }
+.image-cell-inspector p { margin: 0 0 10px; overflow-wrap: anywhere; }
+.image-cell-controls { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+.image-cell-controls label { display: flex; align-items: center; gap: 8px; }
+.image-cell-controls input { width: 90px; padding: 8px; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 4px; }
+.image-art-canvas-board canvas { cursor: crosshair; }
+.image-material-list { max-height: 420px; overflow-y: auto; }

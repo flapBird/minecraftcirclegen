@@ -71,7 +71,7 @@ export function BannerMaker() {
         restore = window.setTimeout(() => setSavedBanners((current) => current.length ? current : valid), 0);
       }
     } catch {
-      window.localStorage.removeItem(SAVED_BANNERS_KEY);
+      // Storage can be unavailable (private mode or browser policy). Keep the editor usable.
     }
     return () => { if (restore !== null) window.clearTimeout(restore); };
   }, []);
@@ -165,8 +165,14 @@ export function BannerMaker() {
   };
 
   const persistSavedBanners = (next: SavedBanner[]) => {
-    setSavedBanners(next);
-    window.localStorage.setItem(SAVED_BANNERS_KEY, JSON.stringify(next));
+    try {
+      window.localStorage.setItem(SAVED_BANNERS_KEY, JSON.stringify(next));
+      setSavedBanners(next);
+      return true;
+    } catch {
+      showStatus("Device storage is unavailable or full. Copy a share link to keep your banner.");
+      return false;
+    }
   };
 
   const saveCurrentBanner = () => {
@@ -177,7 +183,7 @@ export function BannerMaker() {
       design,
       savedAt: Date.now(),
     }, ...savedBanners.filter((item) => item.design !== design)].slice(0, 12);
-    persistSavedBanners(next);
+    if (!persistSavedBanners(next)) return;
     showStatus(existing ? "Saved banner updated" : "Banner saved on this device");
   };
 
@@ -193,7 +199,7 @@ export function BannerMaker() {
   };
 
   const removeSavedBanner = (id: string) => {
-    persistSavedBanners(savedBanners.filter((item) => item.id !== id));
+    if (!persistSavedBanners(savedBanners.filter((item) => item.id !== id))) return;
     showStatus("Saved banner removed");
   };
 

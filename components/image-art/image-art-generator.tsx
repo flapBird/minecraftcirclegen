@@ -2,6 +2,7 @@
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent } from "react";
 import { convertRasterToBlocks, resizeRasterImage } from "@/lib/image-art/convert-image-art";
+import { downloadImageArtCsv } from "@/lib/image-art/export-image-art-csv";
 import { downloadImageArtPng, drawImageArt } from "@/lib/image-art/export-image-art-png";
 import type { ImageArtMode, ImageArtResult, ImageFit, RasterImage } from "@/lib/image-art/image-art-types";
 import type { GradientPalette } from "@/lib/gradient/gradient-types";
@@ -15,6 +16,7 @@ const MAP_SIZES = [
 
 export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
   const [source, setSource] = useState<RasterImage | null>(null);
+  const [selectedCell, setSelectedCell] = useState({ x: 0, z: 0 });
   const [sourceName, setSourceName] = useState("");
   const [pixelSize, setPixelSize] = useState(48);
   const [mapSize, setMapSize] = useState("1x1");
@@ -66,6 +68,11 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
     });
   }, [backgroundColor, dither, fit, mode, palette, source, targetSize.height, targetSize.width, transparentPixels]);
 
+  const selectedX = Math.min(selectedCell.x, (result?.width ?? 1) - 1);
+  const selectedZ = Math.min(selectedCell.z, (result?.height ?? 1) - 1);
+  const selectedBlock = result?.cells[selectedZ]?.[selectedX];
+  const materialNumber = selectedBlock ? (result?.materials.findIndex(({ block }) => block.id === selectedBlock.id) ?? -1) + 1 : 0;
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
@@ -75,7 +82,13 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
     canvas.height = result.height * cell;
     context.imageSmoothingEnabled = false;
     drawImageArt(context, result, cell, showGrid, mode);
-  }, [mode, result, showGrid]);
+    context.strokeStyle = "#000000";
+    context.lineWidth = 3;
+    context.strokeRect(selectedX * cell + 0.5, selectedZ * cell + 0.5, cell - 1, cell - 1);
+    context.strokeStyle = "#ffffff";
+    context.lineWidth = 1;
+    context.strokeRect(selectedX * cell + 0.5, selectedZ * cell + 0.5, cell - 1, cell - 1);
+  }, [mode, result, selectedX, selectedZ, showGrid]);
 
   const loadFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -158,24 +171,39 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
           {result ? (
             <>
               <div className="image-art-canvas-board">
-                <canvas ref={canvasRef} aria-label={`Generated Minecraft ${mode} art preview`} />
+                <canvas ref={canvasRef} aria-label={`Generated Minecraft ${mode} art preview`} aria-describedby="image-cell-help" onClick={(event) => {
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  if (!bounds.width || !bounds.height) return;
+                  setSelectedCell({
+                    x: Math.max(0, Math.min(result.width - 1, Math.floor((event.clientX - bounds.left) * result.width / bounds.width))),
+                    z: Math.max(0, Math.min(result.height - 1, Math.floor((event.clientY - bounds.top) * result.height / bounds.height))),
+                  });
+                }} />
+              </div>
+              <div className="image-cell-inspector">
+                <p id="image-cell-help">Click a block or enter coordinates. Top-left is (0, 0); X goes right and Z goes down.</p>
+                <div className="image-cell-controls">
+                  <label>X <input type="number" min={0} max={result.width - 1} value={selectedX} onChange={(event) => setSelectedCell({ x: Math.max(0, Math.min(result.width - 1, Math.floor(Number(event.target.value) || 0))), z: selectedZ })} /></label>
+                  <label>Z <input type="number" min={0} max={result.height - 1} value={selectedZ} onChange={(event) => setSelectedCell({ x: selectedX, z: Math.max(0, Math.min(result.height - 1, Math.floor(Number(event.target.value) || 0))) })} /></label>
+                </div>
+                <p role="status">X {selectedX}, Z {selectedZ}: {selectedBlock ? `#${materialNumber} ${selectedBlock.name}` : "Empty — leave this cell unbuilt"}
+                  {mode === "map" && ` · Map column ${Math.floor(selectedX / 128) + 1}, row ${Math.floor(selectedZ / 128) + 1} · local (${selectedX % 128}, ${selectedZ % 128})`}
+                </p>
               </div>
               <div className="image-material-heading">
-                <strong>Material preview</strong>
+                <strong>All materials</strong>
                 <span>{result.materials.length} block types</span>
               </div>
               <ul className="image-material-list">
-                {result.materials.slice(0, 12).map(({ block, count }) => (
+                {result.materials.map(({ block, count }, index) => (
                   <li key={block.id}>
                     <span style={{ backgroundColor: block.hex }} aria-hidden="true" />
-                    <strong>{block.name}</strong>
+                    <strong>#{index + 1} {block.name}</strong>
                     <small>{count.toLocaleString()}</small>
                   </li>
                 ))}
               </ul>
-              {result.materials.length > 12 && (
-                <p className="creative-preview-note">Copy the material list to get all {result.materials.length} block types.</p>
-              )}
+              <p className="creative-preview-note">Coordinate CSV includes every cell and its material. Map colors are flat-build approximations; palette IDs are labels, not Minecraft command IDs.</p>
             </>
           ) : (
             <div
@@ -292,6 +320,11 @@ export function ImageArtGenerator({ mode }: { mode: ImageArtMode }) {
 
           <div className="settings-actions creative-actions">
             <button type="button" className="primary-button" disabled={!result} onClick={download}>↓ Download as PNG</button>
+            <button type="button" className="secondary-button" disabled={!result} onClick={() => {
+              if (!result) return;
+              try { downloadImageArtCsv(result, mode); showStatus("Coordinate CSV downloaded"); }
+              catch { showStatus("The coordinate CSV could not be created"); }
+            }}>Download coordinate CSV</button>
             <button type="button" className="secondary-button" disabled={!result} onClick={copyMaterials}>Copy materials</button>
           </div>
           {mode === "map" && (

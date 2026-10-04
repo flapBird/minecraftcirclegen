@@ -175,3 +175,19 @@ npx vitest run --config artifacts/site-audit-2026-10-03/vitest.config.ts
 | 6. GSC Pages / Queries / Devices / Countries / 索引 / 人工处置 / CWV | 未完成 | 尚需稳定的浏览器控制窗口继续读取 |
 
 因此，本报告可以支持修复列出的实现问题，**还不能给出已证实的流量下降根因、CWV 达标结论、全部页面视觉合格结论或搜索恢复时间承诺。**
+
+
+## 8. 2026-10-04 功能修复记录
+
+本报告及 `repro.test.tsx` 保留审计时的历史状态；该复现脚本断言的是旧缺陷，修复后不再用它判定正确性。新的回归用例位于 `tests/components/site-audit-regressions.test.tsx`、`tests/components/image-art-inspector.test.tsx`、`tests/image-art/export-image-art-csv.test.ts` 与字体导出测试。
+
+- 几何分享直接序列化当前参数，多边形提供可见高度控制。
+- 字体输入保留原文，限制字符数、行数、网格面积及导出尺寸；超限时显示说明并禁用对应导出。
+- 翻译器不再截断初始输入；交换和分享采用一致容量校验，新分享链接使用 URL fragment，避免长文本进入服务器请求路径。旧 query 链接仍可读取。PNG 高度超限时给出反馈。
+- Pixel Art / Map Art 增加点选与键盘坐标检查、完整编号材料表和逐格 CSV（含空格、地图分块与块内坐标）。CSV 中 palette_id 不是 Minecraft 命令 ID。
+- Banner 存储被禁用或写满时保留编辑内容并提示分享链接备份，不再错误提示已保存。
+- CSP 放行已知 Clarity 与 AdSense 加载、连接、图片和 iframe 域，更新 Clarity 隐私说明。此为现有静态策略的定向修补，**不能宣称已满足 Google 对 AdSense 的完整 nonce CSP 兼容要求，也未验证真实广告填充**。
+
+CSP 依据：[Microsoft Clarity 官方说明](https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-csp)、[Google AdSense CSP 官方说明](https://support.google.com/adsense/answer/16283098?hl=en-GB)。Google 仅支持 nonce strict CSP；完整迁移还需评估 Next.js 动态渲染和缓存变化。3D 最大尺寸主线程计算的性能风险、GSC 下降原因和线上移动端完整验收仍未因此解决。
+
+本轮验证：42 个测试文件、255 个测试通过；TypeScript、ESLint、生产构建通过。本机生产服务的首页及 Font、Enchanting、Shape、Map Art、Pixel Art 页面均返回 200，并检查 HTML 主标题及实际 CSP 响应头。未部署、未做真实浏览器广告请求或手机真机验证。

@@ -3,13 +3,16 @@ import type { NextConfig } from "next";
 const developmentScriptSource =
   process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
 
+// AdSense vendors may change: this scoped allowlist fixes known loader endpoints,
+// but is not a substitute for Google's nonce-based strict CSP integration.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${developmentScriptSource} https://www.googletagmanager.com`,
+  `script-src 'self' 'unsafe-inline'${developmentScriptSource} https://www.googletagmanager.com https://*.clarity.ms https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.googleadservices.com https://googleads.g.doubleclick.net`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://textures.minecraft.net",
+  "img-src 'self' data: blob: https://textures.minecraft.net https://*.clarity.ms https://c.bing.com https://*.googlesyndication.com https://*.doubleclick.net https://www.google.com",
   "font-src 'self'",
-  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com ws: wss:",
+  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com https://*.googlesyndication.com https://*.doubleclick.net https://www.google.com ws: wss:",
+  "frame-src https://*.googlesyndication.com https://*.doubleclick.net https://www.google.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

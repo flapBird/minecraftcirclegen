@@ -13,6 +13,16 @@ export interface FontExportOptions {
   padding?: number;
 }
 
+export function fontCanvasSize(result: Pick<PixelTextResult, "width" | "height">, options: Pick<FontExportOptions, "blockSize" | "padding">) {
+  const padding = options.blockSize * (options.padding ?? 2);
+  const width = result.width * options.blockSize + padding * 2;
+  const height = result.height * options.blockSize + padding * 2;
+  if (!Number.isSafeInteger(width) || !Number.isSafeInteger(height) || width < 1 || height < 1 || width > 8192 || height > 8192 || width * height > 16777216) {
+    throw new Error("Image exceeds 8,192 pixels per side or 16 megapixels. Reduce scale, padding, or text length.");
+  }
+  return { width, height, padding };
+}
+
 function hexToRgb(hex: string) {
   const value = hex.replace("#", "");
   const normalized = value.length === 3 ? value.split("").map((part) => part + part).join("") : value;
@@ -92,10 +102,10 @@ export function paintPixelText(
 }
 
 export function downloadFontPng(result: PixelTextResult, options: FontExportOptions) {
-  const padding = options.blockSize * (options.padding ?? 2);
+  const { width, height, padding } = fontCanvasSize(result, options);
   const canvas = document.createElement("canvas");
-  canvas.width = result.width * options.blockSize + padding * 2;
-  canvas.height = result.height * options.blockSize + padding * 2;
+  canvas.width = width;
+  canvas.height = height;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas export is unavailable in this browser.");
   context.imageSmoothingEnabled = false;
@@ -110,10 +120,10 @@ export async function copyFontPng(result: PixelTextResult, options: FontExportOp
   if (!("ClipboardItem" in window) || !navigator.clipboard?.write) {
     throw new Error("PNG clipboard copying is unavailable in this browser.");
   }
-  const padding = options.blockSize * (options.padding ?? 2);
+  const { width, height, padding } = fontCanvasSize(result, options);
   const canvas = document.createElement("canvas");
-  canvas.width = result.width * options.blockSize + padding * 2;
-  canvas.height = result.height * options.blockSize + padding * 2;
+  canvas.width = width;
+  canvas.height = height;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Canvas export is unavailable in this browser.");
   context.imageSmoothingEnabled = false;

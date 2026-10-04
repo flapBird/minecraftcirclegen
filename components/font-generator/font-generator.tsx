@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { copyFontPng, downloadFontPng, paintPixelText, type FontExportOptions } from "@/lib/font/export-font-png";
+import { copyFontPng, downloadFontPng, fontCanvasSize, paintPixelText, type FontExportOptions } from "@/lib/font/export-font-png";
 import {
   MINECRAFT_COLORS,
   renderPixelText,
@@ -47,21 +47,30 @@ export function FontGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const toastTimer = useRef<number | null>(null);
 
-  const result = useMemo(
-    () => renderPixelText({
-      text,
-      letterSpacing,
-      lineSpacing,
-      shadow,
-      shadowDistance,
-      outline,
-      alignment,
-      style,
-    }),
-    [alignment, letterSpacing, lineSpacing, outline, shadow, shadowDistance, style, text],
-  );
+  const rendered = useMemo(() => {
+    try {
+      return { result: renderPixelText({
+        text,
+        letterSpacing,
+        lineSpacing,
+        shadow,
+        shadowDistance,
+        outline,
+        alignment,
+        style,
+      }), error: "" };
+    } catch (error) {
+      return { result: null, error: error instanceof Error ? error.message : "Text could not be rendered." };
+    }
+  }, [alignment, letterSpacing, lineSpacing, outline, shadow, shadowDistance, style, text]);
+  const { result } = rendered;
+  const canvasState = useMemo(() => {
+    if (!result) return { size: null, error: rendered.error };
+    try { return { size: fontCanvasSize(result, { blockSize, padding }), error: "" }; }
+    catch (error) { return { size: null, error: error instanceof Error ? error.message : "Image is too large." }; }
+  }, [blockSize, padding, rendered.error, result]);
 
-  const blueprintBlocks = result.mainBlocks + result.shadowBlocks + result.outlineBlocks;
+  const blueprintBlocks = result ? result.mainBlocks + result.shadowBlocks + result.outlineBlocks : 0;
 
   const exportOptions = useMemo<FontExportOptions>(() => ({
     blockSize,
@@ -89,19 +98,20 @@ export function FontGenerator() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!canvas || !context) return;
-    const canvasPadding = blockSize * padding;
-    canvas.width = result.width * blockSize + canvasPadding * 2;
-    canvas.height = result.height * blockSize + canvasPadding * 2;
+    if (!canvas || !context || !result || !canvasState.size) return;
+    const { width, height, padding: canvasPadding } = canvasState.size;
+    canvas.width = width;
+    canvas.height = height;
     context.imageSmoothingEnabled = false;
     paintPixelText(context, result, exportOptions, canvasPadding);
-  }, [blockSize, exportOptions, padding, result]);
+  }, [canvasState, exportOptions, result]);
 
   const toggleStyle = (key: StyleKey) => {
     setStyle((current) => ({ ...current, [key]: !current[key] }));
   };
 
   const copyBlueprint = async () => {
+    if (!result) return;
     const plan = result.cells
       .map((row) => row.map((cell) => cell === 1 ? "█" : cell === 2 ? "▒" : cell === 3 ? "▓" : "·").join(""))
       .join("\n");
@@ -114,6 +124,7 @@ export function FontGenerator() {
   };
 
   const copyImage = async () => {
+    if (!result || !canvasState.size) return;
     try {
       await copyFontPng(result, exportOptions);
       showStatus("PNG copied to clipboard");
@@ -123,6 +134,7 @@ export function FontGenerator() {
   };
 
   const download = () => {
+    if (!result || !canvasState.size) return;
     try {
       downloadFontPng(result, exportOptions);
       showStatus("PNG downloaded");
@@ -278,9 +290,9 @@ export function FontGenerator() {
           <section className="font-blueprint-export" aria-labelledby="font-blueprint-title">
             <div>
               <h3 id="font-blueprint-title">Block blueprint</h3>
-              <p>{result.width} × {result.height} grid · {blueprintBlocks} blocks</p>
+              <p>{result?.width ?? 0} × {result?.height ?? 0} grid · {blueprintBlocks} blocks</p>
             </div>
-            <button type="button" className="secondary-button font-blueprint-button" onClick={copyBlueprint}>Copy blueprint</button>
+            <button type="button" className="secondary-button font-blueprint-button" disabled={!result} onClick={copyBlueprint}>Copy blueprint</button>
           </section>
         </aside>
 
@@ -289,13 +301,13 @@ export function FontGenerator() {
             <div className="creative-preview-heading font-preview-heading">
               <h2 id="font-preview-title">Preview</h2>
               <div className="font-preview-actions">
-                <button type="button" className="secondary-button" onClick={copyImage}>Copy PNG</button>
-                <button type="button" className="primary-button" onClick={download}>↓ Download PNG</button>
+                <button type="button" className="secondary-button" disabled={!canvasState.size} onClick={copyImage}>Copy PNG</button>
+                <button type="button" className="primary-button" disabled={!canvasState.size} onClick={download}>↓ Download PNG</button>
               </div>
             </div>
             <div className={`font-canvas-board ${transparent ? "is-transparent" : ""}`}>
               <div className="font-canvas-stage">
-                <canvas ref={canvasRef} aria-label="Generated Minecraft pixel text preview" />
+                {canvasState.error ? <p role="alert">{canvasState.error}</p> : <canvas ref={canvasRef} aria-label="Generated Minecraft pixel text preview" />}
               </div>
             </div>
             <p className="creative-preview-note">

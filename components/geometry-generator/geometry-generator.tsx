@@ -68,17 +68,20 @@ export function GeometryGenerator({
     };
   }, [canonicalShape]);
 
+  const currentShareUrl = useCallback(() => {
+    const url = new URL(window.location.href);
+    ["shape", "diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => url.searchParams.delete(key));
+    if (shape !== canonicalShape) url.searchParams.set("shape", shape);
+    serializeGeometryUrl(shape, options).forEach((value, key) => url.searchParams.set(key, value));
+    return url;
+  }, [canonicalShape, options, shape]);
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      const params = new URLSearchParams(window.location.search);
-      ["shape", "diameter", "width", "height", "mode", "thickness", "layer"].forEach((key) => params.delete(key));
-      if (shape !== canonicalShape) params.set("shape", shape);
-      serializeGeometryUrl(shape, options).forEach((value, key) => params.set(key, value));
-      const query = params.toString();
-      window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
+      window.history.replaceState(null, "", currentShareUrl());
     }, 120);
     return () => window.clearTimeout(timer);
-  }, [canonicalShape, options, shape]);
+  }, [currentShareUrl]);
 
   const updateOptions = (updates: Partial<GeometryOptions>) => {
     setOptions((current) => {
@@ -117,7 +120,9 @@ export function GeometryGenerator({
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      const url = currentShareUrl();
+      window.history.replaceState(null, "", url);
+      await navigator.clipboard.writeText(url.toString());
       showStatus("Blueprint link copied");
     } catch {
       showStatus("Copy failed — select the URL from your browser");
