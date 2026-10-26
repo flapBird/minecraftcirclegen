@@ -3764,6 +3764,25 @@ a {
 .portal-status { margin: 0; min-height: 1.2em; color: #335f36; font-size: 0.82rem; font-weight: 720; }
 @media (max-width: 560px) { .portal-inputs { grid-template-columns: 1fr; } .portal-result-row { align-items: stretch; flex-direction: column; } }
 
+/* Guides section */
+.guides-index-grid { margin-top: 24px; }
+.guides-index-grid small.guide-card-meta { grid-column: 1 / -1; color: #5d685f; font-size: 0.72rem; font-weight: 720; }
+.guide-back-nav { margin-top: 14px; }
+.guide-header { max-width: 820px; }
+.guide-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  margin: 10px 0 14px;
+}
+.guide-meta { color: #5d685f; font-size: 0.82rem; font-weight: 720; margin: 0 0 8px; }
+.guide-article section { margin-top: 40px; }
+.guide-article section:first-of-type { margin-top: 24px; }
+.guide-tools-row { margin-top: 26px; border: 1px solid #d1cdc0; border-radius: 11px; background: #fffdf6; box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); padding: 16px 18px; }
+.guide-tools-row .section-label { margin-bottom: 10px; }
+.guide-next { margin-top: 52px; }
+.guide-next-grid { margin-top: 18px; }
+
 .size-table-wrap table {
   width: 100%;
   border-collapse: collapse;

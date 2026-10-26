@@ -44,6 +44,7 @@ describe("shared tool page navigation", () => {
     );
     expect(within(tools).queryByRole("link", { name: "Give Command Generator" })).not.toBeInTheDocument();
     expect(within(resources).getAllByRole("link").map((link) => link.textContent)).toEqual([
+      "Guides",
       "Circle Chart",
       "House Designs",
       "House Blueprints",
@@ -53,6 +54,10 @@ describe("shared tool page navigation", () => {
     expect(within(resources).getByRole("link", { name: "Circle Chart" })).toHaveAttribute(
       "href",
       "/minecraft-circle-chart",
+    );
+    expect(within(resources).getByRole("link", { name: "Guides" })).toHaveAttribute(
+      "href",
+      "/guides",
     );
     expect(within(site).getAllByRole("link").map((link) => link.textContent)).toEqual([
       "About",

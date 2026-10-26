@@ -38,6 +38,7 @@ export function SiteFooter() {
           <section className="footer-column">
             <h2>Build Resources</h2>
             <nav aria-label="Minecraft building resources">
+              <Link href="/guides">Guides</Link>
               <Link href="/minecraft-circle-chart">Circle Chart</Link>
               <Link href="/house-designs">House Designs</Link>
               <Link href="/house-blueprints">House Blueprints</Link>

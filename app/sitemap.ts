@@ -25,6 +25,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/guides`,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    ...[
+      "circle-building-mistakes",
+      "round-towers-and-domes",
+      "nether-portal-network",
+    ].map((slug) => ({
+      url: `${baseUrl}/guides/${slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    {
       url: `${baseUrl}/nether-portal-calculator`,
       changeFrequency: "weekly",
       priority: 0.9,
