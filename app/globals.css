@@ -5312,6 +5312,8 @@ a {
 .blueprint-download { grid-area: download; margin: 0 18px 18px; cursor: pointer; }
 .house-back-link { margin-top: 24px !important; }
 .house-back-link a { color: #386a3d; font-weight: 750; }
+.house-section-more { margin-top: 22px; }
+.house-section-more a { color: #386a3d; font-weight: 750; }
 
 /* Staircase collection */
 .staircase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }

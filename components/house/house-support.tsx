@@ -3,9 +3,10 @@ import type { HouseBlueprint, HouseCollection, HouseFaq } from "@/content/houses
 import { TOOL_PAGES, type ToolKey } from "@/lib/site/tools";
 
 type HouseDesignPageKey = HouseCollection["slug"] | "staircases";
+type HouseDirectoryKey = HouseDesignPageKey | "blueprints";
 
 const HOUSE_DESIGN_PAGES: Array<{
-  key: HouseDesignPageKey;
+  key: HouseDirectoryKey;
   href: string;
   title: string;
   description: string;
@@ -39,6 +40,12 @@ const HOUSE_DESIGN_PAGES: Array<{
     href: "/house-designs/staircases",
     title: "Staircase Designs",
     description: "Space-efficient stair layouts for lofts, towers, basements, and full second floors.",
+  },
+  {
+    key: "blueprints",
+    href: "/house-blueprints",
+    title: "House Blueprints",
+    description: "Exact top-down layers, material counts, and downloadable SVG grids for every plan.",
   },
 ];
 

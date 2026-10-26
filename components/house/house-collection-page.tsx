@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ContentBreadcrumbs, type BreadcrumbItem } from "@/components/layout/content-breadcrumbs";
 import { HouseGrid } from "./house-card";
 import { HouseDesignDirectory, HouseFaqList, RelatedTools } from "./house-support";
@@ -36,6 +37,7 @@ export function HouseCollectionPage({ collection }: { collection: HouseCollectio
             <p>Compare the footprint, block count, build time, and main materials before opening the exact layers.</p>
           </div>
           <HouseGrid blueprints={blueprints} />
+          <p className="house-section-more"><Link href="/house-blueprints">See all house blueprints <span aria-hidden="true">→</span></Link></p>
         </section>
         <section className="house-section">
           <p className="section-label">SIZE GUIDE</p>

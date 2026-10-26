@@ -8,6 +8,7 @@ import { DifficultyBadge, HouseGrid } from "@/components/house/house-card";
 import { MaterialTable, RelatedTools } from "@/components/house/house-support";
 import { StructuredData, breadcrumbSchema, schemaGraph } from "@/components/house/structured-data";
 import { HOUSE_BLUEPRINTS, getHouseBlueprint, getHouseBlueprints } from "@/content/houses/blueprints";
+import { getHouseCollection } from "@/content/houses/collections";
 import { absoluteUrl, createHouseMetadata } from "@/lib/site/house-seo";
 
 export const dynamicParams = false;
@@ -35,6 +36,8 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
   const { slug } = await params;
   const blueprint = getHouseBlueprint(slug);
   if (!blueprint) notFound();
+  // Cottage plans have no dedicated collection page; they are featured under Small Houses.
+  const collection = getHouseCollection(blueprint.category === "cottage" ? "small" : blueprint.category);
   const breadcrumbs: BreadcrumbItem[] = [
     { name: "Home", href: "/" },
     { name: "House Blueprints", href: "/house-blueprints" },
@@ -116,7 +119,15 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
         <section className="house-section">
           <div className="house-section-heading"><div><p className="section-label">RELATED HOUSE DESIGNS</p><h2>Compare another blueprint</h2></div><p>These plans share a footprint, category, or useful next level of complexity.</p></div>
           <HouseGrid blueprints={getHouseBlueprints(blueprint.relatedSlugs)} />
-          <p className="house-back-link"><Link href="/house-blueprints">← View all house blueprints</Link></p>
+          <p className="house-back-link">
+            <Link href="/house-blueprints">← View all house blueprints</Link>
+            {collection && (
+              <>
+                <span aria-hidden="true"> · </span>
+                <Link href={`/house-designs/${collection.slug}`}>More {collection.name.toLowerCase()}</Link>
+              </>
+            )}
+          </p>
         </section>
       </div>
     </main>
