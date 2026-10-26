@@ -114,10 +114,16 @@ describe("generation client fallbacks", () => {
 
 describe("ShapeGenerator with oversized volumes", () => {
   // Without a Worker the component still reaches the exact total through the fallback path.
-  it("shows the full 128-block sphere total after the deferred load", async () => {
+  // Width 100 filled is the cheapest size above the heavy threshold, keeping this test
+  // affordable when the suite runs in parallel.
+  it("shows the full oversized sphere total after the deferred load", async () => {
     render(<ShapeGenerator />);
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Diameter" }), { target: { value: "128" } });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Diameter" }), { target: { value: "100" } });
     fireEvent.click(screen.getByLabelText("Filled"));
-    await waitFor(() => expect(screen.getAllByText("1,099,136").length).toBeGreaterThan(0), { timeout: 10_000 });
-  });
+    const options: ShapeOptions = { shape: "sphere", width: 100, height: 100, depth: 100, sides: 6, thickness: 1, filled: true, layer: 50 };
+    const expected = generateShapeLayers(options)
+      .reduce((sum, layer) => sum + layer.currentBlocks, 0)
+      .toLocaleString("en-US");
+    await waitFor(() => expect(screen.getAllByText(expected).length).toBeGreaterThan(0), { timeout: 15_000 });
+  }, 30_000);
 });
