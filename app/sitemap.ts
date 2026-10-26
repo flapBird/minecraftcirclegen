@@ -24,6 +24,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/nether-portal-calculator`,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     ...["oval-generator", "sphere-generator", "dome-generator"].map((path) => ({
       url: `${baseUrl}/${path}`,
       changeFrequency: "weekly" as const,

@@ -190,6 +190,24 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
       answer: "The preview is withheld when the target, item, amount, lore, or enchantment settings are invalid, so a known-bad command is not offered for copying.",
     },
   ],
+  "nether-portal": [
+    {
+      question: "How do I convert Overworld coordinates to Nether coordinates?",
+      answer: "Divide X and Z by 8 and keep Y unchanged; division rounds down, so X=100 becomes X=12 and X=-100 becomes X=-13. The calculator applies the same conversion the game uses when linking portals.",
+    },
+    {
+      question: "Why did my portal link to the wrong place?",
+      answer: "Another existing portal was closer to the converted target by 3D distance, including Y. Build your intended Nether-side portal first at the calculated coordinates, and break any stray portal the game auto-created nearby.",
+    },
+    {
+      question: "How far apart should Overworld portals be?",
+      answer: "In Java Edition, two Overworld portals that convert to targets within 16 blocks of each other in the Nether can share a link, so keep them at least 128 Overworld blocks apart in both X and Z. Bedrock Edition searches 128 blocks around the target in both dimensions.",
+    },
+    {
+      question: "Does the Y coordinate change in the Nether?",
+      answer: "No. Y passes through unchanged in both directions, but it still counts toward the 3D distance the game uses to pick the closest portal, so matching heights between paired portals makes links predictable.",
+    },
+  ],
   "name-checker": [
     {
       question: "Does not found mean a Minecraft username is available?",
@@ -267,11 +285,15 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
     },
     {
       question: "Does the generator calculate materials?",
-      answer: "Yes. After conversion it counts each matched block type so you can prepare an exact material list.",
+      answer: "Yes. After conversion it shows every matched block type in a numbered material list with exact counts. Click a preview cell or enter X/Z coordinates to find its material number and name.",
+    },
+    {
+      question: "How do I follow the coordinate CSV?",
+      answer: "The CSV lists every cell, including empty spaces, with its X/Z position, material number, and material name. The top-left is (0, 0); X increases right and Z increases down the blueprint. These are blueprint positions, not absolute world coordinates, and palette IDs are not Minecraft command IDs.",
     },
     {
       question: "Can it export a schematic or Litematica file?",
-      answer: "The current version exports a visual blueprint and material list, not a world, schematic, or Litematica file.",
+      answer: "The generator exports a PNG blueprint, coordinate CSV, and copyable material list. It does not generate world, schematic, or Litematica files.",
     },
   ],
   "map-art": [
@@ -285,11 +307,11 @@ export const TOOL_FAQS: Record<ToolKey, ToolFaq[]> = {
     },
     {
       question: "Can I make art larger than one map?",
-      answer: "Yes. Choose a multi-map layout and the preview marks the boundaries between each 128×128 tile.",
+      answer: "Yes. Choose a multi-map layout and the preview marks the boundaries between each 128×128 tile. The cell inspector and coordinate CSV identify each block's map row and column, starting at 1, and its local X/Z position from 0 to 127 within that tile.",
     },
     {
       question: "Does it create a map.dat or world file?",
-      answer: "No. It produces a PNG blueprint and material counts; it does not modify saves or generate map.dat files.",
+      answer: "No. It provides a PNG blueprint, coordinate CSV, and complete numbered material list with counts. Blueprint coordinates start at the top-left (0, 0), not at your world's origin, and palette IDs are not Minecraft command IDs. It does not modify saves or generate map.dat files.",
     },
   ],
   font: [

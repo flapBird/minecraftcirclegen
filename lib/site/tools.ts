@@ -14,7 +14,8 @@ export type ToolKey =
   | "give-command"
   | "name-checker"
   | "uuid-lookup"
-  | "enchanting-translator";
+  | "enchanting-translator"
+  | "nether-portal";
 
 export interface ToolPage {
   key: ToolKey;
@@ -132,6 +133,13 @@ export const TOOL_PAGES: ToolPage[] = [
     description: "Create version-aware Java item commands with names, lore, and enchantments.",
   },
   {
+    key: "nether-portal",
+    href: "/nether-portal-calculator",
+    navLabel: "Portal Calculator",
+    title: "Nether Portal Calculator",
+    description: "Convert Overworld and Nether coordinates with the exact 1:8 ratio and copy portal frame commands.",
+  },
+  {
     key: "name-checker",
     href: "/minecraft-name-checker",
     navLabel: "Name Checker",
@@ -174,7 +182,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   {
     key: "command",
     title: "Command & Data Tools",
-    toolKeys: ["give-command"],
+    toolKeys: ["give-command", "nether-portal"],
   },
   {
     key: "player",
@@ -197,7 +205,8 @@ export const RELATED_TOOLS: Record<ToolKey, ToolKey[]> = {
   "map-art": ["pixel-art", "gradient", "shape"],
   font: ["text", "enchanting-translator", "banner", "pixel-art"],
   "enchanting-translator": ["font", "text", "color-codes"],
-  "give-command": ["banner", "text"],
+  "give-command": ["banner", "text", "nether-portal"],
+  "nether-portal": ["give-command", "text"],
   "name-checker": ["uuid-lookup"],
   "uuid-lookup": ["name-checker"],
 };
