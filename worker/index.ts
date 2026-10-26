@@ -1,6 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import { buildContentSecurityPolicy } from "../lib/site/security-headers";
 
 interface AssetFetcher {
   fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
@@ -22,20 +23,10 @@ interface ExecutionContext {
   passThroughOnException(): void;
 }
 
-const developmentScriptSource = import.meta.env.DEV ? " 'unsafe-eval'" : "";
-
-const CONTENT_SECURITY_POLICY = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${developmentScriptSource} https://www.googletagmanager.com`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://textures.minecraft.net",
-  "font-src 'self'",
-  "connect-src 'self' ws: wss: https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-].join("; ");
+// The policy is shared with next.config.ts via lib/site/security-headers.ts.
+const CONTENT_SECURITY_POLICY = buildContentSecurityPolicy({
+  developmentScriptSource: import.meta.env.DEV ? " 'unsafe-eval'" : "",
+});
 
 function withSecurityHeaders(response: Response, request: Request): Response {
   const headers = new Headers(response.headers);

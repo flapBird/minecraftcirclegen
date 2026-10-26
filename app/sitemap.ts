@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 import { HOUSE_BLUEPRINT_SLUGS } from "@/content/houses/blueprints";
+import { GUIDES } from "@/content/guides/registry";
+
+const GUIDE_SLUGS = GUIDES.map((guide) => guide.slug);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://minecraftcirclegen.com";
@@ -29,11 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...[
-      "circle-building-mistakes",
-      "round-towers-and-domes",
-      "nether-portal-network",
-    ].map((slug) => ({
+    ...GUIDE_SLUGS.map((slug) => ({
       url: `${baseUrl}/guides/${slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
