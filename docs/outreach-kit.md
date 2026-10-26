@@ -22,7 +22,11 @@
 
 标题：`I made a printable chart of every common circle size (7 to 101 blocks) with exact block counts`
 
-正文：我一直在手工数格子建圆形，索性把生成器的算法做成了静态图表库，每个直径都标了精确方块数（空心/实心两套），可以直接照着格子放。附上 21 格圆的例子——56 块。欢迎挑错。链接：https://minecraftcirclegen.com/minecraft-circle-chart
+英文正文（可直接复制）：
+
+> I kept miscounting turns when building circles freehand, so I turned my generator's math into a static chart library — every common diameter with exact outline AND filled block counts, ready to copy block by block. Example: a 21-block circle is exactly 56 blocks. Charts for 7 up to 101 blocks here: https://minecraftcirclegen.com/minecraft-circle-chart
+>
+> Happy to add sizes or formats if something's missing.
 
 配图：截取 circle-chart-21.svg 的渲染 + 一张游戏内建好的圆（**等你的游戏内实拍**）。
 
@@ -30,13 +34,25 @@
 
 标题：`Layer-by-layer sphere plans: a 21-block sphere is exactly 1,082 blocks`
 
-正文：整理了 15/21/31 三种直径球的逐层蓝图和精确材料数（21 空心球正好 1,082 块，实心要 4,945），逐层网格可以直接照抄。链接：https://minecraftcirclegen.com/guides/sphere-layer-guide
+英文正文（可直接复制）：
+
+> I wrote up layer-by-layer sphere plans with verified counts: a 15-block sphere is 530 blocks hollow (1,791 filled), a 21-block sphere is exactly 1,082 hollow (4,945 filled). Every layer is a grid you can copy directly, and the middle layer must match your footprint circle exactly — that's the check that keeps the ball round. Full plans: https://minecraftcirclegen.com/guides/sphere-layer-guide
 
 ### 帖子草稿 3（r/MinecraftCommands）
 
 标题：`Nether portal math cheat sheet: /tp + /fill frame commands at the exact converted coordinates`
 
-正文：做了个下界传送门坐标换算器，输出目标坐标、`/execute in minecraft:the_nether run tp @s X Y Z`，以及 4 条门框 `/fill` 指令（含 Java/Bedrock 搜索半径差异说明：16 块 vs 128 块）。链接：https://minecraftcirclegen.com/nether-portal-calculator
+英文正文（可直接复制）：
+
+> I built a nether portal calculator that outputs the converted coordinates plus ready-to-run commands: `/execute in minecraft:the_nether run tp @s X Y Z` and four `/fill` commands for the obsidian frame at the exact target. It also documents the Java vs Bedrock search-radius difference (16 blocks vs 128 blocks) that causes most mislinks. Tool: https://minecraftcirclegen.com/nether-portal-calculator
+
+### Planet Minecraft 博客草稿（英文，可投稿）
+
+标题：`Circle charts, sphere layer plans, and a nether portal calculator — all block counts verified`
+
+正文要点（英文组织成3-4段）：
+
+> Every chart and count on our site is computed by the same algorithm the tools use, so the numbers never drift from the previews. The chart library covers diameters 7–101 with outline and filled counts; the sphere guide walks a 21-block build layer by layer (exactly 1,082 blocks hollow); the nether portal calculator converts coordinates with the game's real floor-division rounding and outputs /tp and /fill commands. Everything runs in the browser, no login, Java and Bedrock. Start here: https://minecraftcirclegen.com/minecraft-circle-chart
 
 ### 时机与节奏
 
