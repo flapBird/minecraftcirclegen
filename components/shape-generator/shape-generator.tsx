@@ -8,9 +8,12 @@ import {
   generateShapeLayers,
   normalizeShapeOptions,
   shapeCoordinates,
+  type ShapeBlueprint,
   type ShapeOptions,
   type UniversalShape,
 } from "@/lib/shape/generate-shape";
+import type { VolumeData } from "@/lib/shape/volume-data";
+import { isHeavyShapeWork, loadShapeLayers, shapeWorkKey } from "@/lib/generation/generation-client";
 import { ShapeCanvas } from "./shape-canvas";
 
 const DEFAULT_OPTIONS: ShapeOptions = { shape: "sphere", width: 21, height: 15, depth: 21, sides: 6, thickness: 1, filled: false, layer: 11 };
@@ -87,7 +90,30 @@ export function ShapeGenerator() {
   const normalized = useMemo(() => normalizeShapeOptions(options), [options]);
   const previewOptions = useDeferredValue(normalized);
   const previewZoom = useDeferredValue(zoom);
-  const layers = useMemo(() => generateShapeLayers(previewOptions), [previewOptions]);
+  const heavy = isHeavyShapeWork(previewOptions);
+  const previewKey = useMemo(() => shapeWorkKey(previewOptions), [previewOptions]);
+  const [loaded, setLoaded] = useState<{ key: string; layers: ShapeBlueprint[]; volume: VolumeData | null } | null>(null);
+
+  useEffect(() => {
+    if (!heavy) return;
+    let cancelled = false;
+    loadShapeLayers(previewOptions).then((payload) => {
+      if (cancelled) return;
+      setLoaded({ key: previewKey, layers: payload.layers, volume: payload.volume });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [heavy, previewKey, previewOptions]);
+
+  const loadedMatches = loaded !== null && loaded.key === previewKey;
+  const syncLayers = useMemo(() => (heavy ? null : generateShapeLayers(previewOptions)), [heavy, previewOptions]);
+  // While a heavy request runs, the previous volume stays on screen instead of blocking input.
+  const layers = heavy
+    ? (loaded && loadedMatches ? loaded.layers : loaded?.layers ?? generateShapeLayers(previewOptions))
+    : (syncLayers ?? generateShapeLayers(previewOptions));
+  const volumeData = heavy ? (loaded && loadedMatches ? loaded.volume : loaded?.volume ?? null) : null;
+  const computing = heavy && !loadedMatches;
   const blueprint = layers[Math.max(0, previewOptions.layer - 1)] ?? layers[0];
   const is3d = THREE_D_SHAPES.includes(normalized.shape);
   const hasHeight = ["ellipse", "triangle", "rectangle", "polygon", "star", "cylinder", "cone", "pyramid"].includes(normalized.shape);
@@ -189,7 +215,7 @@ export function ShapeGenerator() {
               <div className="shape-zoom-controls"><button type="button" aria-label="Zoom out" onClick={() => setZoom((current) => Math.max(.5, current - .1))}>−</button><span>{Math.round(zoom * 100)}%</span><button type="button" aria-label="Zoom in" onClick={() => setZoom((current) => Math.min(2.5, current + .1))}>+</button><button type="button" onClick={() => setZoom(1)}>Fit</button><button type="button" className="shape-fullscreen-button" aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} aria-pressed={isFullscreen} title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"} onClick={toggleFullscreen}><span aria-hidden="true">⛶</span></button></div>
             </div>
           </div>
-          <ShapeCanvas blueprint={blueprint} layers={layers} mode={is3d ? viewMode : "2d"} showGrid={showGrid} showCoordinates={showCoordinates} zoom={previewZoom} autoRotate={autoRotate} onZoomChange={setZoom} canvasRef={canvasRef} />
+          <ShapeCanvas blueprint={blueprint} layers={layers} mode={is3d ? viewMode : "2d"} showGrid={showGrid} showCoordinates={showCoordinates} zoom={previewZoom} autoRotate={autoRotate} onZoomChange={setZoom} canvasRef={canvasRef} volumeData={volumeData} />
         </section>
 
         <aside className="shape-settings-card" aria-labelledby="shape-settings-title">
@@ -207,6 +233,7 @@ export function ShapeGenerator() {
           {is3d && <div className="shape-layer-control"><div><strong>Layer / Y level</strong><span>Y {blueprint.layer - 1}</span></div><input type="range" min={1} max={blueprint.layerCount} value={blueprint.layer} onChange={(event) => update({ layer: Number(event.target.value) })} /><div><button type="button" disabled={blueprint.layer <= 1} onClick={() => update({ layer: blueprint.layer - 1 })}>← Previous Layer</button><button type="button" disabled={blueprint.layer >= blueprint.layerCount} onClick={() => update({ layer: blueprint.layer + 1 })}>Next Layer →</button></div></div>}
 
           <dl className="shape-stats"><div><dt>{is3d ? "Current layer" : "Block count"}</dt><dd>{blueprint.currentBlocks.toLocaleString()}</dd></div>{is3d && <div><dt>Total blocks</dt><dd>{blueprint.totalBlocks.toLocaleString()}</dd></div>}<div><dt>Grid size</dt><dd>{blueprint.width} × {blueprint.height}</dd></div></dl>
+          {computing && <p className="generation-status" role="status">Computing the full blueprint in the background — the preview shows the previous size until it is ready.</p>}
           <div className="shape-actions"><button type="button" className="primary-button" onClick={download}>↓ Download current view</button><button type="button" className="secondary-button" onClick={copyCoordinates}>Copy current-layer coordinates</button></div>
         </aside>
       </div>

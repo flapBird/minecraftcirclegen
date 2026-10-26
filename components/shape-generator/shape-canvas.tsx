@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import type { ShapeBlueprint } from "@/lib/shape/generate-shape";
+import { volumeIndex, type VolumeData } from "@/lib/shape/volume-data";
 
 type ViewMode = "2d" | "3d";
 type Point3 = [number, number, number];
@@ -25,6 +26,7 @@ export function ShapeCanvas({
   autoRotate,
   onZoomChange,
   canvasRef,
+  volumeData,
 }: {
   blueprint: ShapeBlueprint;
   layers: ShapeBlueprint[];
@@ -35,6 +37,7 @@ export function ShapeCanvas({
   autoRotate: boolean;
   onZoomChange: Dispatch<SetStateAction<number>>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  volumeData: VolumeData | null;
 }) {
   const shellRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ x: number; y: number } | null>(null);
@@ -43,7 +46,7 @@ export function ShapeCanvas({
   const [rotation, setRotation] = useState({ yaw: -0.72, pitch: -0.52 });
 
   const volume = useMemo(() => {
-    if (mode !== "3d") return { occupied: new Set<string>(), blocks: [] as Point3[] };
+    if (volumeData || mode !== "3d") return { occupied: new Set<string>(), blocks: [] as Point3[] };
     const occupied = new Set<string>();
     const blocks: Point3[] = [];
     layers.forEach((layer, y) => layer.grid.forEach((row, z) => row.forEach((filled, x) => {
@@ -52,7 +55,21 @@ export function ShapeCanvas({
       blocks.push([x, y, z]);
     })));
     return { occupied, blocks };
-  }, [layers, mode]);
+  }, [layers, mode, volumeData]);
+
+  const syncSurfaceBlocks = useMemo(() => {
+    if (volumeData || mode !== "3d") return [] as Point3[];
+    return volume.blocks.filter(([x, y, z]) =>
+      FACE_DATA.some(({ neighbor }) => !volume.occupied.has(`${x + neighbor[0]},${y + neighbor[1]},${z + neighbor[2]}`)));
+  }, [mode, volume, volumeData]);
+
+  const isOccupied = useCallback((x: number, y: number, z: number) => {
+    if (volumeData) {
+      if (x < 0 || x >= volumeData.width || z < 0 || z >= volumeData.depth || y < 0 || y >= volumeData.layerCount) return false;
+      return volumeData.occupancy[volumeIndex(x, y, z, volumeData.width, volumeData.depth)] === 1;
+    }
+    return volume.occupied.has(`${x},${y},${z}`);
+  }, [volume, volumeData]);
 
   const viewMetrics = useCallback(() => {
     const cell = Math.max(1, Math.min((size.width * 0.88) / blueprint.width, (size.height * 0.82) / blueprint.height) * zoom);
@@ -145,17 +162,21 @@ export function ShapeCanvas({
       };
       const normalDepth = ([x, y, z]: Point3) => y * sinP + (x * sinY + z * cosY) * cosP;
       const faces: Array<{ points: Array<{ x: number; y: number }>; depth: number; shade: number; active: boolean }> = [];
-      const surfaceBlocks = volume.blocks.filter(([x, y, z]) => FACE_DATA.some(({ neighbor }) => !volume.occupied.has(`${x + neighbor[0]},${y + neighbor[1]},${z + neighbor[2]}`)));
-      const step = Math.max(1, Math.ceil(surfaceBlocks.length / 24000));
-      surfaceBlocks.forEach(([x, y, z], blockIndex) => {
-        if (blockIndex % step !== 0) return;
+      const surfaceCount = volumeData ? volumeData.surface.length / 3 : syncSurfaceBlocks.length;
+      const surfaceAt = (index: number): Point3 => volumeData
+        ? [volumeData.surface[index * 3], volumeData.surface[index * 3 + 1], volumeData.surface[index * 3 + 2]]
+        : syncSurfaceBlocks[index];
+      const step = Math.max(1, Math.ceil(surfaceCount / 24000));
+      for (let index = 0; index < surfaceCount; index += 1) {
+        if (index % step !== 0) continue;
+        const [x, y, z] = surfaceAt(index);
         FACE_DATA.forEach((face) => {
           const [dx, dy, dz] = face.neighbor;
-          if (volume.occupied.has(`${x + dx},${y + dy},${z + dz}`) || normalDepth(face.normal) <= 0.035) return;
+          if (isOccupied(x + dx, y + dy, z + dz) || normalDepth(face.normal) <= 0.035) return;
           const projected = face.vertices.map(([vx, vy, vz]) => transform([x + vx, y + vy, z + vz]));
           faces.push({ points: projected, depth: projected.reduce((sum, point) => sum + point.depth, 0) / projected.length, shade: face.shade, active: y === blueprint.layer - 1 });
         });
-      });
+      }
       faces.sort((a, b) => a.depth - b.depth);
       const muted = ["#aebcaf", "#879a89", "#718373", "#5d6f60"];
       const active = ["#79ad6f", "#568b51", "#447644", "#355f39"];
@@ -204,7 +225,7 @@ export function ShapeCanvas({
     context.moveTo(view.x + view.width / 2, view.y); context.lineTo(view.x + view.width / 2, view.y + view.height);
     context.moveTo(view.x, view.y + view.height / 2); context.lineTo(view.x + view.width, view.y + view.height / 2);
     context.stroke();
-  }, [blueprint, canvasRef, layers, mode, rotation.pitch, rotation.yaw, showCoordinates, showGrid, size.height, size.width, viewMetrics, volume.blocks, volume.occupied, zoom]);
+  }, [blueprint, canvasRef, isOccupied, layers, mode, rotation.pitch, rotation.yaw, showCoordinates, showGrid, size.height, size.width, syncSurfaceBlocks, viewMetrics, volumeData, zoom]);
 
   const updatePointer = (event: React.PointerEvent<HTMLCanvasElement>) => {
     if (mode === "3d") {

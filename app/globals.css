@@ -3783,6 +3783,9 @@ a {
 .guide-next { margin-top: 52px; }
 .guide-next-grid { margin-top: 18px; }
 
+/* Worker-backed generation status */
+.generation-status { margin: 10px 0 0; padding: 10px 14px; border: 1px solid #c9d3c6; border-radius: 8px; background: #f2f5ef; color: #44543f; font-size: 0.82rem; font-weight: 720; }
+
 .size-table-wrap table {
   width: 100%;
   border-collapse: collapse;

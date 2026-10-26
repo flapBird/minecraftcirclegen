@@ -8,7 +8,8 @@ import {
   parseGeometryUrl,
   serializeGeometryUrl,
 } from "@/lib/geometry/geometry-url-state";
-import type { GeometryOptions, GeometryShape } from "@/lib/geometry/geometry-types";
+import type { GeometryOptions, GeometryResult, GeometryShape } from "@/lib/geometry/geometry-types";
+import { isHeavyGeometryWork, loadGeometry } from "@/lib/generation/generation-client";
 import { SITE_NAVIGATION_EVENT } from "@/lib/site/navigation-events";
 import { GeometryCanvas } from "./geometry-canvas";
 import { GeometryControls } from "./geometry-controls";
@@ -38,10 +39,32 @@ export function GeometryGenerator({
   const toastTimer = useRef<number | null>(null);
   const previewOptions = useDeferredValue(options);
   const previewZoom = useDeferredValue(zoom);
-  const result = useMemo(
-    () => generateGeometry(shape, previewOptions),
-    [previewOptions, shape],
+  const heavy = isHeavyGeometryWork(shape, previewOptions);
+  const previewKey = useMemo(() => `${shape}:${JSON.stringify(previewOptions)}`, [previewOptions, shape]);
+  const [loaded, setLoaded] = useState<{ key: string; result: GeometryResult } | null>(null);
+
+  useEffect(() => {
+    if (!heavy) return;
+    let cancelled = false;
+    loadGeometry(shape, previewOptions).then((payload) => {
+      if (cancelled) return;
+      setLoaded({ key: previewKey, result: payload });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [heavy, previewKey, previewOptions, shape]);
+
+  const loadedMatches = loaded !== null && loaded.key === previewKey;
+  const syncResult = useMemo(
+    () => (heavy ? null : generateGeometry(shape, previewOptions)),
+    [heavy, previewOptions, shape],
   );
+  // While a heavy count runs in the worker, the previous result stays visible.
+  const result = heavy
+    ? (loaded && loadedMatches ? loaded.result : loaded?.result ?? generateGeometry(shape, previewOptions))
+    : (syncResult ?? generateGeometry(shape, previewOptions));
+  const computing = heavy && !loadedMatches;
 
   const showStatus = useCallback((message: string) => {
     if (toastTimer.current !== null) window.clearTimeout(toastTimer.current);
@@ -167,6 +190,7 @@ export function GeometryGenerator({
           </div>
         </section>
       </div>
+      {computing && <p className="generation-status" role="status">Counting every layer of this volume in the background…</p>}
       {toast && <div className="toast" role="status" aria-live="polite">{toast}</div>}
     </div>
   );
