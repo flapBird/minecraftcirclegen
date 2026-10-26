@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "minecraft-circle-gen",
+  "compatibility_date": "2026-10-26",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "./worker/index.ts",
+  // Serves the vinext build on the apex; the old Vercel chain stays intact and
+  // remains the fallback if this route is removed.
+  "routes": [
+    { "pattern": "minecraftcirclegen.com/*", "zone_name": "minecraftcirclegen.com" }
+  ],
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  "images": {
+    "binding": "IMAGES"
+  }
+}
