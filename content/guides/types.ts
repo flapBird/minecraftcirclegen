@@ -15,6 +15,7 @@ export type Guide = {
   datePublished: string;
   toolKeys: ToolKey[];
   contentLinks: { label: string; href: string }[];
+  illustration?: { src: string; alt: string };
   sections: GuideSection[];
 };
 

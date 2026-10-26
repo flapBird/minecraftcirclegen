@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
-import { CircleChartSvg } from "@/components/circle-chart/circle-chart-svg";
 import { HomeToolDirectory } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
@@ -336,13 +335,26 @@ export default function Home() {
                 </table>
               </div>
               <div className="size-chart-strip" aria-label="Sample Minecraft circle charts">
-                {[5, 9, 21, 51].map((diameter) => (
+                {[
+                  { diameter: 7, blocks: 16 },
+                  { diameter: 15, blocks: 40 },
+                  { diameter: 21, blocks: 56 },
+                  { diameter: 51, blocks: 144 },
+                ].map(({ diameter, blocks }) => (
                   <Link
                     key={diameter}
                     href="/minecraft-circle-chart"
                     aria-label={`Circle chart for a ${diameter}-block diameter, with more sizes on the full chart`}
                   >
-                    <CircleChartSvg diameter={diameter} />
+                    {/* Static SVG blueprint asset: fixed dimensions, no optimization needed. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/circle-charts/circle-chart-${String(diameter).padStart(2, "0")}.svg`}
+                      alt={`Hollow Minecraft circle blueprint, ${diameter} by ${diameter} blocks, ${blocks} blocks`}
+                      width={diameter * 10}
+                      height={diameter * 10}
+                      loading="lazy"
+                    />
                     <span className="size-chart-caption">{diameter} blocks</span>
                   </Link>
                 ))}

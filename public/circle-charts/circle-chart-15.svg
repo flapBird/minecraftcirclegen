@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" role="img" aria-label="Hollow Minecraft circle blueprint, 15 by 15 blocks, 40 blocks" shape-rendering="crispEdges">
+<title>Hollow Minecraft circle blueprint, 15 by 15 blocks, 40 blocks</title>
+<defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="#d7ddd4" stroke-width="1"/></pattern></defs>
+<rect width="150" height="150" fill="#ffffff"/>
+<rect width="150" height="150" fill="url(#grid)"/>
+<rect class="chart-block" x="50" y="0" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="60" y="0" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="70" y="0" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="80" y="0" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="90" y="0" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="30" y="10" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="40" y="10" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="100" y="10" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="110" y="10" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="20" y="20" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="120" y="20" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="10" y="30" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="130" y="30" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="10" y="40" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="130" y="40" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="0" y="50" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="140" y="50" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="0" y="60" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="140" y="60" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="0" y="70" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="140" y="70" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="0" y="80" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="140" y="80" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="0" y="90" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="140" y="90" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="10" y="100" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="130" y="100" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="10" y="110" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="130" y="110" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="20" y="120" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="120" y="120" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="30" y="130" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="40" y="130" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="100" y="130" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="110" y="130" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="50" y="140" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="60" y="140" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="70" y="140" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="80" y="140" width="10" height="10" fill="#4d7f47"/>
+<rect class="chart-block" x="90" y="140" width="10" height="10" fill="#4d7f47"/>
+</svg>

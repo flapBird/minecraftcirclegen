@@ -11,6 +11,10 @@ export const circleMistakesGuide: Guide = {
   contentLinks: [
     { label: "Minecraft circle chart", href: "/minecraft-circle-chart" },
   ],
+  illustration: {
+    src: "/circle-charts/circle-chart-15.svg",
+    alt: "Hollow Minecraft circle blueprint, 15 by 15 blocks, 40 blocks — the kind of counted pattern that prevents lopsided circles",
+  },
   sections: [
     {
       heading: "Why circles go wrong",

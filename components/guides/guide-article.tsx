@@ -48,6 +48,13 @@ export function GuideArticle({ guide }: { guide: Guide }) {
             <span aria-hidden="true"> · </span>
             {guideReadingMinutes(guide)} min read
           </p>
+          {guide.illustration && (
+            <figure className="guide-illustration">
+              {/* Static SVG blueprint asset: fixed dimensions, no optimization needed. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={guide.illustration.src} alt={guide.illustration.alt} width={300} height={300} />
+            </figure>
+          )}
         </header>
         {guide.sections.map((section, index) => (
           <section key={section.heading}>
