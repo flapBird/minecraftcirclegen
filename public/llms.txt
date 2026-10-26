@@ -20,8 +20,8 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 
 ## Art and Design Tools
 
-- [Minecraft Pixel Art Generator](https://minecraftcirclegen.com/minecraft-pixel-art-generator): Processes an uploaded image locally into a block grid, palette, material counts, and PNG blueprint, with crop/contain, dithering, transparency, and grid controls.
-- [Minecraft Map Art Generator](https://minecraftcirclegen.com/minecraft-map-art-generator): Creates flat 128×128, 256×128, 128×256, or 256×256 block plans using map-oriented palettes and tile dividers. It does not generate map.dat, schematic, or Litematica files.
+- [Minecraft Pixel Art Generator](https://minecraftcirclegen.com/minecraft-pixel-art-generator): Processes an uploaded image locally into a block grid that preserves its aspect ratio, with palette, dithering, transparency, and grid controls. Includes a complete numbered material list, per-cell coordinate lookup, PNG blueprint, and coordinate CSV covering every cell, including empty spaces.
+- [Minecraft Map Art Generator](https://minecraftcirclegen.com/minecraft-map-art-generator): Creates flat 128×128, 256×128, 128×256, or 256×256 block plans using map-oriented palettes, crop/contain controls, and tile dividers. Includes a complete numbered material list, per-cell inspection, PNG blueprint, and coordinate CSV with map row/column and local tile coordinates. It does not generate map.dat, schematic, or Litematica files.
 - [Minecraft Font Generator](https://minecraftcirclegen.com/minecraft-font-generator): Renders text on a consistent pixel grid with familiar color/formatting codes, gradients, outlines, shadows, transparent PNG export, and a copyable block-letter blueprint.
 - [Minecraft Banner Maker](https://minecraftcirclegen.com/minecraft-banner-maker): Uses the 16 standard dye colors and up to six common loom-pattern layers. A pattern click adds one layer. Designs can be reordered, recolored, randomized, cleared, saved in the current browser, shared by URL, downloaded as PNG, or copied as `/give` (Java 1.20.5+) and `/setblock` (Java 1.20.5+) commands. The lower guide explains the tool and its three-step workflow; the compact loom recipe appears below the editor after the first pattern is added. Bedrock command behavior differs.
 
@@ -35,6 +35,7 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 ## Command and Data Tools
 
 - [Minecraft Give Command Generator](https://minecraftcirclegen.com/minecraft-give-command-generator): Creates validated Java Edition `/give` commands with searchable items, legal stack sizes, styled names and lore, compatible enchantments, attribute modifiers, and version-aware component or legacy NBT syntax. It can also download the result as a `.mcfunction` file; Bedrock syntax is not supported.
+- [Minecraft Nether Portal Calculator](https://minecraftcirclegen.com/nether-portal-calculator): Converts Overworld and Nether coordinates with the exact 1:8 ratio (floor rounding), shows Java and Bedrock portal search radii, and outputs teleport plus obsidian frame fill commands. Y is never scaled.
 
 ## Player Profile Tools
 
@@ -62,11 +63,28 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 - [9×11 Cottage House](https://minecraftcirclegen.com/house-blueprints/9x11-cottage-house)
 - [Compact Two-Story House](https://minecraftcirclegen.com/house-blueprints/compact-two-story-house)
 
+## Reference and Guides
+
+- [Minecraft Circle Chart](https://minecraftcirclegen.com/minecraft-circle-chart): Block-by-block circle templates for every common diameter from 3 to 101, with outline and filled block counts and generator links for each size.
+
+### Building Guides
+
+- [Common Mistakes When Building Minecraft Circles](https://minecraftcirclegen.com/guides/circle-building-mistakes): Nine fixable causes of lopsided circles, from eyeballing turns to ignoring wall thickness.
+- [How to Make a Minecraft Circle Without a Generator](https://minecraftcirclegen.com/guides/circle-without-generator): Read a chart row by row, count straight runs, and use the quarter-mirror method.
+- [Planning Round Towers and Domes That Actually Line Up](https://minecraftcirclegen.com/guides/round-towers-and-domes): Footprint, wall thickness, windows on a curve, and dome caps as one workflow.
+- [Round Base Layouts: Planning Rooms Inside a Circle](https://minecraftcirclegen.com/guides/round-base-layouts): Verified floor areas per diameter and room arrangements that respect curved walls.
+- [How to Build a Minecraft Sphere: Layer-by-Layer Plans](https://minecraftcirclegen.com/guides/sphere-layer-guide): Verified block counts per diameter, hollow versus filled, and a bottom-to-top layer workflow.
+- [Minecraft Dome Roofs: Sizes, Layer Plans, and When to Use One](https://minecraftcirclegen.com/guides/dome-roof-guide): Layer counts for common diameters, ceiling-clearance rules, and flat-roof alternatives.
+- [Minecraft Ovals and Ellipses: When a Circle Won't Fit](https://minecraftcirclegen.com/guides/oval-blueprint-guide): Paired dimensions, thickness on stretched curves, and build-type size recommendations.
+- [Circles in Minecraft Pixel Art: Rings, Logos, and Round Murals](https://minecraftcirclegen.com/guides/pixel-art-circles-and-rings): Ring borders for murals, dithering on curves, and map-art scale planning.
+- [How to Plan a Nether Portal Network That Never Mislinks](https://minecraftcirclegen.com/guides/nether-portal-network): The 1:8 conversion, Java and Bedrock search radii, spacing rules, and hub layout.
+
 ## Interpretation Notes
 
 - Java and Bedrock can share ordinary visual block plans, but command syntax, text formatting, item data, available blocks, and rendering can differ.
 - A “material count” describes the generated plan or illustrated shell. Builders may need extra blocks for scaffolding, substitutions, decoration, or mistakes.
 - Image uploads for Pixel Art and Map Art are processed in the browser; they are not presented as server-side uploads.
+- Pixel Art and Map Art coordinates start at the blueprint's top-left (0, 0), with X increasing right and Z down; they are not absolute world coordinates. Map rows and columns start at 1, with local tile coordinates from 0 to 127. CSV palette IDs are labels, not Minecraft command IDs.
 - Block-gradient matches are visual recommendations based on texture colors, not a guarantee of identical appearance under every shader, light level, biome, or game version.
 - MiniMessage and ampersand formats normally require compatible server software or plugins; they are not universal vanilla input formats.
 - Give-command output is for the selected Java Edition syntax family; item data and command syntax can differ by version and are not interchangeable with Bedrock commands.
