@@ -1,4 +1,3 @@
-import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CircleChartSvg } from "@/components/circle-chart/circle-chart-svg";
@@ -14,13 +13,13 @@ export const metadata: Metadata = {
   description,
   alternates: { canonical: "/minecraft-circle-chart" },
   openGraph: {
-    images: DEFAULT_SOCIAL_IMAGES,
+    images: [{ url: "/og/minecraft-circle-chart.png", width: 1200, height: 630 }],
     title,
     description,
     url: "/minecraft-circle-chart",
     type: "website",
   },
-  twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title, description },
+  twitter: { images: [{ url: "/og/minecraft-circle-chart.png", width: 1200, height: 630 }], card: "summary_large_image", title, description },
 };
 
 const faqs = [

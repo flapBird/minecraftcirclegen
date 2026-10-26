@@ -1,4 +1,3 @@
-import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NetherPortalCalculator } from "@/components/nether-portal/nether-portal-calculator";
@@ -13,14 +12,9 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/nether-portal-calculator" },
-  openGraph: {
-    images: DEFAULT_SOCIAL_IMAGES,
-    title,
-    description,
-    url: "/nether-portal-calculator",
-    type: "website",
-  },
-  twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title, description },
+  // og/twitter images come from opengraph-image.tsx in this route.
+  openGraph: { title, description, url: "/nether-portal-calculator", type: "website" },
+  twitter: { card: "summary_large_image", title, description },
 };
 
 export default async function NetherPortalCalculatorPage({ searchParams }: {

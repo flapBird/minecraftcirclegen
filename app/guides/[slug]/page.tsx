@@ -1,4 +1,3 @@
-import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,18 +16,24 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
   const { slug } = await params;
   const guide = getGuide(slug);
   if (!guide) return {};
+  // og/twitter images come from opengraph-image.tsx in this route.
   return {
     title: `${guide.title} – Minecraft Circle Gen Guides`,
     description: guide.description,
     alternates: { canonical: `/guides/${guide.slug}` },
     openGraph: {
-      images: DEFAULT_SOCIAL_IMAGES,
+      images: [{ url: `/og/guides-${guide.slug}.png`, width: 1200, height: 630, alt: guide.title }],
       title: guide.title,
       description: guide.description,
       url: `/guides/${guide.slug}`,
       type: "article",
     },
-    twitter: { images: DEFAULT_SOCIAL_IMAGES, card: "summary_large_image", title: guide.title, description: guide.description },
+    twitter: {
+      card: "summary_large_image",
+      images: [{ url: `/og/guides-${guide.slug}.png`, width: 1200, height: 630, alt: guide.title }],
+      title: guide.title,
+      description: guide.description,
+    },
   };
 }
 
