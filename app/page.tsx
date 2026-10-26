@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { GeometryGenerator } from "@/components/geometry-generator/geometry-generator";
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
+import { CircleChartSvg } from "@/components/circle-chart/circle-chart-svg";
 import { HomeToolDirectory } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
@@ -334,6 +335,24 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
+              <div className="size-chart-strip" aria-label="Sample Minecraft circle charts">
+                {[5, 9, 21, 51].map((diameter) => (
+                  <Link
+                    key={diameter}
+                    href="/minecraft-circle-chart"
+                    aria-label={`Circle chart for a ${diameter}-block diameter, with more sizes on the full chart`}
+                  >
+                    <CircleChartSvg diameter={diameter} />
+                    <span className="size-chart-caption">{diameter} blocks</span>
+                  </Link>
+                ))}
+              </div>
+              <p>
+                Need a pattern to copy block by block? The full{" "}
+                <Link href="/minecraft-circle-chart">Minecraft circle chart</Link> shows
+                outline and filled templates with exact block counts for every common
+                diameter from 3 to 101.
+              </p>
               <p>
                 Small changes matter more at compact sizes. Moving from 9 to 11
                 blocks can noticeably improve the usable floor area. At larger

@@ -43,7 +43,17 @@ describe("shared tool page navigation", () => {
       "/minecraft-tools",
     );
     expect(within(tools).queryByRole("link", { name: "Give Command Generator" })).not.toBeInTheDocument();
-    expect(within(resources).getAllByRole("link")).toHaveLength(4);
+    expect(within(resources).getAllByRole("link").map((link) => link.textContent)).toEqual([
+      "Circle Chart",
+      "House Designs",
+      "House Blueprints",
+      "Starter Houses",
+      "Staircase Designs",
+    ]);
+    expect(within(resources).getByRole("link", { name: "Circle Chart" })).toHaveAttribute(
+      "href",
+      "/minecraft-circle-chart",
+    );
     expect(within(site).getAllByRole("link").map((link) => link.textContent)).toEqual([
       "About",
       "Contact",

@@ -3713,6 +3713,25 @@ a {
   background: #fffdf6;
 }
 
+/* Circle chart page */
+.size-chart-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; align-items: end; margin: 26px 0 12px; }
+.size-chart-strip a { display: grid; gap: 7px; justify-items: center; }
+.size-chart-strip svg { width: 100%; height: auto; max-width: 170px; justify-self: center; border: 1px solid #e3e6df; border-radius: 4px; }
+.size-chart-caption { color: #5d685f; font-size: 0.78rem; font-weight: 750; }
+.chart-group { margin-top: 42px; }
+.chart-group:first-child { margin-top: 0; }
+.chart-group-intro { color: #5d685f; max-width: 760px; }
+.chart-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; margin-top: 18px; }
+.chart-card { display: grid; gap: 10px; align-content: start; border: 1px solid #d1cdc0; border-radius: 11px; background: #fffdf6; box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); padding: 14px; margin: 0; }
+.chart-card svg { width: 100%; height: auto; display: block; border: 1px solid #e3e6df; border-radius: 4px; }
+.chart-card-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.chart-card-heading strong { font-size: 0.92rem; }
+.chart-card-heading span { color: #5d685f; font-size: 0.72rem; font-weight: 750; white-space: nowrap; }
+.chart-card p { margin: 0; color: #5d685f; font-size: 0.8rem; line-height: 1.45; }
+.chart-card-links { display: flex; gap: 12px; flex-wrap: wrap; }
+.chart-card-links a { color: #386a3d; font-weight: 750; font-size: 0.8rem; }
+@media (max-width: 760px) { .size-chart-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 .size-table-wrap table {
   width: 100%;
   border-collapse: collapse;

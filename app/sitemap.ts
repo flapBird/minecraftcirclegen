@@ -19,6 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/minecraft-circle-chart`,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
     ...["oval-generator", "sphere-generator", "dome-generator"].map((path) => ({
       url: `${baseUrl}/${path}`,
       changeFrequency: "weekly" as const,
