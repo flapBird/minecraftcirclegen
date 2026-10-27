@@ -11,6 +11,11 @@ export const sphereLayerGuide: Guide = {
   contentLinks: [
     { label: "Minecraft circle chart", href: "/minecraft-circle-chart" },
   ],
+  illustration: {
+    src: "/guides-visuals/sphere-layer-15.png",
+    alt: "Equator layer of a 15-block hollow Minecraft sphere rendered by the sphere generator, with both center axes marked",
+    landscape: true,
+  },
   sections: [
     {
       heading: "Spheres are circles stacked with a plan",

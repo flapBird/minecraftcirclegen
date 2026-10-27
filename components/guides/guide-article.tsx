@@ -49,10 +49,17 @@ export function GuideArticle({ guide }: { guide: Guide }) {
             {guideReadingMinutes(guide)} min read
           </p>
           {guide.illustration && (
-            <figure className="guide-illustration">
-              {/* Static SVG blueprint asset: fixed dimensions, no optimization needed. */}
+            <figure
+              className={`guide-illustration${guide.illustration.landscape ? " is-landscape" : ""}`}
+            >
+              {/* Static blueprint/visual asset: fixed dimensions, no optimization needed. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={guide.illustration.src} alt={guide.illustration.alt} width={300} height={300} />
+              <img
+                src={guide.illustration.src}
+                alt={guide.illustration.alt}
+                width={guide.illustration.landscape ? 480 : 300}
+                height={guide.illustration.landscape ? 369 : 300}
+              />
             </figure>
           )}
         </header>

@@ -1,10 +1,29 @@
 import { DEFAULT_SOCIAL_IMAGES } from "@/lib/site/social-metadata";
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
+import { ANALYTICS_LOCAL_HOSTNAME_GUARD } from "@/lib/site/analytics-guard";
 import "./globals.css";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+
+// Plain inline loaders with a runtime hostname guard: vinext's Cloudflare
+// runtime drops next/script tags from SSR, and analytics/ads must not depend
+// on framework script quirks (or fire on local development hosts).
+const ADSENSE_LOADER = `(function(){
+  if (${ANALYTICS_LOCAL_HOSTNAME_GUARD}) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.crossOrigin = 'anonymous';
+  s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4183802444188513';
+  document.head.appendChild(s);
+})();`;
+
+const CLARITY_LOADER = `(function(c,l,a,r,i,t,y){
+  if (${ANALYTICS_LOCAL_HOSTNAME_GUARD}) return;
+  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "yoqcv66g25");`;
 
 const siteUrl = "https://minecraftcirclegen.com/";
 
@@ -58,11 +77,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4183802444188513"
-          crossOrigin="anonymous"
-          strategy="beforeInteractive"
+        <script
+          dangerouslySetInnerHTML={{ __html: ADSENSE_LOADER }}
         />
       </head>
       <body>
@@ -73,15 +89,7 @@ export default function RootLayout({
         {children}
         <SiteFooter />
         <GoogleAnalytics />
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`
-            (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "yoqcv66g25");
-          `}
-        </Script>
+        <script dangerouslySetInnerHTML={{ __html: CLARITY_LOADER }} />
       </body>
     </html>
   );

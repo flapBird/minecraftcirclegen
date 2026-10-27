@@ -3784,6 +3784,7 @@ a {
 .guide-next-grid { margin-top: 18px; }
 .guide-illustration { margin: 16px 0 0; max-width: 300px; }
 .guide-illustration img { width: 100%; height: auto; display: block; border: 1px solid #d1cdc0; border-radius: 11px; background: #fffdf6; box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); }
+.guide-illustration.is-landscape { max-width: 520px; }
 
 /* Worker-backed generation status */
 .generation-status { margin: 10px 0 0; padding: 10px 14px; border: 1px solid #c9d3c6; border-radius: 8px; background: #f2f5ef; color: #44543f; font-size: 0.82rem; font-weight: 720; }

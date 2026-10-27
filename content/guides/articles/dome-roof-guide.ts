@@ -12,8 +12,9 @@ export const domeRoofGuide: Guide = {
     { label: "Minecraft circle chart", href: "/minecraft-circle-chart" },
   ],
   illustration: {
-    src: "/circle-charts/circle-chart-21.svg",
-    alt: "Hollow Minecraft circle blueprint, 21 by 21 blocks, 56 blocks — the footprint a 21-block dome sits on",
+    src: "/guides-visuals/dome-ring-6.png",
+    alt: "Layer 6 of a 15-block hollow Minecraft dome rendered by the dome generator, showing the shell ring and the inner ceiling ring",
+    landscape: true,
   },
   sections: [
     {
