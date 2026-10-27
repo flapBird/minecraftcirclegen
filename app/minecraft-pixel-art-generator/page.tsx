@@ -5,7 +5,7 @@ import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Pixel Art Generator – Image to Blocks";
 const description =
-  "Upload an image and convert it into a buildable Minecraft block grid with palette controls, dithering, material counts, and PNG export.";
+  "Convert an image into Minecraft pixel art with a block grid, numbered material list, coordinate lookup, and PNG or coordinate CSV downloads.";
 
 export const metadata: Metadata = {
   title,
@@ -36,8 +36,8 @@ export default function MinecraftPixelArtGeneratorPage() {
             <p>
               The Minecraft Pixel Art Generator converts a photo, logo, sprite, or drawing into a
               practical block-by-block mural. Every output pixel is matched to a vanilla building
-              block, producing a visual blueprint, exact dimensions, and a material list for survival
-              or creative builds.
+              block, producing a visual blueprint, exact dimensions, and a complete numbered material
+              list for survival or creative builds. Transparent cells can be left empty.
             </p>
             <p>
               Images are decoded and converted in your browser. The source file is not uploaded or
@@ -51,8 +51,13 @@ export default function MinecraftPixelArtGeneratorPage() {
               <li><strong>Set the size.</strong><span>The longest side controls the finished mural dimensions in blocks.</span></li>
               <li><strong>Choose materials.</strong><span>Use all blocks, common survival materials, colorful blocks, or natural blocks.</span></li>
               <li><strong>Adjust the conversion.</strong><span>Toggle color dithering, transparent pixels, and grid lines.</span></li>
-              <li><strong>Build the result.</strong><span>Download the blueprint and copy the material list before gathering blocks.</span></li>
+              <li><strong>Build the result.</strong><span>Inspect each cell to identify its numbered material, then download the PNG or coordinate CSV and copy the material list.</span></li>
             </ol>
+            <p>
+              Click a block in the preview or enter its X/Z coordinates. The top-left cell is (0, 0),
+              with X increasing to the right and Z down the blueprint. The CSV lists every cell,
+              including empty spaces, so you can follow the plan row by row.
+            </p>
           </section>
           <ToolPageEnd toolKey="pixel-art" />
         </div>

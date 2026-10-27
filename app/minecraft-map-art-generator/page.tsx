@@ -5,7 +5,7 @@ import { ToolPageEnd } from "@/components/layout/tool-page-end";
 
 const title = "Minecraft Map Art Generator – Image to Map Blueprint";
 const description =
-  "Convert an image into a flat Minecraft map-art blueprint from 128×128 to 256×256 blocks, with map colors, dithering, tiles, and materials.";
+  "Convert an image into a flat Minecraft map-art blueprint from 128×128 to 256×256 blocks, with numbered materials, tile coordinates, PNG and CSV export.";
 
 export const metadata: Metadata = {
   title,
@@ -49,10 +49,15 @@ export default function MinecraftMapArtGeneratorPage() {
             <ol className="guide-steps">
               <li><strong>Upload an image.</strong><span>Square artwork fits one map most naturally, but other ratios can be cropped or contained.</span></li>
               <li><strong>Choose a layout.</strong><span>Use one 128×128 map or expand the design across two or four maps.</span></li>
-              <li><strong>Check the preview.</strong><span>Terracotta-colored divider lines mark the edge of each individual map tile.</span></li>
-              <li><strong>Prepare materials.</strong><span>Copy the exact block counts and stack estimates.</span></li>
+              <li><strong>Check the preview.</strong><span>Divider lines mark each map tile. Click a block or enter X/Z coordinates to see its numbered material, map row and column, and position within the tile.</span></li>
+              <li><strong>Prepare materials.</strong><span>Review the complete numbered material list, copy block counts and stack estimates, and download the PNG or coordinate CSV.</span></li>
               <li><strong>Build and capture.</strong><span>Use scale-0 maps to locate each 128×128 tile boundary before building. Match the top of the blueprint to north, keep the surface level, then capture and lock each map.</span></li>
             </ol>
+            <p>
+              Blueprint coordinates start at (0, 0) in the top-left, with X increasing right and Z down.
+              Map rows and columns start at 1; each tile uses local coordinates from 0 to 127.
+              The CSV includes both sets of coordinates and each cell&apos;s material.
+            </p>
           </section>
           <ToolPageEnd toolKey="map-art" />
         </div>
