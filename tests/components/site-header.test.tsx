@@ -28,11 +28,13 @@ describe("SiteHeader", () => {
       "Circle",
       "House Designs",
       "Blueprints",
+      "Guides",
     ]);
     expect(primaryLinks.map((link) => link.getAttribute("href"))).toEqual([
       "/",
       "/house-designs",
       "/house-blueprints",
+      "/guides",
     ]);
 
     const tools = navigation.querySelector(".desktop-tools-menu > summary");
@@ -109,6 +111,7 @@ describe("SiteHeader", () => {
       "Circle",
       "House Designs",
       "Blueprints",
+      "Guides",
     ]);
 
     await userEvent.click(within(navigation).getByText("Tools", { exact: true }));

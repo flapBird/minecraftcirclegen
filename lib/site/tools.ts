@@ -26,7 +26,7 @@ export interface ToolPage {
 }
 
 export interface ContentPage {
-  key: "house-designs" | "house-blueprints";
+  key: "house-designs" | "house-blueprints" | "guides";
   href: string;
   navLabel: string;
   title: string;
@@ -229,6 +229,13 @@ export const CONTENT_PAGES: ContentPage[] = [
     navLabel: "Blueprints",
     title: "Minecraft House Blueprints",
     description: "Exact house layers, material counts, and downloadable block plans.",
+  },
+  {
+    key: "guides",
+    href: "/guides",
+    navLabel: "Guides",
+    title: "Minecraft Building Guides",
+    description: "Experience-based guides for circles, portals, and round builds.",
   },
 ];
 

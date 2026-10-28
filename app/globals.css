@@ -3737,7 +3737,7 @@ a {
 .portal-fieldset { border: 1px solid #d1cdc0; border-radius: 11px; background: #fffdf6; padding: 14px 16px 16px; margin: 0; }
 .portal-fieldset legend { font-size: 0.78rem; font-weight: 780; color: #5d685f; padding: 0 6px; }
 .portal-segmented { display: flex; gap: 10px; flex-wrap: wrap; }
-.portal-segmented label { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #b8c2b4; border-radius: 8px; background: #fffdf6; padding: 9px 14px; font-size: 0.86rem; font-weight: 720; cursor: pointer; }
+.portal-segmented label { flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #b8c2b4; border-radius: 8px; background: #fffdf6; padding: 9px 14px; font-size: 0.86rem; font-weight: 720; cursor: pointer; text-align: center; }
 .portal-segmented label.is-active { border-color: #3d7042; background: #4d7f47; color: white; box-shadow: 3px 3px 0 rgba(52, 75, 48, 0.15); }
 .portal-segmented input { position: absolute; opacity: 0; pointer-events: none; }
 .portal-segmented label:has(input:focus-visible) { outline: 2px solid #335f36; outline-offset: 2px; }
@@ -3756,7 +3756,7 @@ a {
 .portal-note { margin: 0; color: #5d685f; font-size: 0.8rem; line-height: 1.5; }
 .portal-commands { display: grid; gap: 12px; }
 .portal-command-row { display: flex; align-items: flex-start; gap: 12px; }
-.portal-command-row pre { flex: 1; margin: 0; border: 1px solid #d1cdc0; border-radius: 8px; background: #f4f6f1; padding: 12px 14px; font-size: 0.82rem; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+.portal-command-row pre { flex: 1; margin: 0; border: 1px solid #d1cdc0; border-radius: 8px; background: #f4f6f1; padding: 12px 14px; font-size: 0.82rem; overflow-x: auto; white-space: pre; }
 .portal-command-row--block { flex-direction: column; align-items: stretch; }
 .portal-command-row--block pre { flex: none; }
 .portal-command-row--block .portal-copy-button { justify-self: start; }
