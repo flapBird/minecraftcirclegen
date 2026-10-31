@@ -5,7 +5,6 @@ import { GeometryGenerator } from "@/components/geometry-generator/geometry-gene
 import { GeometryGeneratorFromUrl } from "@/components/geometry-generator/geometry-generator-from-url";
 import { parseGeometryUrl } from "@/lib/geometry/geometry-url-state";
 import { HomeToolDirectory } from "@/components/layout/tool-page-end";
-import { HeroPlateArt } from "@/components/site/tool-scenes";
 
 const title = "Minecraft Circle Generator – Build Perfect Block Circles";
 const description =
@@ -141,23 +140,6 @@ export default function Home() {
               Create perfect Minecraft circles, calculate the blocks you need,
               and download or share the exact block layout.
             </p>
-            <div className="hero-plates">
-              {(
-                [
-                  ["circle", "Circle"],
-                  ["oval", "Oval"],
-                  ["sphere", "Sphere"],
-                  ["dome", "Dome"],
-                ] as const
-              ).map(([shape, label]) => (
-                <div key={shape} className="hero-plate">
-                  <span className="hero-plate-art">
-                    <HeroPlateArt shape={shape} />
-                  </span>
-                  <span className="hero-plate-label">{label}</span>
-                </div>
-              ))}
-            </div>
             <ul className="hero-facts">
               <li>
                 <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">

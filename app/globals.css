@@ -622,60 +622,19 @@ a {
 .hero-subtitle {
   max-width: 640px;
   margin: 12px auto 0;
-  color: var(--text-muted);
+  color: #687168;
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   line-height: 1.5;
 }
 
-/* Drafting plates under the hero: the four shapes the tool draws, each on its
-   own piece of blueprint paper with a block-like offset shadow. */
-.hero-plates {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  max-width: 920px;
-  margin: 30px auto 0;
-}
-
-.hero-plate-art {
-  display: grid;
-  place-items: center;
-  height: 118px;
-  overflow: hidden;
-  border: 1px solid var(--line-warm);
-  border-radius: 8px;
-  background:
-    linear-gradient(rgba(62, 127, 76, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(62, 127, 76, 0.06) 1px, transparent 1px),
-    var(--paper-blueprint);
-  background-size: 24px 24px;
-  box-shadow: 4px 4px 0 rgba(69, 85, 62, 0.1);
-}
-
-.hero-plate-art svg {
-  width: 88px;
-  height: 88px;
-  display: block;
-}
-
-.hero-plate-label {
-  display: block;
-  margin-top: 8px;
-  color: #5d6a61;
-  font-family: var(--pixel-font);
-  font-size: 0.66rem;
-  font-weight: 900;
-  letter-spacing: 0.09em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
+/* Fact ticks under the hero subtitle: the promises the generator makes,
+   stated before the tool itself. */
 .hero-facts {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px 26px;
-  margin: 26px 0 0;
+  margin: 22px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -6960,9 +6919,6 @@ a {
   .tools-index-grid a { min-height: 92px; }
   .tools-index-grid a.is-featured { grid-column: auto; grid-row: auto; }
   .tool-preview.is-featured { height: 150px; }
-  .hero-plates { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .hero-plate-art { height: 96px; }
-  .hero-plate-art svg { width: 72px; height: 72px; }
   .hero-facts { gap: 8px 18px; }
   .hero-facts li { font-size: 0.8rem; }
   .tools-index-search input { padding-right: 72px; font-size: .78rem; }
