@@ -7,6 +7,7 @@ import {
   TOOL_PAGES,
   type ToolCategoryKey,
 } from "@/lib/site/tools";
+import { ToolSceneArt } from "@/components/site/tool-scenes";
 
 type DirectoryCategory = "all" | ToolCategoryKey;
 
@@ -82,13 +83,27 @@ export function ToolsDirectoryBrowser() {
                 <span>{tools.length}</span>
               </div>
               <div className="tools-index-grid">
-                {tools.map((tool) => (
-                  <Link key={tool.key} href={tool.href}>
-                    <strong>{tool.title}</strong>
-                    <p>{tool.description}</p>
-                    <i aria-hidden="true">→</i>
-                  </Link>
-                ))}
+                {tools.map((tool) => {
+                  // The Circle card anchors the Build & Shape group; keep the
+                  // featured 2×2 tile for the grouped views only, so search
+                  // results stay an even grid.
+                  const isFeatured =
+                    category.key === "build" &&
+                    tool.key === "circle" &&
+                    !normalizedQuery;
+                  return (
+                    <Link
+                      key={tool.key}
+                      href={tool.href}
+                      className={isFeatured ? "is-featured" : undefined}
+                    >
+                      <ToolSceneArt tool={tool.key} featured={isFeatured} />
+                      <strong>{tool.title}</strong>
+                      <p>{tool.description}</p>
+                      <i aria-hidden="true">→</i>
+                    </Link>
+                  );
+                })}
               </div>
             </section>
           ))}

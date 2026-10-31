@@ -597,6 +597,73 @@ a {
   line-height: 1.5;
 }
 
+/* Drafting plates under the hero: the four shapes the tool draws, each on its
+   own piece of blueprint paper with a block-like offset shadow. */
+.hero-plates {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 920px;
+  margin: 30px auto 0;
+}
+
+.hero-plate-art {
+  display: grid;
+  place-items: center;
+  height: 118px;
+  overflow: hidden;
+  border: 1px solid #d5d1c4;
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    #f8f5ed;
+  background-size: 24px 24px;
+  box-shadow: 4px 4px 0 rgba(69, 85, 62, 0.1);
+}
+
+.hero-plate-art svg {
+  width: 88px;
+  height: 88px;
+  display: block;
+}
+
+.hero-plate-label {
+  display: block;
+  margin-top: 8px;
+  color: #5d6a61;
+  font-family: var(--pixel-font);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 26px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4c5a50;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.hero-facts svg {
+  flex: 0 0 auto;
+  color: var(--green);
+}
+
 .tool-section {
   padding: 14px 0 76px;
   background:
@@ -5830,6 +5897,60 @@ a {
   font-style: normal;
 }
 
+/* Mini blueprint preview on each directory card, matching the drafting-paper
+   treatment used by the generator workbenches. */
+.tool-preview {
+  position: relative;
+  display: block;
+  height: 84px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid #d5d1c4;
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    #f8f5ed;
+  background-size: 24px 24px;
+  box-shadow: 4px 4px 0 rgba(69, 85, 62, 0.1);
+}
+
+.tool-preview svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tool-preview.is-featured {
+  height: 176px;
+}
+
+.tool-preview-tag {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 10px;
+  border-radius: 4px;
+  background: #285f36;
+  color: #fff;
+  padding: 3px 8px;
+  font-family: var(--pixel-font);
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.tools-index-grid a.is-featured {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 0;
+}
+
+.tools-index-grid a.is-featured strong {
+  font-size: 1.08rem;
+}
+
 .tools-index-empty {
   padding: 72px 20px 80px;
   color: #687269;
@@ -6339,6 +6460,7 @@ a {
 
 @media (max-width: 860px) {
   .tools-index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tools-index-grid a.is-featured { grid-row: auto; }
   .server-tool-layout,
   .banner-workbench,
   .shape-workbench,
@@ -6784,6 +6906,13 @@ a {
   .tools-index-category-guide { grid-template-columns: 1fr; }
   .tools-index-grid { grid-template-columns: 1fr; }
   .tools-index-grid a { min-height: 92px; }
+  .tools-index-grid a.is-featured { grid-column: auto; grid-row: auto; }
+  .tool-preview.is-featured { height: 150px; }
+  .hero-plates { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .hero-plate-art { height: 96px; }
+  .hero-plate-art svg { width: 72px; height: 72px; }
+  .hero-facts { gap: 8px 18px; }
+  .hero-facts li { font-size: 0.8rem; }
   .tools-index-search input { padding-right: 72px; font-size: .78rem; }
   .tools-index-filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
   .tools-index-filters button { flex: 0 0 auto; }
