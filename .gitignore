@@ -42,3 +42,7 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# claude-design 画布编辑器运行时文件
+designs/**/.artifact-server.json
+designs/**/.artifact-server.log
