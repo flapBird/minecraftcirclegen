@@ -7,13 +7,14 @@
   "boards": {
     "Main.dc.html": { "x": 0, "y": 0, "w": 1280, "h": 1400, "title": "工具目录 · 方向A 图标工作台", "expand": "fill" },
     "DirectoryB.dc.html": { "x": 1400, "y": 0, "w": 1280, "h": 1400, "title": "工具目录 · 方向B 分类色签", "expand": "fill" },
-    "DirectoryC.dc.html": { "x": 2800, "y": 0, "w": 1280, "h": 1450, "title": "工具目录 · 方向C 微缩预览", "expand": "fill" },
-    "HeroA.dc.html": { "x": 0, "y": 1560, "w": 1280, "h": 960, "title": "首页 Hero · 方向A 图纸中轴", "expand": "fill" },
+    "DirectoryC.dc.html": { "x": 2800, "y": 0, "w": 1280, "h": 1450, "title": "工具目录 · 方向C 微缩预览（初版）", "expand": "fill" },
+    "DirectoryC2.dc.html": { "x": 4200, "y": 0, "w": 1280, "h": 1240, "title": "工具目录 · 方向C2 微缩预览·CZ比例", "expand": "fill" },
+    "HeroA.dc.html": { "x": 0, "y": 1560, "w": 1280, "h": 960, "title": "首页 Hero · 方向A 图纸中轴 ✅已选", "expand": "fill" },
     "HeroB.dc.html": { "x": 1400, "y": 1560, "w": 1280, "h": 960, "title": "首页 Hero · 方向B 左文右图", "expand": "fill" }
   },
-  "order": ["Main.dc.html", "DirectoryB.dc.html", "DirectoryC.dc.html", "HeroA.dc.html", "HeroB.dc.html"],
+  "order": ["Main.dc.html", "DirectoryB.dc.html", "DirectoryC.dc.html", "DirectoryC2.dc.html", "HeroA.dc.html", "HeroB.dc.html"],
   "notes": {
-    "n1": { "x": 0, "y": -280, "text": "工具目录卡片 · 三个方向", "kind": "title1", "maxW": 3960 },
+    "n1": { "x": 0, "y": -280, "text": "工具目录卡片 · 三个方向 + C收敛版", "kind": "title1", "maxW": 5360 },
     "n2": { "x": 0, "y": 1280, "text": "首页 Hero · 两个方向", "kind": "title1", "maxW": 2560 }
   },
   "designSystems": []
