@@ -4593,6 +4593,30 @@ a {
   margin-top: 24px;
 }
 
+/* Small blueprint plate used as the 404 page's decorative mark. */
+.error-mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid #d5d1c4;
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 127, 76, 0.06) 1px, transparent 1px),
+    #f8f5ed;
+  background-size: 24px 24px;
+  box-shadow: 4px 4px 0 rgba(69, 85, 62, 0.1);
+}
+
+.error-mark svg {
+  width: 60px;
+  height: 60px;
+  display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
