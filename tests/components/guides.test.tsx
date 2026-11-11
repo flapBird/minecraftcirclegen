@@ -61,7 +61,8 @@ describe("guides index page", () => {
     render(<GuidesIndexPage />);
     expect(screen.getByRole("heading", { level: 1, name: /Minecraft Building Guides/ })).toBeInTheDocument();
     for (const guide of GUIDES) {
-      expect(screen.getByRole("link", { name: new RegExp(guide.title) })).toHaveAttribute(
+      const escapedTitle = guide.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      expect(screen.getByRole("link", { name: new RegExp(escapedTitle) })).toHaveAttribute(
         "href",
         `/guides/${guide.slug}`,
       );

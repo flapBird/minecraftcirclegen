@@ -26,12 +26,14 @@ describe("SiteHeader", () => {
 
     expect(primaryLinks.map((link) => link.textContent)).toEqual([
       "Circle",
+      "Circle Chart",
       "House Designs",
       "Blueprints",
       "Guides",
     ]);
     expect(primaryLinks.map((link) => link.getAttribute("href"))).toEqual([
       "/",
+      "/minecraft-circle-chart",
       "/house-designs",
       "/house-blueprints",
       "/guides",
@@ -109,6 +111,7 @@ describe("SiteHeader", () => {
       .filter((element): element is HTMLAnchorElement => element instanceof HTMLAnchorElement);
     expect(primaryMobileLinks.map((link) => link.textContent)).toEqual([
       "Circle",
+      "Circle Chart",
       "House Designs",
       "Blueprints",
       "Guides",

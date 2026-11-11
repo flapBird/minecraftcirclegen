@@ -3,9 +3,9 @@ import type { Guide } from "../types";
 export const circleWithoutGeneratorGuide: Guide = {
   slug: "circle-without-generator",
   eyebrow: "BUILDING FUNDAMENTALS",
-  title: "How to Make a Minecraft Circle Without a Generator",
+  title: "How to Draw a Minecraft Circle Without a Generator (Counting Method)",
   description:
-    "Build Minecraft circles by hand: read a chart row by row, count straight runs instead of guessing, and use the quarter-mirror method to stay round with nothing but blocks and patience.",
+    "Draw Minecraft circles by hand with the counting method: read a chart row by row, count straight runs instead of guessing, and use the quarter-mirror method to stay round with nothing but blocks and patience.",
   datePublished: "2026-10-27",
   toolKeys: ["circle"],
   contentLinks: [

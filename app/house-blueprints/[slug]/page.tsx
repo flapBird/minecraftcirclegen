@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { ContentBreadcrumbs, type BreadcrumbItem } from "@/components/layout/content-breadcrumbs";
 import { BlueprintLayerViewer } from "@/components/house/blueprint-layer-viewer";
 import { DifficultyBadge, HouseGrid } from "@/components/house/house-card";
-import { MaterialTable, RelatedTools } from "@/components/house/house-support";
-import { StructuredData, breadcrumbSchema, schemaGraph } from "@/components/house/structured-data";
+import { HouseFaqList, MaterialTable, RelatedTools } from "@/components/house/house-support";
+import { StructuredData, breadcrumbSchema, faqSchema, schemaGraph } from "@/components/house/structured-data";
 import { HOUSE_BLUEPRINTS, getHouseBlueprint, getHouseBlueprints } from "@/content/houses/blueprints";
 import { getHouseCollection } from "@/content/houses/collections";
 import { absoluteUrl, createHouseMetadata } from "@/lib/site/house-seo";
@@ -51,10 +51,12 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
     supply: blueprint.materials.map((material) => ({ "@type": "HowToSupply", name: `${material.count} ${material.name}` })),
     step: blueprint.steps.map((step, index) => ({ "@type": "HowToStep", position: index + 1, name: `Step ${index + 1}`, text: step })),
   };
+  const schemaNodes: unknown[] = [breadcrumbSchema(breadcrumbs), howToSchema];
+  if (blueprint.faqs?.length) schemaNodes.push(faqSchema(blueprint.faqs));
 
   return (
     <main id="main-content" className="house-content-page blueprint-detail-page">
-      <StructuredData data={schemaGraph([breadcrumbSchema(breadcrumbs), howToSchema])} />
+      <StructuredData data={schemaGraph(schemaNodes)} />
       <section className="house-detail-hero">
         <div className="page-container">
           <ContentBreadcrumbs items={breadcrumbs} />
@@ -115,6 +117,11 @@ export default async function HouseBlueprintDetailPage({ params }: BlueprintPage
           <h2>Make the plan work in your world</h2>
           <div className="house-tip-grid">{blueprint.tips.map((tip, index) => <article key={tip}><h3>Tip {index + 1}</h3><p>{tip}</p></article>)}</div>
         </section>
+        {blueprint.faqs?.length ? (
+          <section className="house-section" id="faq">
+            <HouseFaqList faqs={blueprint.faqs} />
+          </section>
+        ) : null}
         <RelatedTools toolKeys={blueprint.relatedTools} />
         <section className="house-section">
           <div className="house-section-heading"><div><p className="section-label">RELATED HOUSE DESIGNS</p><h2>Compare another blueprint</h2></div><p>These plans share a footprint, category, or useful next level of complexity.</p></div>

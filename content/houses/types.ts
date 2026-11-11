@@ -43,6 +43,7 @@ export type HouseBlueprint = {
   layers: BlueprintLayer[];
   steps: string[];
   tips: string[];
+  faqs?: HouseFaq[];
   image: string;
   imageAlt: string;
   relatedTools: ToolKey[];
@@ -66,6 +67,7 @@ export type HouseCollection = {
   selectionTitle: string;
   selectionParagraphs: string[];
   tips: { title: string; text: string }[];
+  comparePlans?: boolean;
   relatedTools: ToolKey[];
   faqs: HouseFaq[];
 };

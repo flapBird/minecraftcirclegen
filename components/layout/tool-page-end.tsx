@@ -85,6 +85,10 @@ export function HomeToolDirectory() {
           Start with a popular generator, or open the complete collection to search and browse every category.
         </p>
         <div className="home-tool-card-grid">
+          <Link href="/minecraft-circle-chart">
+            <strong>Minecraft Circle Chart</strong>
+            <span>Copy-ready circle templates for every diameter from 3 to 101.</span>
+          </Link>
           {tools.map((tool) => (
             <Link key={tool.key} href={tool.href}>
               <strong>{tool.title}</strong>

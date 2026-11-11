@@ -46,3 +46,6 @@ next-env.d.ts
 # claude-design 画布编辑器运行时文件
 designs/**/.artifact-server.json
 designs/**/.artifact-server.log
+
+# ZCode 本地会话数据
+/.zcode/

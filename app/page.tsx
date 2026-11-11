@@ -178,6 +178,41 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="chart-promo-band" aria-label="Minecraft circle chart templates">
+          <div className="page-container chart-promo-inner">
+            <div className="chart-promo-copy">
+              <h2>Prefer to copy a ready-made circle?</h2>
+              <p>
+                The Minecraft circle chart lists a block template for every diameter
+                from 3 to 101, with exact outline and filled block counts.
+              </p>
+              <Link className="chart-promo-cta" href="/minecraft-circle-chart">
+                Browse all circle templates (3–101) <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+            <div className="chart-promo-strip">
+              {[7, 15, 21].map((diameter) => (
+                <Link
+                  key={diameter}
+                  href={`/minecraft-circle-chart#size-${diameter}`}
+                  aria-label={`Circle template for a ${diameter}-block diameter`}
+                >
+                  {/* Static SVG blueprint asset: fixed dimensions, no optimization needed. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/circle-charts/circle-chart-${String(diameter).padStart(2, "0")}.svg`}
+                    alt=""
+                    width={diameter * 10}
+                    height={diameter * 10}
+                    loading="lazy"
+                  />
+                  <span>{diameter} blocks</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <HomeToolDirectory />
 
         <article className="seo-content">

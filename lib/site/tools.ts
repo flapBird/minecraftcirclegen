@@ -26,7 +26,7 @@ export interface ToolPage {
 }
 
 export interface ContentPage {
-  key: "house-designs" | "house-blueprints" | "guides";
+  key: "circle-chart" | "house-designs" | "house-blueprints" | "guides";
   href: string;
   navLabel: string;
   title: string;
@@ -216,6 +216,13 @@ export function getToolsForCategory(category: ToolCategory) {
 }
 
 export const CONTENT_PAGES: ContentPage[] = [
+  {
+    key: "circle-chart",
+    href: "/minecraft-circle-chart",
+    navLabel: "Circle Chart",
+    title: "Minecraft Circle Chart",
+    description: "Copy-ready circle templates for every diameter from 3 to 101.",
+  },
   {
     key: "house-designs",
     href: "/house-designs",

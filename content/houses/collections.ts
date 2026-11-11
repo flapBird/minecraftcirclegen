@@ -32,6 +32,7 @@ export const HOUSE_COLLECTIONS: HouseCollection[] = [
       { title: "Use local blocks", text: "Swap woods or stone variants in equal counts instead of traveling for a perfect palette." },
       { title: "Leave one upgrade path", text: "A side wall without a chimney or farm can later open into storage or an enchanting wing." },
     ],
+    comparePlans: true,
     relatedTools: ["gradient", "circle"],
     faqs: [
       { question: "How big should a Minecraft starter house be?", answer: "A 7×7 footprint is the practical minimum for a comfortable one-room base. A 9×9 plan gives noticeably better storage and walking space while remaining fast to build." },

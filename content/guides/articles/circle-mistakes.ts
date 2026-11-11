@@ -3,9 +3,9 @@ import type { Guide } from "../types";
 export const circleMistakesGuide: Guide = {
   slug: "circle-building-mistakes",
   eyebrow: "BUILDING FUNDAMENTALS",
-  title: "Common Mistakes When Building Minecraft Circles",
+  title: "Common Mistakes When Drawing Minecraft Circles by Hand (And How to Fix Them)",
   description:
-    "Nine fixable mistakes cause most lopsided or wasted Minecraft circles, from eyeballing turns to ignoring wall thickness. Learn how to spot and correct each one.",
+    "Nine fixable mistakes cause most lopsided hand-built Minecraft circles, from eyeballing turns to ignoring wall thickness. Learn how to spot and correct each one without a generator.",
   datePublished: "2026-10-27",
   toolKeys: ["circle", "oval", "sphere", "dome"],
   contentLinks: [

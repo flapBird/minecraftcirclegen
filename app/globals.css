@@ -3776,14 +3776,20 @@ a {
 .chart-group:first-child { margin-top: 0; }
 .chart-group-intro { color: var(--text-soft); max-width: 760px; }
 .chart-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; margin-top: 18px; }
-.chart-card { display: grid; gap: 10px; align-content: start; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--paper-warm); box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); padding: 14px; margin: 0; }
-.chart-card svg { width: 100%; height: auto; display: block; border: 1px solid #e3e6df; border-radius: 4px; }
+.chart-card { display: grid; gap: 10px; align-content: start; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--paper-warm); box-shadow: 4px 4px 0 rgba(58, 73, 55, 0.06); padding: 14px; margin: 0; scroll-margin-top: 92px; }
+.chart-card svg, .chart-card img { width: 100%; height: auto; display: block; border: 1px solid #e3e6df; border-radius: 4px; }
 .chart-card-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .chart-card-heading strong { font-size: 0.92rem; }
 .chart-card-heading span { color: var(--text-soft); font-size: 0.72rem; font-weight: 750; white-space: nowrap; }
 .chart-card p { margin: 0; color: var(--text-soft); font-size: 0.8rem; line-height: 1.45; }
-.chart-card-links { display: flex; gap: 12px; flex-wrap: wrap; }
-.chart-card-links a { color: var(--green-mid); font-weight: 750; font-size: 0.8rem; }
+.chart-card-links { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.chart-card-links a, .chart-copy-link { color: var(--green-mid); font-weight: 750; font-size: 0.8rem; }
+.chart-copy-link { border: 0; background: none; padding: 0; cursor: pointer; font-family: inherit; }
+.chart-copy-link:hover { text-decoration: underline; }
+.chart-jump-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.chart-jump-nav a { border: 1px solid var(--line-strong); border-radius: 999px; background: var(--paper-warm); padding: 7px 14px; font-size: 0.82rem; font-weight: 750; color: var(--green-deep); scroll-margin-top: 92px; }
+.chart-jump-nav a:hover { border-color: var(--green-mid); background: var(--tint-green); }
+.chart-group { scroll-margin-top: 92px; }
 @media (max-width: 760px) { .size-chart-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Nether portal calculator */
@@ -5597,6 +5603,50 @@ a {
 .footer-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(34px, 8vw, 110px);
+}
+
+/* Homepage circle chart promo band */
+.chart-promo-band {
+  background: #fffaf0;
+  border-top: 1px solid var(--line-warm);
+  padding: 34px 0;
+}
+
+.chart-promo-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(24px, 5vw, 56px);
+}
+
+.chart-promo-copy h2 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin: 0 0 8px; }
+.chart-promo-copy p { margin: 0 0 14px; color: var(--text-soft); font-size: 0.95rem; }
+
+.chart-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid var(--green-mid);
+  border-radius: 10px;
+  background: var(--green-brand);
+  color: white;
+  box-shadow: 3px 3px 0 rgba(52, 75, 48, 0.15);
+  padding: 10px 18px;
+  font-size: 0.92rem;
+  font-weight: 780;
+}
+
+.chart-promo-cta:hover { background: #396c3e; }
+
+.chart-promo-strip { display: flex; gap: 18px; align-items: end; }
+.chart-promo-strip a { display: grid; gap: 6px; justify-items: center; }
+.chart-promo-strip img { width: 96px; height: auto; display: block; border: 1px solid #e3e6df; border-radius: 4px; background: #fff; }
+.chart-promo-strip span { color: var(--text-soft); font-size: 0.78rem; font-weight: 750; }
+
+@media (max-width: 760px) {
+  .chart-promo-inner { grid-template-columns: 1fr; }
+  .chart-promo-strip { justify-content: center; }
 }
 
 .home-tool-directory {

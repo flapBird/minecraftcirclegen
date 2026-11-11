@@ -120,7 +120,7 @@ function domeTotals(size, filled) {
   return total;
 }
 
-const diameters = [7, 11, 15, 21, 31, 51];
+const diameters = Array.from({ length: 99 }, (_, index) => index + 3);
 mkdirSync("public/circle-charts", { recursive: true });
 for (const diameter of diameters) {
   writeFileSync(`public/circle-charts/circle-chart-${String(diameter).padStart(2, "0")}.svg`, circleSvg(diameter));

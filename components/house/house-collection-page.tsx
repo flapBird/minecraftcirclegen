@@ -39,6 +39,43 @@ export function HouseCollectionPage({ collection }: { collection: HouseCollectio
           <HouseGrid blueprints={blueprints} />
           <p className="house-section-more"><Link href="/house-blueprints">See all house blueprints <span aria-hidden="true">→</span></Link></p>
         </section>
+        {collection.comparePlans && blueprints.length > 0 ? (
+          <section className="house-section" aria-labelledby={`${collection.slug}-compare-heading`}>
+            <p className="section-label">PLAN COMPARISON</p>
+            <h2 id={`${collection.slug}-compare-heading`}>Compare the {collection.name.toLowerCase()}</h2>
+            <p>
+              Block counts come from the layer grids of each blueprint, so the material
+              list on every plan page is exact. Open a plan for its full material
+              checklist, layer viewer, and step-by-step build order.
+            </p>
+            <div className="house-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Plan</th>
+                    <th scope="col">Footprint</th>
+                    <th scope="col">Floors</th>
+                    <th scope="col">Structure blocks</th>
+                    <th scope="col">Build time</th>
+                    <th scope="col">Difficulty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {blueprints.map((blueprint) => (
+                    <tr key={blueprint.slug}>
+                      <th scope="row"><Link href={`/house-blueprints/${blueprint.slug}`}>{blueprint.name}</Link></th>
+                      <td>{blueprint.width}×{blueprint.length}</td>
+                      <td>{blueprint.floors}</td>
+                      <td>{blueprint.blockCount.toLocaleString("en-US")}</td>
+                      <td>{blueprint.estimatedBuildTime}</td>
+                      <td>{blueprint.difficulty}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : null}
         <section className="house-section">
           <p className="section-label">SIZE GUIDE</p>
           <h2>Pick the right footprint</h2>

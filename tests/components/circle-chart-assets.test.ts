@@ -5,6 +5,7 @@ import { generateCircle } from "@/lib/circle/generate-circle";
 import { generateGeometry } from "@/lib/geometry/generate-geometry";
 
 const chartDir = join(process.cwd(), "public", "circle-charts");
+const CHART_DIAMETERS = Array.from({ length: 99 }, (_, index) => index + 3);
 
 describe("exported circle chart assets", () => {
   it("exports one SVG per expected diameter with correct block counts", () => {
@@ -21,9 +22,10 @@ describe("exported circle chart assets", () => {
       expect(blockRects, `${file} block count drift`).toBe(expected);
       expect(svg).toContain(`aria-label="Hollow Minecraft circle blueprint, ${diameter} by ${diameter} blocks, ${expected} blocks"`);
     }
-    for (const diameter of [7, 11, 15, 21, 31, 51]) {
+    for (const diameter of CHART_DIAMETERS) {
       expect(exported.has(String(diameter)), `missing asset for diameter ${diameter}`).toBe(true);
     }
+    expect(exported.size).toBe(CHART_DIAMETERS.length);
   });
 
   it("keeps 21-block and 31-block counts consistent with the geometry tool", () => {
