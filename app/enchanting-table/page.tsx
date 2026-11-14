@@ -149,7 +149,6 @@ export default function EnchantingTablePage() {
           </p>
           <div className="house-hero-actions">
             <a href="#bookshelf-simulator" className="house-primary-button">Open the layout simulator</a>
-            <a href="#how-to-make" className="house-secondary-button">Crafting recipe</a>
             <Link href="/minecraft-enchanting-table-translator" className="house-secondary-button">Decode the symbols</Link>
           </div>
           <nav className="chart-jump-nav" aria-label="Jump to a section">

@@ -7217,3 +7217,7 @@ a {
   .enchant-simulator-head { flex-direction: column; align-items: stretch; }
   .enchant-layer-switch, .enchant-presets { justify-content: center; }
 }
+
+/* Enchanting table hero: center the CTA row and section pills under the centered headline */
+.enchanting-guide-page .house-hero-actions { justify-content: center; }
+.enchanting-guide-page .chart-jump-nav { justify-content: center; }
