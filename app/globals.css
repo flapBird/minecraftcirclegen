@@ -7018,3 +7018,202 @@ a {
 .image-cell-controls input { width: 90px; padding: 8px; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 4px; }
 .image-art-canvas-board canvas { cursor: crosshair; }
 .image-material-list { max-height: 420px; overflow-y: auto; }
+
+/* Enchanting table guide: crafting recipe + bookshelf layout simulator */
+.enchant-recipe {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: auto minmax(240px, 1fr);
+  gap: 20px;
+  align-items: center;
+  background: var(--paper-warm);
+  border: 1px solid var(--line-cream);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.enchant-recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 74px);
+  gap: 5px;
+  padding: 10px;
+  background: var(--soft);
+  border: 1px solid var(--line-green);
+  border-radius: 10px;
+}
+
+.enchant-recipe-cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border: 1px solid var(--line-green);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--text-label);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.enchant-recipe-cell.is-empty { background: var(--paper); }
+.enchant-recipe-cell.is-obsidian { background-image: url("/minecraft-blocks/obsidian.png"); color: rgba(255, 255, 255, 0.94); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65); border-color: var(--ink-deep); }
+.enchant-recipe-cell.is-diamond { background-image: url("/minecraft-blocks/diamond_block.png"); color: var(--ink-deep); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55); }
+.enchant-recipe-cell.is-book { background: linear-gradient(180deg, #a5683c 0%, #8d5631 100%); color: var(--paper-warm); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); border-color: var(--terracotta); }
+
+.enchant-recipe-materials { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.enchant-recipe-materials li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; line-height: 1.5; color: var(--text-soft); }
+.enchant-recipe-materials i { flex: none; width: 24px; height: 24px; margin-top: 1px; border: 1px solid var(--line-mid); border-radius: 5px; background-size: cover; background-position: center; }
+.enchant-recipe-materials i.is-obsidian { background-image: url("/minecraft-blocks/obsidian.png"); border-color: var(--ink-deep); }
+.enchant-recipe-materials i.is-diamond { background-image: url("/minecraft-blocks/diamond_block.png"); }
+.enchant-recipe-materials i.is-book { background: linear-gradient(180deg, #a5683c 0%, #8d5631 100%); border-color: var(--terracotta); }
+
+.enchant-simulator-shell { margin-top: 20px; }
+
+.enchant-simulator {
+  background: var(--paper);
+  border: 1px solid var(--line-cool);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.enchant-simulator-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line-cool);
+  background: var(--paper-warm);
+}
+
+.enchant-layer-switch { display: inline-flex; gap: 4px; padding: 4px; background: var(--soft); border-radius: 10px; }
+.enchant-layer-switch button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+.enchant-layer-switch button.is-active { border-color: var(--line-green); background: var(--paper); color: var(--green-dark); box-shadow: 0 2px 7px rgba(34, 53, 40, 0.08); }
+
+.enchant-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.enchant-presets button {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--line-pale);
+  border-radius: 9px;
+  background: var(--paper);
+  color: var(--text-label);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+.enchant-presets button:hover { border-color: var(--line-hover); color: var(--green-dark); }
+
+.enchant-simulator-body {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(230px, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 22px 20px;
+}
+
+.enchant-grid-wrap { display: grid; gap: 12px; justify-items: center; }
+
+.enchant-grid {
+  --enchant-cell: clamp(44px, 7vw, 62px);
+  display: grid;
+  grid-template-columns: repeat(5, var(--enchant-cell));
+  border-top: 2px solid var(--line-strong);
+  border-left: 2px solid var(--line-strong);
+  background: var(--paper-warm);
+  box-shadow: 7px 8px 0 rgba(58, 72, 56, 0.07);
+}
+
+.enchant-cell {
+  width: var(--enchant-cell);
+  height: var(--enchant-cell);
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--line-green);
+  border-bottom: 1px solid var(--line-green);
+  background: var(--paper-warm);
+  background-size: cover;
+  background-position: center;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+}
+
+.enchant-cell:focus-visible { outline: 2px solid var(--terracotta); outline-offset: -2px; z-index: 1; }
+
+.enchant-cell.is-ring { cursor: pointer; }
+.enchant-cell.is-ring.is-shelf { background-image: url("/minecraft-blocks/bookshelf.png"); }
+.enchant-cell.is-ring:not(.is-shelf):hover { background: var(--tint-green); }
+.enchant-cell.is-ring.is-shelf:hover { filter: brightness(1.1); }
+
+.enchant-cell.is-gap { cursor: pointer; }
+.enchant-cell.is-gap::before { content: ""; width: 46%; height: 46%; border: 1px dashed var(--line-mid); border-radius: 6px; }
+.enchant-cell.is-gap:hover::before { border-color: var(--green-mid); }
+.enchant-cell.is-gap.is-blocked::before { content: none; }
+.enchant-cell.is-gap.is-blocked:hover { background: var(--tint-green); }
+
+.enchant-torch { position: relative; width: 26%; height: 48%; display: block; }
+.enchant-torch::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; aspect-ratio: 1; border-radius: 2px; background: var(--amber); box-shadow: 0 0 6px rgba(216, 139, 46, 0.85); }
+.enchant-torch::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 34%; height: 58%; background: var(--terracotta); border-radius: 1px; }
+
+.enchant-cell.is-table { cursor: default; background-image: url("/minecraft-blocks/obsidian.png"); border-color: var(--ink-deep); }
+.enchant-table-book { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 46%; height: 32%; background: var(--paper-warm); border: 1px solid var(--ink-soft); border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45); }
+.enchant-table-label { position: absolute; bottom: 3px; left: 0; right: 0; text-align: center; font-size: 0.56rem; font-weight: 750; color: rgba(255, 255, 255, 0.92); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+
+.enchant-editing-note { margin: 0; max-width: 360px; text-align: center; font-size: 0.72rem; line-height: 1.5; color: var(--text-faint); }
+
+.enchant-readout {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 16px 18px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line-cream);
+  border-radius: 12px;
+}
+
+.enchant-power-stat { margin: 0; display: flex; align-items: baseline; gap: 8px; }
+.enchant-power-stat strong { font-size: 2.1rem; line-height: 1; color: var(--green-dark); font-variant-numeric: tabular-nums; }
+.enchant-power-cap { font-size: 0.8rem; font-weight: 750; color: var(--text-soft); }
+
+.enchant-slot-line { margin: 0; font-size: 0.92rem; font-weight: 750; color: var(--ink-soft); }
+.enchant-slot-detail { margin: 0; font-size: 0.78rem; color: var(--text-muted); }
+
+.enchant-hints { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.enchant-hints li { position: relative; padding-left: 16px; font-size: 0.8rem; line-height: 1.55; color: var(--text-soft); }
+.enchant-hints li::before { content: ""; position: absolute; left: 0; top: 7px; width: 7px; height: 7px; border-radius: 2px; background: var(--amber); }
+
+.enchant-legend { display: flex; flex-wrap: wrap; gap: 7px 16px; padding: 13px 18px; border-top: 1px solid var(--line-cool); background: var(--paper-warm); }
+.enchant-legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; color: var(--text-soft); }
+.enchant-legend i { width: 14px; height: 14px; border: 1px solid var(--line-mid); border-radius: 3px; background-size: cover; background-position: center; }
+.enchant-legend i.is-legend-shelf { background-image: url("/minecraft-blocks/bookshelf.png"); }
+.enchant-legend i.is-legend-empty { background: var(--paper); }
+.enchant-legend i.is-legend-gap { border-style: dashed; background: transparent; }
+.enchant-legend i.is-legend-torch { background: var(--amber); border-color: var(--amber); }
+.enchant-legend i.is-legend-table { background-image: url("/minecraft-blocks/obsidian.png"); border-color: var(--ink-deep); }
+
+@media (max-width: 760px) {
+  .enchant-recipe { grid-template-columns: 1fr; }
+  .enchant-recipe-grid { justify-self: center; }
+  .enchant-simulator-body { grid-template-columns: 1fr; }
+  .enchant-simulator-head { flex-direction: column; align-items: stretch; }
+  .enchant-layer-switch, .enchant-presets { justify-content: center; }
+}

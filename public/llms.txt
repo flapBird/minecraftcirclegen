@@ -66,6 +66,7 @@ The site is an unofficial fan-made resource and is not affiliated with Mojang St
 ## Reference and Guides
 
 - [Minecraft Circle Chart](https://minecraftcirclegen.com/minecraft-circle-chart): Block-by-block circle templates for every common diameter from 3 to 101, with outline and filled block counts and generator links for each size.
+- [Minecraft Enchanting Table](https://minecraftcirclegen.com/enchanting-table): Crafting recipe, an interactive 15-bookshelf layout simulator that shows when level 30 unlocks, Java 1.18.2+ placement and gap rules, the shelf-count level table, and an explanation of the Standard Galactic Alphabet glyphs with a link to the translator.
 
 ### Building Guides
 

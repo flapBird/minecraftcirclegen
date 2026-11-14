@@ -40,6 +40,7 @@ export function SiteFooter() {
             <nav aria-label="Minecraft building resources">
               <Link href="/guides">Guides</Link>
               <Link href="/minecraft-circle-chart">Circle Chart</Link>
+              <Link href="/enchanting-table">Enchanting Table</Link>
               <Link href="/house-designs">House Designs</Link>
               <Link href="/house-blueprints">House Blueprints</Link>
               <Link href="/house-designs/starter">Starter Houses</Link>

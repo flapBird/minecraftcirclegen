@@ -26,7 +26,7 @@ export interface ToolPage {
 }
 
 export interface ContentPage {
-  key: "circle-chart" | "house-designs" | "house-blueprints" | "guides";
+  key: "circle-chart" | "house-designs" | "house-blueprints" | "guides" | "enchanting-table";
   href: string;
   navLabel: string;
   title: string;
@@ -243,6 +243,13 @@ export const CONTENT_PAGES: ContentPage[] = [
     navLabel: "Guides",
     title: "Minecraft Building Guides",
     description: "Experience-based guides for circles, portals, and round builds.",
+  },
+  {
+    key: "enchanting-table",
+    href: "/enchanting-table",
+    navLabel: "Enchanting",
+    title: "Minecraft Enchanting Table",
+    description: "Level 30 guide with a 15-bookshelf layout simulator and symbol decoder.",
   },
 ];
 

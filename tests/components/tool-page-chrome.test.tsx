@@ -46,6 +46,7 @@ describe("shared tool page navigation", () => {
     expect(within(resources).getAllByRole("link").map((link) => link.textContent)).toEqual([
       "Guides",
       "Circle Chart",
+      "Enchanting Table",
       "House Designs",
       "House Blueprints",
       "Starter Houses",
